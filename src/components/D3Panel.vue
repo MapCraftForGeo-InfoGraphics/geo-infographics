@@ -39,6 +39,7 @@ export default {
 
   methods: {
     handleResize() {
+      console.log("re-draw")
       this.drawChart(this.mapData);
     },
 
@@ -51,8 +52,12 @@ export default {
       const mapWidth = svg.node().getBoundingClientRect().width;
       const mapHeight = svg.node().getBoundingClientRect().height;
 
+      // const colorScale = d3.scaleSequential(d3.interpolateViridis)
+      //     .domain([0, d3.max(data.features, d => d.properties.population)])
+      //     .interpolator(d3.interpolateBlues);
+
       const colorScale = d3.scaleSequential(d3.interpolateViridis)
-          .domain([0, d3.max(data.features, d => d.properties.population)])
+          .domain([0, Math.log(d3.max(data.features, d => d.properties.population))])
           .interpolator(d3.interpolateBlues);
 
       const projection = d3.geoMercator().fitSize([mapWidth, mapHeight], data);
@@ -63,7 +68,8 @@ export default {
         .enter()
         .append('path')
         .attr('d', path)
-        .attr('fill', d => colorScale(d.properties.population))
+        // .attr('fill', d => colorScale(d.properties.population))
+        .attr('fill', d => colorScale(Math.log(d.properties.population)))
         .attr('stroke', '#000000');
     },
 
