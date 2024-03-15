@@ -72,6 +72,8 @@
       </v-expansion-panels>
     </v-navigation-drawer>
     
+
+    
     <div ref="mapContainer" class="map-container" style="width: 100%; height: 100%;">
       <svg ref="svg" style="width: 100%; height: 100%;"></svg>
     </div>
