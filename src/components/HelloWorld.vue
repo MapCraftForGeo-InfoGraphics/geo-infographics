@@ -2,7 +2,7 @@
   <v-container style="width: 100%; height: 100%;">
 
     <v-navigation-drawer :width="400">
-      <v-list-item title="Geo-Info Graphics" ></v-list-item>
+      <v-list-item title="Geo-Info Graphics WebUI" ></v-list-item>
       <v-divider></v-divider>
 
       <v-expansion-panels>
@@ -73,7 +73,7 @@
     </v-navigation-drawer>
     
 
-    
+
     <div ref="mapContainer" class="map-container" style="width: 100%; height: 100%;">
       <svg ref="svg" style="width: 100%; height: 100%;"></svg>
     </div>
