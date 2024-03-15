@@ -7,10 +7,10 @@
 
       <v-expansion-panels>
         <v-expansion-panel>
-          <v-expansion-panel-title>
-            item 1
-          </v-expansion-panel-title>
 
+          <v-expansion-panel-title>
+            Basci Map Representations
+          </v-expansion-panel-title>
           <v-expansion-panel-text>
             Some content 1
             <v-img
@@ -22,11 +22,11 @@
           </v-expansion-panel-text>
         </v-expansion-panel>
 
+
         <v-expansion-panel>
           <v-expansion-panel-title>
-            item 2
+            Map Projections
           </v-expansion-panel-title>
-
           <v-expansion-panel-text>
             Some content 2
             <v-img
@@ -38,15 +38,37 @@
           </v-expansion-panel-text>
         </v-expansion-panel>
 
+
         <v-expansion-panel>
           <v-expansion-panel-title>
-            item 3
+            Hightlight Techniques
           </v-expansion-panel-title>
-
           <v-expansion-panel-text>
             Some content 3
           </v-expansion-panel-text>
         </v-expansion-panel>
+
+
+
+        <v-expansion-panel>
+          <v-expansion-panel-title>
+            Label Positions
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
+            Some content 4
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+
+
+        <v-expansion-panel>
+          <v-expansion-panel-title>
+            Encoding Channels
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
+            Some content 5
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+
       </v-expansion-panels>
     </v-navigation-drawer>
     
@@ -74,8 +96,13 @@ export default {
     this.loadJson('countries.geojson').then(data => {
       this.mapData = data;
 
-      this.loadJson('country-by-population.json').then(scale => {
-        console.log(scale);
+      this.loadJson('country-by-population.json').then(popuData => {
+        this.mapData.features.forEach(feature => {
+          var population = popuData.find(item => item.country === feature.properties.ADMIN);
+          feature.properties.population = (population === undefined ? 0 : population.population);
+        });
+
+        console.log(this.mapData);
         this.handleResize(this.mapData);
       });
     });
@@ -100,6 +127,10 @@ export default {
       const mapWidth = svg.node().getBoundingClientRect().width;
       const mapHeight = svg.node().getBoundingClientRect().height;
 
+      const colorScale = d3.scaleSequential(d3.interpolateViridis)
+          .domain([0, d3.max(data.features, d => d.properties.population)])
+          .interpolator(d3.interpolateBlues);
+
       const projection = d3.geoMercator().fitSize([mapWidth, mapHeight], data);
       const path = d3.geoPath().projection(projection);
 
@@ -108,8 +139,8 @@ export default {
         .enter()
         .append('path')
         .attr('d', path)
-        .attr('fill', 'lightgray')
-        .attr('stroke', 'white');
+        .attr('fill', d => colorScale(d.properties.population))
+        .attr('stroke', '#000000');
     },
 
     loadJson(na) {
