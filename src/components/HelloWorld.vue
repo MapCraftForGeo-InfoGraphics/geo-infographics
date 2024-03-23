@@ -18,7 +18,7 @@
           <v-expansion-panel>
 
             <v-expansion-panel-title>
-              Basci Map Representations
+              Basic Map Representations
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               Some content 1
