@@ -14,7 +14,7 @@ export default {
 
   mounted() {
     // 监听窗口大小变化
-    window.addEventListener('resize', this.handleResize);
+    // window.addEventListener('resize', this.handleResize);
 
     // 初次渲染图表
     this.loadJson('countries.geojson').then(data => {
@@ -34,7 +34,7 @@ export default {
 
   beforeUnmount() {
     // 组件销毁时移除监听器
-    window.removeEventListener('resize', this.handleResize);
+    // window.removeEventListener('resize', this.handleResize);
   },
 
   methods: {
