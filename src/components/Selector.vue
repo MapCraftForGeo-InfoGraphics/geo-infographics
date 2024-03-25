@@ -109,7 +109,21 @@
                 Label Positions
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-                Some content 4
+                <v-row>
+                    <v-col>
+                        <div class="element" id="Mollweide">
+                            Mollweide
+                            <v-img :src="require('../assets/Mollweide.svg')" />
+                        </div>
+                    </v-col>
+
+                    <v-col>
+                        <div class="element" id="Robinson">
+                            Robinson
+                            <v-img :src="require('../assets/Robinson.svg')" />
+                        </div>
+                    </v-col>
+                </v-row>
             </v-expansion-panel-text>
         </v-expansion-panel>
 
@@ -119,7 +133,21 @@
                 Encoding Channels
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-                Some content 5
+                <v-row>
+                    <v-col>
+                        <div class="element" id="Mollweide">
+                            Mollweide
+                            <v-img :src="require('../assets/Mollweide.svg')" />
+                        </div>
+                    </v-col>
+
+                    <v-col>
+                        <div class="element" id="Robinson">
+                            Robinson
+                            <v-img :src="require('../assets/Robinson.svg')" />
+                        </div>
+                    </v-col>
+                </v-row>
             </v-expansion-panel-text>
         </v-expansion-panel>
 
