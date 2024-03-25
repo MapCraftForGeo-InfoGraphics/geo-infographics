@@ -1,65 +1,66 @@
 <template>
     <v-expansion-panels>
         <v-expansion-panel>
-
             <v-expansion-panel-title>
                 Basic Map Representations
             </v-expansion-panel-title>
+
             <v-expansion-panel-text>
-                <v-row>
-                    <v-col>
-                        <div class="element" id="Political-Map">
+                <v-container class="container">
+                    <v-row>
+                        <v-col>
                             Political Map
                             <v-img :src="require('../assets/PoliticalMap.svg')" />
-                        </div>
+                        </v-col>
 
-                        <div class="element" id="Shape-based-Map">
-                            Shape-based Map
-                            <v-img :src="require('../assets/Shape-basedMap.svg')" />
-                        </div>
-
-                        <div class="element" id="Grid-Cartogram">
-                            Grid Cartogram
-                            <v-img :src="require('../assets/GridCartogram.svg')" />
-                        </div>
-                    </v-col>
-
-                    <v-col>
-                        <div class="element" id="Topographic-Map">
+                        <v-col>
                             Topographic Map
                             <v-img :src="require('../assets/TopographicMap.svg')" />
-                        </div>
+                        </v-col>
+                    </v-row>
 
-                        <div class="element" id="Street-Map">
+                    <v-row>
+                        <v-col>
+                            Shape-based Map
+                            <v-img :src="require('../assets/Shape-basedMap.svg')" />
+                        </v-col>
+
+                        <v-col>
                             Street Map
                             <v-img :src="require('../assets/StreetMap.svg')" />
-                        </div>
-                    </v-col>
-                </v-row>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            Grid Cartogram
+                            <v-img :src="require('../assets/GridCartogram.svg')" />
+                        </v-col>
+
+                        <v-col></v-col>
+                    </v-row>
+                </v-container>
             </v-expansion-panel-text>
         </v-expansion-panel>
-
 
         <v-expansion-panel>
             <v-expansion-panel-title>
                 Map Projections
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-                <v-row>
-                    <v-col>
-                        <div class="element" id="Mollweide">
+                <v-container class="container">
+                    <v-row>
+                        <v-col>
                             Mollweide
                             <v-img :src="require('../assets/Mollweide.svg')" />
-                        </div>
-                    </v-col>
+                        </v-col>
 
-                    <v-col>
-                        <div class="element" id="Robinson">
+                        <v-col>
                             Robinson
                             <v-img :src="require('../assets/Robinson.svg')" />
-                        </div>
-                    </v-col>
-                </v-row>
+                        </v-col>
+                    </v-row>
+                </v-container>
             </v-expansion-panel-text>
         </v-expansion-panel>
 
@@ -68,37 +69,39 @@
             <v-expansion-panel-title>
                 Hightlight Techniques
             </v-expansion-panel-title>
+
             <v-expansion-panel-text>
-                <v-row>
-                    <v-col>
-                        <div class="element" id="Light">
+                <v-container class="container">
+                    <v-row>
+                        <v-col>
                             Light
                             <v-img :src="require('../assets/HighlightLight.svg')" />
-                        </div>
+                        </v-col>
 
-                        <div class="element" id="Map-Pin">
-                            Color
-                            <v-img :src="require('../assets/HighlightMappin.svg')" />
-                        </div>
-                    </v-col>
-
-                    <v-col>
-                        <div class="element" id="Color">
+                        <v-col>
                             Robinson
                             <v-img :src="require('../assets/HighlightColor.svg')" />
-                        </div>
+                        </v-col>
+                    </v-row>
 
-                        <div class="element" id="3D-Transformation">
+                    <v-row>
+                        <v-col>
+                            Color
+                            <v-img :src="require('../assets/HighlightMappin.svg')" />
+                        </v-col>
+                        <v-col>
                             Mollweide
                             <v-img :src="require('../assets/Highlight3d.svg')" />
-                        </div>
-                    </v-col>
-                </v-row>
+                        </v-col>
+                    </v-row>
 
-                <div class="element" id="Enlarged-Portions">
-                    Mollweide
-                    <v-img :src="require('../assets/HighlightEnlarge.svg')" width="60%"/>
-                </div>
+                    <v-row>
+                        <v-col>
+                            Mollweide
+                            <v-img :src="require('../assets/HighlightEnlarge.svg')" width="60%" />
+                        </v-col>
+                    </v-row>
+                </v-container>
             </v-expansion-panel-text>
         </v-expansion-panel>
 
@@ -108,22 +111,67 @@
             <v-expansion-panel-title>
                 Label Positions
             </v-expansion-panel-title>
-            <v-expansion-panel-text>
-                <v-row>
-                    <v-col>
-                        <div class="element" id="Mollweide">
-                            Mollweide
-                            <v-img :src="require('../assets/Mollweide.svg')" />
-                        </div>
-                    </v-col>
 
-                    <v-col>
-                        <div class="element" id="Robinson">
-                            Robinson
-                            <v-img :src="require('../assets/Robinson.svg')" />
-                        </div>
-                    </v-col>
-                </v-row>
+            <v-expansion-panel-text>
+                <v-container class="container">
+                    <div class="sub-title" id="sub-title-0">Situated</div>
+                    <v-container class="sub-container">
+                        <v-row>
+                            <v-col>
+                                Situated
+                                <v-img :src="require('../assets/Situated.svg')" />
+                            </v-col>
+
+                            <v-col></v-col>
+                        </v-row>
+                    </v-container>
+
+                    <div class="sub-title">Matched</div>
+                    <v-container class="sub-container">
+                        <v-row>
+                            <v-col>
+                                Text
+                                <v-img :src="require('../assets/MatchedText.svg')" />
+                            </v-col>
+
+                            <v-col>
+                                Icon
+                                <v-img :src="require('../assets/MatchedIcon.svg')" />
+                            </v-col>
+                        </v-row>
+
+                        <v-row>
+                            <v-col>
+                                Color
+                                <v-img :src="require('../assets/MathchedColor.svg')" />
+                            </v-col>
+                            <v-col></v-col>
+                        </v-row>
+                    </v-container>
+
+                    <div class="sub-title">Linked</div>
+                    <v-container class="sub-container">
+                        <v-row>
+                            <v-col style="padding: 0;">
+                                <v-col>
+                                    Convenient
+                                    <v-img :src="require('../assets/LinkedConvenient.svg')" />
+                                </v-col>
+
+                                <v-col>
+                                    Aligned
+                                    <v-img :src="require('../assets/LinkedAligned.svg')" />
+                                </v-col>
+
+                            </v-col>
+
+                            <v-col>
+                                Ordered
+                                <v-img :src="require('../assets/LinkedOrdered.svg')" />
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </v-container>
             </v-expansion-panel-text>
         </v-expansion-panel>
 
@@ -133,30 +181,63 @@
                 Encoding Channels
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-                <v-row>
-                    <v-col>
-                        <div class="element" id="Mollweide">
-                            Mollweide
-                            <v-img :src="require('../assets/Mollweide.svg')" />
-                        </div>
-                    </v-col>
+                <v-container class="container">
+                    <v-row>
+                        <v-col>
+                            Color (Luminance)
+                            <v-img :src="require('../assets/Color(Luminance).svg')" />
+                        </v-col>
 
-                    <v-col>
-                        <div class="element" id="Robinson">
-                            Robinson
-                            <v-img :src="require('../assets/Robinson.svg')" />
-                        </div>
-                    </v-col>
-                </v-row>
+                        <v-col>
+                            Color (Hue)
+                            <v-img :src="require('../assets/Color(Hue).svg')" />
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            3D Length
+                            <v-img :src="require('../assets/3DLength.svg')" />
+                        </v-col>
+
+                        <v-col>
+                            Glyph
+                            <v-img :src="require('../assets/Glyph.svg')" />
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            Link (Line)
+                            <v-img :src="require('../assets/Link(Line).svg')" />
+                        </v-col>
+
+                        <v-col>
+                            Link (Arrow)
+                            <v-img :src="require('../assets/Link(Arrow).svg')" />
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            Size
+                            <v-img :src="require('../assets/Size.svg')" />
+                        </v-col>
+
+                        <v-col>
+                            Quantity
+                            <v-img :src="require('../assets/Quantity.svg')" />
+                        </v-col>
+                    </v-row>
+                </v-container>
             </v-expansion-panel-text>
         </v-expansion-panel>
-
     </v-expansion-panels>
 </template>
 
 <script>
 export default {
-    name: 'ChannelSelector',
+    name: 'VisualSelector',
 
     components: {
 
@@ -174,5 +255,29 @@ export default {
 
     },
 }
-
 </script>
+
+<style scoped>
+    .container {
+        padding: 0px;
+    }
+
+    .sub-container {
+        border: 1px dotted;
+        border-color: #E1CBD8;
+    }
+
+    .sub-title {
+        margin-top: 6px;
+        padding: 3px;
+        font-size: 14px;
+        border-radius: 6px;
+        display: block;
+        width: fit-content;
+        background-color: #E1CBD8;
+    }
+
+    #sub-title-0 {
+        margin-top: 0px;
+    }
+</style>

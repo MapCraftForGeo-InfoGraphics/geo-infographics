@@ -1,5 +1,8 @@
 <template>
+  <v-container style="width: 100%; height: 100%; margin-left: 0; margin-right: 0">
     <svg ref="svg" style="width: 100%; height: 100%;"></svg>
+  </v-container>
+
 </template>
 
 <script>
@@ -57,8 +60,8 @@ export default {
       //     .interpolator(d3.interpolateBlues);
 
       const colorScale = d3.scaleSequential(d3.interpolateViridis)
-          .domain([0, Math.log(d3.max(data.features, d => d.properties.population))])
-          .interpolator(d3.interpolateBlues);
+        .domain([0, Math.log(d3.max(data.features, d => d.properties.population))])
+        .interpolator(d3.interpolateBlues);
 
       const projection = d3.geoMercator().fitSize([mapWidth, mapHeight], data);
       const path = d3.geoPath().projection(projection);
@@ -76,14 +79,14 @@ export default {
     loadJson(na) {
       return new Promise((resolve, reject) => {
         d3.json(na).then(data => {
-            resolve(data);
-          }).catch(error => {
-            console.error('Error loading GeoJSON data:', error);
-            reject(error);
-          });
+          resolve(data);
+        }).catch(error => {
+          console.error('Error loading GeoJSON data:', error);
+          reject(error);
+        });
       });
     },
   },
-  
+
 }
 </script>
