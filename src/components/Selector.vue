@@ -282,7 +282,7 @@ export default {
     }
 
     .element:hover{
-        transform: scale(1.2);
+        transform: scale(1.1);
         border: 0.67px solid;
         border-color: #E1CBD8;
     }
