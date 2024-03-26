@@ -12,66 +12,68 @@ export default {
   name: 'D3Panel',
 
   data: () => ({
-    mapData: {},
+    svg: null,
+
+    mapHeight: 100,
+    mapWidth: 100,
+
+    geoData: {},
+    geoProjection: null,
+    geoPath: null,
   }),
 
   mounted() {
-    // 监听窗口大小变化
-    // window.addEventListener('resize', this.handleResize);
+    // 获得html中的地图（svg）标签
+    this.svg = d3.select(this.$refs.svg);
 
-    // 初次渲染图表
+    //根据窗口大小设置地图的大小
+    this.mapWidth = this.svg.node().getBoundingClientRect().width;
+    this.mapHeight = this.svg.node().getBoundingClientRect().height;
+
+    // 读取geojson
     this.loadJson('countries.geojson').then(data => {
-      this.mapData = data;
+      this.geoData = data;
 
+      // 读取人口信息
       this.loadJson('country-by-population.json').then(popuData => {
-        this.mapData.features.forEach(feature => {
+        this.geoData.features.forEach(feature => {
           var population = popuData.find(item => item.country === feature.properties.ADMIN);
           feature.properties.population = (population === undefined ? 0 : population.population);
         });
 
-        console.log(this.mapData);
-        this.handleResize(this.mapData);
+        //配置默认数据
+        this.setProjection(0);
+
+        //绘制地图
+        this.initMap();
       });
     });
   },
 
-  beforeUnmount() {
-    // 组件销毁时移除监听器
-    // window.removeEventListener('resize', this.handleResize);
-  },
-
   methods: {
-    handleResize() {
-      console.log("re-draw")
-      this.drawChart(this.mapData);
+    //重新加载数据并绘制svg
+    initMap() {
+      this.geoPath = d3.geoPath().projection(this.geoProjection);
+      this.drawSvg()
     },
 
-    drawChart(data) {
-      const svg = d3.select(this.$refs.svg);
-
+    //重新绘制svg
+    drawSvg() {
       // 移除现有的 SVG
-      svg.selectAll('*').remove();
+      this.svg.selectAll('*').remove();
 
-      const mapWidth = svg.node().getBoundingClientRect().width;
-      const mapHeight = svg.node().getBoundingClientRect().height;
-
-      // const colorScale = d3.scaleSequential(d3.interpolateViridis)
-      //     .domain([0, d3.max(data.features, d => d.properties.population)])
-      //     .interpolator(d3.interpolateBlues);
-
+      // 设置色彩的Encoding Channel
       const colorScale = d3.scaleSequential(d3.interpolateViridis)
-        .domain([0, Math.log(d3.max(data.features, d => d.properties.population))])
+        .domain([0, Math.log(d3.max(this.geoData.features, d => d.properties.population))])
         .interpolator(d3.interpolateBlues);
 
-      const projection = d3.geoMercator().fitSize([mapWidth, mapHeight], data);
-      const path = d3.geoPath().projection(projection);
-
-      svg.selectAll('path')
-        .data(data.features)
+      // 绘制svg
+      this.svg.selectAll('path')
+        .data(this.geoData.features)
         .enter()
         .append('path')
-        .attr('d', path)
-        // .attr('fill', d => colorScale(d.properties.population))
+        .attr('d', this.geoPath)
+        .attr('fill', d => colorScale(d.properties.population))
         .attr('fill', d => colorScale(Math.log(d.properties.population)))
         .attr('stroke', '#000000');
     },
@@ -86,7 +88,36 @@ export default {
         });
       });
     },
-  },
 
+    // 设置 Map Projection
+    // 0: Mollweide
+    // 1: Robinson
+    setProjection(projection_type) {
+      if (projection_type === 0) {
+        this.geoProjection = d3.geoProjection(function (x, y) {
+          var lambda = x / 180 * Math.PI;
+          var phi = y / 180 * Math.PI;
+          var theta = Math.asin((2 * phi) / Math.PI);
+          var _x = (Math.sqrt(2) / Math.PI) * lambda * Math.cos(theta);
+          var _y = Math.sqrt(2) / Math.PI * Math.sin(theta);
+          return [_x, _y];
+        }).fitSize([this.mapWidth, this.mapHeight], this.geoData);
+      }
+
+      else if (projection_type === 1) {
+        this.geoProjection = d3.geoProjection(function (x, y) {
+          // 投影函数
+          var lambda = x / 180 * Math.PI;
+          var phi = y / 180 * Math.PI;
+          var phi_1 = Math.asin(2 / Math.PI * Math.sin(phi));
+          var theta = 0.8 * lambda * Math.cos(phi_1);
+          var _x = 2 / Math.PI * theta;
+          var _y = Math.sin(phi_1);
+          return [_x, _y];
+        }).fitSize([this.mapWidth, this.mapHeight], this.geoData);
+      }
+    },
+
+  },
 }
 </script>
