@@ -44,17 +44,36 @@ export default {
     });
   },
 
-  // 将函数提供的方法（我也不懂）
+  // 将函数提供的方法
   setup() {
-    const projection = (type) => {
-      console.log("change projection to type", type);
+    const setRepresentation = (type) => {
+      d3PanelInstance.value.setRepresentation(type);
+    };
+
+    const setProjection = (type) => {
       // Call D3Panel's setProjection method
       d3PanelInstance.value.setProjection(type);
       d3PanelInstance.value.initMap();
     };
 
+    const setHighlight = (type) => {
+      d3PanelInstance.value.setHighlight(type);
+    }
+
+    const setLabelPosition = (type) => {
+      d3PanelInstance.value.setLabelPosition(type);
+    }
+
+    const setEncodingChannel = (type) => {
+      d3PanelInstance.value.setEncodingChannel(type);
+    }
+
     // Provide setProjection function to child components
-    provide('projection', projection);
+    provide('setRepresentation', setRepresentation);
+    provide('setProjection', setProjection);
+    provide('setHighlight', setHighlight);
+    provide('setLabelPosition', setLabelPosition);
+    provide('setEncodingChannel', setEncodingChannel);
 
     // Reference to D3Panel component instance
     const d3PanelInstance = ref(null);

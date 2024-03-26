@@ -89,11 +89,20 @@ export default {
       });
     },
 
+    // 
+
+    // 设置 Map Representation
+    setRepresentation(type){
+      console.log("Representation:", type)
+    },
+
     // 设置 Map Projection
     // 0: Mollweide
     // 1: Robinson
-    setProjection(projection_type) {
-      if (projection_type === 0) {
+    setProjection(type) {
+      console.log("Map Projection:", type);
+
+      if (type === 0) {
         this.geoProjection = d3.geoProjection(function (x, y) {
           var lambda = x / 180 * Math.PI;
           var phi = y / 180 * Math.PI;
@@ -104,7 +113,7 @@ export default {
         }).fitSize([this.mapWidth, this.mapHeight], this.geoData);
       }
 
-      else if (projection_type === 1) {
+      else if (type === 1) {
         this.geoProjection = d3.geoProjection(function (x, y) {
           // 投影函数
           var lambda = x / 180 * Math.PI;
@@ -116,6 +125,18 @@ export default {
           return [_x, _y];
         }).fitSize([this.mapWidth, this.mapHeight], this.geoData);
       }
+    },
+
+    setHighlight(type){
+      console.log("Highlight Techniques:", type)
+    },
+
+    setLabelPosition(type){
+      console.log("Label Position:", type)
+    },
+
+    setEncodingChannel(type){
+      console.log("Encoding Channel:", type)
     },
 
   },

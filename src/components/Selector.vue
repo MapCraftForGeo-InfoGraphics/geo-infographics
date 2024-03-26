@@ -51,12 +51,12 @@
             <v-expansion-panel-text>
                 <v-container class="container">
                     <v-row>
-                        <v-col class="element" @click="projection(0)">
+                        <v-col class="element" @click="setProjection(0)">
                             Mollweide
                             <v-img :src="require('../assets/Mollweide.svg')" contain />
                         </v-col>
 
-                        <v-col class="element" @click="projection(1)">
+                        <v-col class="element" @click="setProjection(1)">
                             Robinson
                             <v-img :src="require('../assets/Robinson.svg')" contain />
                         </v-col>
@@ -68,7 +68,7 @@
 
         <v-expansion-panel>
             <v-expansion-panel-title>
-                Hightlight Techniques
+                Highlight Techniques
             </v-expansion-panel-title>
 
             <v-expansion-panel-text>
@@ -246,14 +246,26 @@ export default {
 
     data: () => ({
         projectionType: 0,
+
+        myType: {
+            
+        }
     }),
 
     // 注入HelloWorld.vue中提供的函数
     setup() {
-    // Inject the setProjection function from HelloWorld.vue
-    const projection = inject('projection');
+    // Inject the function from HelloWorld.vue
+    const setRepresentation = inject('setRepresentation');
+    const setProjection = inject('setProjection');
+    const setHighlight = inject('setHighlight');
+    const setLabelPosition = inject('setLabelPosition');
+    const setEncodingChannel = inject('setEncodingChannel');
     return {
-        projection
+        setRepresentation,
+        setProjection,
+        setHighlight,
+        setLabelPosition,
+        setEncodingChannel
     };
   }
 }
