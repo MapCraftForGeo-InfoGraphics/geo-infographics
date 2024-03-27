@@ -207,6 +207,7 @@ export default {
       // 清除现有的 SVG 内容
       this.svg.selectAll('*').remove();
 
+      //Encoding Color (Luminance)'
       if (type === this.myType['Color (Luminance)']) {
         // 应用蓝色编码
         const colorScale = d3.scaleSequential(d3.interpolateBlues)
@@ -220,6 +221,41 @@ export default {
           .attr('d', this.geoPath)
           .attr('fill', d => colorScale(Math.log(d.properties.population)))
           .attr('stroke', '#000000');
+      }
+      //Encoding 3D Length
+      else if (type === this.myType['3D Length']) {
+        this.drawSvg(); // 绘制地图的基本轮廓
+        // 在地图上绘制模拟的3D长方体
+        const baseHeight = 5; // 长方体基础高度，所有长方体至少有这个高度
+        const populationPerHeight = 10000000; // 每增加这么多人口，长方体的高度增加一单位
+        const cuboidWidth = 10; // 长方体的宽度
+        const cuboidLength = 20; // 长方体的长度（在SVG中模拟的“深度”）
+        const sideOpacity = 0.5; // 侧面的不透明度
+
+        this.geoData.features.forEach(feature => {
+          const center = this.geoPath.centroid(feature);
+          const population = feature.properties.population;
+          const height = baseHeight + (population / populationPerHeight); // 长方体的总高度
+
+          // 绘制长方体的“前面”
+          this.svg.append('rect')
+            .attr('x', center[0] - cuboidWidth / 2)
+            .attr('y', center[1] - height)
+            .attr('width', cuboidWidth)
+            .attr('height', height)
+            .attr('fill', 'rgba(100, 100, 255, 0.7)');
+
+          // 绘制长方体的“顶面”
+          this.svg.append('polygon')
+            .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
+            .attr('fill', 'rgba(150, 150, 255, 0.7)');
+
+          // 绘制长方体的“左侧面”
+          this.svg.append('polygon')
+            .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
+            .attr('fill', `rgba(100, 100, 255, ${sideOpacity})`);
+        });
+
       }
       //Encoding Size
       else if (type === this.myType['Size']) {
