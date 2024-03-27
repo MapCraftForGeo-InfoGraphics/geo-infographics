@@ -29,7 +29,7 @@ export default {
       "Shape-based Map": 2,
       "Street Map": 3,
       "Grid Cartogram": 4,
-      
+
 
       "Mollweide": 0,
       "Robinson": 1,
@@ -56,8 +56,8 @@ export default {
       "Link (Arrow)": 5,
       "Size": 6,
       "Quantity": 7,
-     
-      
+
+
 
     }
   }),
@@ -124,6 +124,7 @@ export default {
       //   .attr('stroke', '#000000');
     },
 
+
     loadJson(na) {
       return new Promise((resolve, reject) => {
         d3.json(na).then(data => {
@@ -134,6 +135,26 @@ export default {
         });
       });
     },
+
+    // //encoding Size
+    // drawPopulationSquares() {
+    //   const populationExtent = d3.extent(this.geoData.features, d => d.properties.population);
+    //   const sizeScale = d3.scaleSqrt()
+    //     .domain(populationExtent)
+    //     .range([5, 50]); // 方块大小的范围
+
+    //   // 直接在现有的SVG上绘制方块，不清除之前的内容
+    //   this.geoData.features.forEach(feature => {
+    //     const [x, y] = this.geoPath.centroid(feature);
+    //     const population = feature.properties.population;
+    //     this.svg.append('rect')
+    //       .attr('x', x - sizeScale(population) / 2)
+    //       .attr('y', y - sizeScale(population) / 2)
+    //       .attr('width', sizeScale(population))
+    //       .attr('height', sizeScale(population))
+    //       .attr('fill', 'rgba(118, 139, 193, 0.7)');
+    //   });
+    // },
 
     // 
 
@@ -181,27 +202,51 @@ export default {
       console.log("Label Position:", type)
     },
 
-    // setEncodingChannel(type) {
-    //   console.log("Encoding Channel:", type)
-    //   if (type === this.myType['Color']) {
-        
-    //   }
-    // },
     setEncodingChannel(type) {
       console.log("Encoding Channel:", type);
+      // 清除现有的 SVG 内容
+      this.svg.selectAll('*').remove();
+
       if (type === this.myType['Color (Luminance)']) {
-        // 设置为蓝色编码
+        // 应用蓝色编码
         const colorScale = d3.scaleSequential(d3.interpolateBlues)
           .domain([0, Math.log(d3.max(this.geoData.features, d => d.properties.population))]);
-        this.fillColorFunction = d => colorScale(Math.log(d.properties.population));
-      } else {
-        // 其他情况，使用单一的灰色
-        this.fillColorFunction = () => '#808080';
-      }
 
-      // 由于颜色编码可能已改变，重新绘制地图
-      this.drawSvg();
+        // 重新绘制地图并应用颜色编码
+        this.svg.selectAll('path')
+          .data(this.geoData.features)
+          .enter()
+          .append('path')
+          .attr('d', this.geoPath)
+          .attr('fill', d => colorScale(Math.log(d.properties.population)))
+          .attr('stroke', '#000000');
+      } else if (type === this.myType['Size']) {
+        // 绘制地图的基本轮廓，不包含颜色编码或人口方块
+        this.drawSvg();
+        // 在地图上绘制人口方块
+        // this.drawPopulationSquares();
+        const populationExtent = d3.extent(this.geoData.features, d => d.properties.population);
+        const sizeScale = d3.scaleSqrt()
+          .domain(populationExtent)
+          .range([5, 50]); // 方块大小的范围
+
+        // 直接在现有的SVG上绘制方块，不清除之前的内容
+        this.geoData.features.forEach(feature => {
+          const [x, y] = this.geoPath.centroid(feature);
+          const population = feature.properties.population;
+          this.svg.append('rect')
+            .attr('x', x - sizeScale(population) / 2)
+            .attr('y', y - sizeScale(population) / 2)
+            .attr('width', sizeScale(population))
+            .attr('height', sizeScale(population))
+            .attr('fill', 'rgba(118, 139, 193, 0.7)');
+        });
+      } else {
+        // 默认情况下使用单一的灰色，并绘制地图的基本轮廓
+        this.drawSvg();
+      }
     },
+
 
   },
 }
