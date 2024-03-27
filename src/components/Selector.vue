@@ -8,7 +8,7 @@
             <v-expansion-panel-text>
                 <v-container class="container">
                     <v-row>
-                        <v-col class="element">
+                        <v-col class="element" @click="setRepresentation(myType['Political Map'])">
                             Political Map
                             <v-img :src="require('../assets/PoliticalMap.svg')" contain />
                         </v-col>
@@ -248,6 +248,23 @@ export default {
         projectionType: 0,
 
         myType: {
+            "Political Map": 0,
+            "Shape-based Map": 1,
+            "Grid Cartogram": 2,
+            "Topographic Map": 3,
+            "Street Map": 4,
+
+            "Mollweide": 0,
+            "Robinson": 1,
+
+            "Light": 0,
+            "Color": 1,
+            "Map Pin": 2,
+            "3D Transformation":3,
+            "Enlarged Positions": 4,
+            
+            "Label Situated": 0,
+            "Label Text": 1,
             
         }
     }),

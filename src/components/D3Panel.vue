@@ -20,6 +20,27 @@ export default {
     geoData: {},
     geoProjection: null,
     geoPath: null,
+
+    myType: {
+      "Political Map": 0,
+      "Shape-based Map": 1,
+      "Grid Cartogram": 2,
+      "Topographic Map": 3,
+      "Street Map": 4,
+
+      "Mollweide": 0,
+      "Robinson": 1,
+
+      "Light": 0,
+      "Color": 1,
+      "Map Pin": 2,
+      "3D Transformation": 3,
+      "Enlarged Positions": 4,
+
+      "Label Situated": 0,
+      "Label Text": 1,
+
+    }
   }),
 
   mounted() {
@@ -73,7 +94,6 @@ export default {
         .enter()
         .append('path')
         .attr('d', this.geoPath)
-        .attr('fill', d => colorScale(d.properties.population))
         .attr('fill', d => colorScale(Math.log(d.properties.population)))
         .attr('stroke', '#000000');
     },
@@ -92,7 +112,7 @@ export default {
     // 
 
     // 设置 Map Representation
-    setRepresentation(type){
+    setRepresentation(type) {
       console.log("Representation:", type)
     },
 
@@ -102,7 +122,7 @@ export default {
     setProjection(type) {
       console.log("Map Projection:", type);
 
-      if (type === 0) {
+      if (type === this.myType['Mollweide']) {
         this.geoProjection = d3.geoProjection(function (x, y) {
           var lambda = x / 180 * Math.PI;
           var phi = y / 180 * Math.PI;
@@ -113,7 +133,7 @@ export default {
         }).fitSize([this.mapWidth, this.mapHeight], this.geoData);
       }
 
-      else if (type === 1) {
+      else if (type === this.myType['Robinson']) {
         this.geoProjection = d3.geoProjection(function (x, y) {
           // 投影函数
           var lambda = x / 180 * Math.PI;
@@ -127,15 +147,15 @@ export default {
       }
     },
 
-    setHighlight(type){
+    setHighlight(type) {
       console.log("Highlight Techniques:", type)
     },
 
-    setLabelPosition(type){
+    setLabelPosition(type) {
       console.log("Label Position:", type)
     },
 
-    setEncodingChannel(type){
+    setEncodingChannel(type) {
       console.log("Encoding Channel:", type)
     },
 
