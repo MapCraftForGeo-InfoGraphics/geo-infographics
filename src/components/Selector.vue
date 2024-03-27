@@ -13,26 +13,26 @@
                             <v-img :src="require('../assets/PoliticalMap.svg')" contain />
                         </v-col>
 
-                        <v-col class="element">
+                        <v-col class="element" @click="setRepresentation(myType['Topographic Map'])">
                             Topographic Map
                             <v-img :src="require('../assets/TopographicMap.svg')" contain />
                         </v-col>
                     </v-row>
 
                     <v-row>
-                        <v-col class="element">
+                        <v-col class="element" @click="setRepresentation(myType['Shape-based Map'])">
                             Shape-based Map
                             <v-img :src="require('../assets/Shape-basedMap.svg')" contain />
                         </v-col>
 
-                        <v-col class="element">
+                        <v-col class="element" @click="setRepresentation(myType['Street Map'])">
                             Street Map
                             <v-img :src="require('../assets/StreetMap.svg')" contain />
                         </v-col>
                     </v-row>
 
                     <v-row>
-                        <v-col class="element">
+                        <v-col class="element" @click="setRepresentation(myType['Grid Cartogram'])">
                             Grid Cartogram
                             <v-img :src="require('../assets/GridCartogram.svg')" contain />
                         </v-col>
@@ -51,12 +51,12 @@
             <v-expansion-panel-text>
                 <v-container class="container">
                     <v-row>
-                        <v-col class="element" @click="setProjection(0)">
+                        <v-col class="element" @click="setProjection(myType['Mollweide'])">
                             Mollweide
                             <v-img :src="require('../assets/Mollweide.svg')" contain />
                         </v-col>
 
-                        <v-col class="element" @click="setProjection(1)">
+                        <v-col class="element" @click="setProjection(myType['Robinson'])">
                             Robinson
                             <v-img :src="require('../assets/Robinson.svg')" contain />
                         </v-col>
@@ -74,31 +74,31 @@
             <v-expansion-panel-text>
                 <v-container class="container">
                     <v-row>
-                        <v-col class="element">
+                        <v-col class="element" @click="setHighlight(myType['Light'])">
                             Light
                             <v-img :src="require('../assets/HighlightLight.svg')" contain />
                         </v-col>
 
-                        <v-col class="element">
+                        <v-col class="element" @click="setHighlight(myType['Color'])">
                             Color
                             <v-img :src="require('../assets/HighlightColor.svg')" contain />
                         </v-col>
                     </v-row>
 
                     <v-row>
-                        <v-col class="element">
+                        <v-col class="element" @click="setHighlight(myType['Map Pin'])">
                             Map Pin
                             <v-img :src="require('../assets/HighlightMappin.svg')" contain />
                         </v-col>
 
-                        <v-col class="element">
+                        <v-col class="element" @click="setHighlight(myType['3D Transformation'])">
                             3D Transformation
                             <v-img :src="require('../assets/Highlight3d.svg')" contain />
                         </v-col>
                     </v-row>
 
                     <v-row>
-                        <v-col class="element">
+                        <v-col class="element" @click="setHighlight(myType['Enlarged Positions'])">
                             Enlarged Positions
                             <v-img :src="require('../assets/HighlightEnlarge.svg')" width="61%" contain />
                         </v-col>
@@ -119,7 +119,7 @@
                     <div class="sub-title" id="sub-title-0">Situated</div>
                     <v-container class="sub-container">
                         <v-row>
-                            <v-col class="element">
+                            <v-col class="element" @click="setLabelPosition(myType['Label Situated'])">
                                 Situated
                                 <v-img :src="require('../assets/Situated.svg')" contain />
                             </v-col>
@@ -131,19 +131,19 @@
                     <div class="sub-title">Matched</div>
                     <v-container class="sub-container">
                         <v-row>
-                            <v-col class="element">
+                            <v-col class="element"  @click="setLabelPosition(myType['Label Text'])">
                                 Text
                                 <v-img :src="require('../assets/MatchedText.svg')" contain />
                             </v-col>
 
-                            <v-col class="element">
+                            <v-col class="element"  @click="setLabelPosition(myType['Label Icon'])">
                                 Icon
                                 <v-img :src="require('../assets/MatchedIcon.svg')" contain />
                             </v-col>
                         </v-row>
 
                         <v-row>
-                            <v-col class="element">
+                            <v-col class="element"  @click="setLabelPosition(myType['Label Color'])">
                                 Color
                                 <v-img :src="require('../assets/MathchedColor.svg')" contain />
                             </v-col>
@@ -155,19 +155,19 @@
                     <v-container class="sub-container">
                         <v-row>
                             <v-col style="padding: 0;">
-                                <v-col class="element">
+                                <v-col class="element"  @click="setLabelPosition(myType['Label Convenient'])">
                                     Convenient
                                     <v-img :src="require('../assets/LinkedConvenient.svg')" contain />
                                 </v-col>
 
-                                <v-col class="element">
+                                <v-col class="element"  @click="setLabelPosition(myType['Label Aligned'])">
                                     Aligned
                                     <v-img :src="require('../assets/LinkedAligned.svg')" contain />
                                 </v-col>
 
                             </v-col>
 
-                            <v-col class="element">
+                            <v-col class="element"  @click="setLabelPosition(myType['Label Ordered'])">
                                 Ordered
                                 <v-img :src="require('../assets/LinkedOrdered.svg')" contain />
                             </v-col>
@@ -186,48 +186,48 @@
             <v-expansion-panel-text>
                 <v-container class="container">
                     <v-row>
-                        <v-col class="element">
+                        <v-col class="element" @click="setEncodingChannel(myType['Color (Luminance)'])">
                             Color (Luminance)
                             <v-img :src="require('../assets/Color(Luminance).svg')" contain />
                         </v-col>
 
-                        <v-col class="element">
+                        <v-col class="element" @click="setEncodingChannel(myType['Color (Hue)'])">
                             Color (Hue)
                             <v-img :src="require('../assets/Color(Hue).svg')" contain />
                         </v-col>
                     </v-row>
 
                     <v-row>
-                        <v-col class="element">
+                        <v-col class="element" @click="setEncodingChannel(myType['3D Length'])">
                             3D Length
                             <v-img :src="require('../assets/3DLength.svg')" contain />
                         </v-col>
 
-                        <v-col class="element">
+                        <v-col class="element" @click="setEncodingChannel(myType['Glyph'])">
                             Glyph
                             <v-img :src="require('../assets/Glyph.svg')" contain />
                         </v-col>
                     </v-row>
 
                     <v-row>
-                        <v-col class="element">
+                        <v-col class="element" @click="setEncodingChannel(myType['Link (Line)'])"> 
                             Link (Line)
                             <v-img :src="require('../assets/Link(Line).svg')" contain />
                         </v-col>
 
-                        <v-col class="element">
+                        <v-col class="element" @click="setEncodingChannel(myType['Link (Arrow)'])">
                             Link (Arrow)
                             <v-img :src="require('../assets/Link(Arrow).svg')" contain />
                         </v-col>
                     </v-row>
 
                     <v-row>
-                        <v-col class="element">
+                        <v-col class="element" @click="setEncodingChannel(myType['Size'])">
                             Size
                             <v-img :src="require('../assets/Size.svg')" contain />
                         </v-col>
 
-                        <v-col class="element">
+                        <v-col class="element" @click="setEncodingChannel(myType['Quantity'])">
                             Quantity
                             <v-img :src="require('../assets/Quantity.svg')" contain />
                         </v-col>
@@ -249,10 +249,11 @@ export default {
 
         myType: {
             "Political Map": 0,
-            "Shape-based Map": 1,
-            "Grid Cartogram": 2,
-            "Topographic Map": 3,
-            "Street Map": 4,
+            "Topographic Map": 1,
+            "Shape-based Map": 2,
+            "Street Map": 3,
+            "Grid Cartogram": 4,
+            
 
             "Mollweide": 0,
             "Robinson": 1,
@@ -260,11 +261,25 @@ export default {
             "Light": 0,
             "Color": 1,
             "Map Pin": 2,
-            "3D Transformation":3,
+            "3D Transformation": 3,
             "Enlarged Positions": 4,
-            
+
             "Label Situated": 0,
             "Label Text": 1,
+            "Label Icon": 2,
+            "Label Color": 3,
+            "Label Convenient": 4,
+            "Label Aligned": 5,
+            "Label Ordered": 6,
+
+            "Color (Luminance)": 0,
+            "Color (Hue)": 1,
+            "3D Length": 2,
+            "Glyph": 3,
+            "Link (Line)": 4,
+            "Link (Arrow)": 5,
+            "Size": 6,
+            "Quantity": 7,
             
         }
     }),

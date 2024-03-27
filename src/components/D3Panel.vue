@@ -21,12 +21,15 @@ export default {
     geoProjection: null,
     geoPath: null,
 
+    fillColorFunction: () => '#808080', // 默认为单一灰色
+
     myType: {
       "Political Map": 0,
-      "Shape-based Map": 1,
-      "Grid Cartogram": 2,
-      "Topographic Map": 3,
-      "Street Map": 4,
+      "Topographic Map": 1,
+      "Shape-based Map": 2,
+      "Street Map": 3,
+      "Grid Cartogram": 4,
+      
 
       "Mollweide": 0,
       "Robinson": 1,
@@ -39,6 +42,22 @@ export default {
 
       "Label Situated": 0,
       "Label Text": 1,
+      "Label Icon": 2,
+      "Label Color": 3,
+      "Label Convenient": 4,
+      "Label Aligned": 5,
+      "Label Ordered": 6,
+
+      "Color (Luminance)": 0,
+      "Color (Hue)": 1,
+      "3D Length": 2,
+      "Glyph": 3,
+      "Link (Line)": 4,
+      "Link (Arrow)": 5,
+      "Size": 6,
+      "Quantity": 7,
+     
+      
 
     }
   }),
@@ -83,19 +102,26 @@ export default {
       // 移除现有的 SVG
       this.svg.selectAll('*').remove();
 
-      // 设置色彩的Encoding Channel
-      const colorScale = d3.scaleSequential(d3.interpolateViridis)
-        .domain([0, Math.log(d3.max(this.geoData.features, d => d.properties.population))])
-        .interpolator(d3.interpolateBlues);
+      // // 设置色彩的Encoding Channel
+      // const colorScale = d3.scaleSequential(d3.interpolateViridis)
+      //   .domain([0, Math.log(d3.max(this.geoData.features, d => d.properties.population))])
+      //   .interpolator(d3.interpolateBlues);
 
-      // 绘制svg
       this.svg.selectAll('path')
         .data(this.geoData.features)
         .enter()
         .append('path')
         .attr('d', this.geoPath)
-        .attr('fill', d => colorScale(Math.log(d.properties.population)))
+        .attr('fill', d => this.fillColorFunction(d))
         .attr('stroke', '#000000');
+      // // 绘制svg
+      // this.svg.selectAll('path')
+      //   .data(this.geoData.features)
+      //   .enter()
+      //   .append('path')
+      //   .attr('d', this.geoPath)
+      //   .attr('fill', d => colorScale(Math.log(d.properties.population)))
+      //   .attr('stroke', '#000000');
     },
 
     loadJson(na) {
@@ -155,8 +181,26 @@ export default {
       console.log("Label Position:", type)
     },
 
+    // setEncodingChannel(type) {
+    //   console.log("Encoding Channel:", type)
+    //   if (type === this.myType['Color']) {
+        
+    //   }
+    // },
     setEncodingChannel(type) {
-      console.log("Encoding Channel:", type)
+      console.log("Encoding Channel:", type);
+      if (type === this.myType['Color (Luminance)']) {
+        // 设置为蓝色编码
+        const colorScale = d3.scaleSequential(d3.interpolateBlues)
+          .domain([0, Math.log(d3.max(this.geoData.features, d => d.properties.population))]);
+        this.fillColorFunction = d => colorScale(Math.log(d.properties.population));
+      } else {
+        // 其他情况，使用单一的灰色
+        this.fillColorFunction = () => '#808080';
+      }
+
+      // 由于颜色编码可能已改变，重新绘制地图
+      this.drawSvg();
     },
 
   },
