@@ -220,7 +220,9 @@ export default {
           .attr('d', this.geoPath)
           .attr('fill', d => colorScale(Math.log(d.properties.population)))
           .attr('stroke', '#000000');
-      } else if (type === this.myType['Size']) {
+      }
+      //Encoding Size
+      else if (type === this.myType['Size']) {
         // 绘制地图的基本轮廓，不包含颜色编码或人口方块
         this.drawSvg();
         // 在地图上绘制人口方块
@@ -239,9 +241,44 @@ export default {
             .attr('y', y - sizeScale(population) / 2)
             .attr('width', sizeScale(population))
             .attr('height', sizeScale(population))
-            .attr('fill', 'rgba(118, 139, 193, 0.7)');
+            .attr('fill', 'rgba(118, 139, 193, 1)');
         });
-      } else {
+      }
+      //Encoding Quantity
+      else if (type === this.myType['Quantity']) {
+        this.drawSvg(); // 绘制地图的基本轮廓
+        // 在地图上叠加人口方块
+        const blockSize = 5; // 方块的边长
+        const blockGap = 3; // 方块间的间隔
+        const rowGap = 5; // 新增：行间距
+        const populationPerBlock = 10000000; // 每个方块代表的人口数量
+
+        // 直接在现有的SVG上绘制方块，不清除之前的内容
+        this.geoData.features.forEach(feature => {
+          const center = this.geoPath.centroid(feature);
+          const population = feature.properties.population;
+          const totalBlocks = Math.ceil(population / populationPerBlock); // 总方块数
+          let blocksDrawn = 0; // 已绘制的方块数
+
+          for (let row = 1; blocksDrawn < totalBlocks; row++) {
+            for (let i = 0; i < row && blocksDrawn < totalBlocks; i++) {
+              // 对x坐标的计算不变
+              const x = center[0] - (blockSize + blockGap) * (row - 1) / 2 + (blockSize + blockGap) * i;
+              // 调整y坐标的计算，以增加行间距
+              const y = center[1] + ((blockSize + rowGap) * (row - 1)) - (row * blockSize / 2);
+              this.svg.append('rect')
+                .attr('x', x)
+                .attr('y', y)
+                .attr('width', blockSize)
+                .attr('height', blockSize)
+                .attr('fill', 'rgba(118, 139, 193, 1)'); // 方块的颜色
+              blocksDrawn++;
+            }
+          }
+        });
+      }
+
+      else {
         // 默认情况下使用单一的灰色，并绘制地图的基本轮廓
         this.drawSvg();
       }
