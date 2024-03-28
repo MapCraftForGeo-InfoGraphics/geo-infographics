@@ -203,14 +203,25 @@ export default {
 
     setHighlight(type) {
       console.log("Highlight Techniques:", type)
+      // 当类型为Color时
+      if (type === this.myType['Color']) {
+        this.svg.selectAll('path')
+          .on('click', function () { // 移除未使用的参数
+            d3.select(this)
+              .attr('fill', 'red');
+          });
+      } else {
+        this.svg.selectAll('path')
+          .on('click', null); // 移除点击事件
+      }
     },
 
     setLabelPosition(type) {
       console.log("Label Position:", type)
     },
 
-//encoding glyph
-//contryPopulation/worldPopulation
+    //encoding glyph
+    //contryPopulation/worldPopulation
     drawPieCharts() {
       const radius = 15; // 饼状图的半径，可根据需要调整大小
 
@@ -236,7 +247,7 @@ export default {
         const center = this.geoPath.centroid(feature);
 
         console.log(arcs); // To inspect the overall structure
-        
+
         arcs.forEach(arc => {
           this.svg.append('path')
             .attr('d', arcGenerator(arc))
@@ -269,7 +280,7 @@ export default {
           .attr('stroke', '#000000');
       }
       else if (type === this.myType['Color (Hue)']) {
-        
+
         const colorScale = d3.scaleSequential(d3.interpolateYlGnBu)
           .domain([0, Math.log(d3.max(this.geoData.features, d => d.properties.population))]);
 
