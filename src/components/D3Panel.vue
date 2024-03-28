@@ -201,19 +201,63 @@ export default {
       }
     },
 
+
     setHighlight(type) {
-      console.log("Highlight Techniques:", type)
-      // 当类型为Color时
+      console.log("Highlight Techniques:", type);
+
+      // 重置所有路径的填充颜色到默认颜色
+      this.svg.selectAll('path')
+        .attr('fill', d => this.fillColorFunction(d))
+        .classed('highlighted', false); // 假设你使用了highlighted类来表示高亮
+
+      // 移除所有之前添加的特定高亮元素
+      this.svg.selectAll('.highlight-marker').remove();
+
+      // 取消之前的所有点击事件监听器
+      this.svg.selectAll('path').on('click', null);
+      // 重要：移除绑定到SVG本身的点击事件监听器
+      this.svg.on('click', null);
+
+      // 根据类型应用新的高亮方式
       if (type === this.myType['Color']) {
         this.svg.selectAll('path')
-          .on('click', function () { // 移除未使用的参数
+          .on('click', function () {
             d3.select(this)
+              .classed('highlighted', true) // 使用类来标记高亮
               .attr('fill', 'red');
           });
-      } else {
-        this.svg.selectAll('path')
-          .on('click', null); // 移除点击事件
+      } else if (type === this.myType['Light']) {
+        // 绑定一个新的点击事件监听器到SVG本身
+        this.svg.on('click', function (event) {
+          const [x, y] = d3.pointer(event, this);
+
+          // 添加一个SVG图标作为光圈效果
+          d3.select(this).append('image')
+            .classed('highlight-marker', true) // 使用类来标记这是一个高亮标记
+            .attr('xlink:href', require('../assets/lightIcon.svg'))// 设置图像的路径
+            .attr('x', x - 40) // 调整图像位置，使其中心对准点击位置
+            .attr('y', y - 40) // 同上，这里的15是假设图像大小为30x30像素，需要根据实际大小调整
+            .attr('width', 80) // 设置图像的宽度
+            .attr('height', 80); // 设置图像的高度
+        });
+      }else if (type === this.myType['Map Pin']) {
+        // 绑定一个新的点击事件监听器到SVG本身
+        this.svg.on('click', function (event) {
+          const [x, y] = d3.pointer(event, this);
+
+          // 添加一个SVG图标作为光圈效果
+          d3.select(this).append('image')
+            .classed('highlight-marker', true) // 使用类来标记这是一个高亮标记
+            .attr('xlink:href', require('../assets/locationIcon.png'))// 设置图像的路径
+            .attr('x', x - 40) // 调整图像位置，使其中心对准点击位置
+            .attr('y', y - 96) // 同上，这里的15是假设图像大小为30x30像素，需要根据实际大小调整
+            .attr('width', 80) // 设置图像的宽度
+            .attr('height', 96); // 设置图像的高度
+        });
       }
+
+
+      // 添加更多的条件分支来处理其他类型的高亮方式
     },
 
     setLabelPosition(type) {
