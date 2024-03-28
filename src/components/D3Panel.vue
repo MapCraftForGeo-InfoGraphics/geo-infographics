@@ -268,6 +268,20 @@ export default {
           .attr('fill', d => colorScale(Math.log(d.properties.population)))
           .attr('stroke', '#000000');
       }
+      else if (type === this.myType['Color (Hue)']) {
+        
+        const colorScale = d3.scaleSequential(d3.interpolateYlGnBu)
+          .domain([0, Math.log(d3.max(this.geoData.features, d => d.properties.population))]);
+
+        // 重新绘制地图并应用颜色编码
+        this.svg.selectAll('path')
+          .data(this.geoData.features)
+          .enter()
+          .append('path')
+          .attr('d', this.geoPath)
+          .attr('fill', d => colorScale(Math.log(d.properties.population)))
+          .attr('stroke', '#000000');
+      }
       //Encoding 3D Length
       else if (type === this.myType['3D Length']) {
         this.drawSvg(); // 绘制地图的基本轮廓
