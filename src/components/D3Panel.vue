@@ -71,23 +71,50 @@ export default {
     this.mapHeight = this.svg.node().getBoundingClientRect().height;
 
     // 读取geojson
-    this.loadJson('countries.geojson').then(data => {
-      this.geoData = data;
+    // this.loadJson('countries.geojson').then(data => {
+    //   this.geoData = data;
 
-      // 读取人口信息
-      this.loadJson('country-by-population.json').then(popuData => {
+    //   // 读取人口信息
+    //   this.loadJson('country-by-population.json').then(popuData => {
+    //     this.geoData.features.forEach(feature => {
+    //       var population = popuData.find(item => item.country === feature.properties.ADMIN);
+    //       feature.properties.population = (population === undefined ? 0 : population.population);
+    //     });
+
+    //     //配置默认数据
+    //     this.setProjection(0);
+
+    //     //绘制地图
+    //     this.initMap();
+    //   });
+    // });
+    Promise.all([
+      this.loadJson('countries.geojson'),
+      this.loadJson('country-by-population.json')
+    ]).then(([geoData, popuData]) => {
+      this.geoData = geoData;
+      this.popuData = popuData;
+
+      let worldPopulation = 0;
+      if (this.geoData && this.geoData.features && this.popuData) {
         this.geoData.features.forEach(feature => {
-          var population = popuData.find(item => item.country === feature.properties.ADMIN);
-          feature.properties.population = (population === undefined ? 0 : population.population);
+          const populationInfo = this.popuData.find(item => item.country === feature.properties.ADMIN);
+          const population = populationInfo ? populationInfo.population : 0;
+          feature.properties.population = population;
+          worldPopulation += population;
         });
+      }
+      this.worldPopulation = worldPopulation;
 
-        //配置默认数据
-        this.setProjection(0);
-
-        //绘制地图
-        this.initMap();
-      });
+      // Now setProjection and initMap once data is fully prepared
+      this.setProjection(0);
+      this.initMap();
+    }).catch(error => {
+      console.error('Error loading data:', error);
+      // Handle loading errors
     });
+
+
   },
 
   methods: {
@@ -136,27 +163,7 @@ export default {
       });
     },
 
-    // //encoding Size
-    // drawPopulationSquares() {
-    //   const populationExtent = d3.extent(this.geoData.features, d => d.properties.population);
-    //   const sizeScale = d3.scaleSqrt()
-    //     .domain(populationExtent)
-    //     .range([5, 50]); // 方块大小的范围
 
-    //   // 直接在现有的SVG上绘制方块，不清除之前的内容
-    //   this.geoData.features.forEach(feature => {
-    //     const [x, y] = this.geoPath.centroid(feature);
-    //     const population = feature.properties.population;
-    //     this.svg.append('rect')
-    //       .attr('x', x - sizeScale(population) / 2)
-    //       .attr('y', y - sizeScale(population) / 2)
-    //       .attr('width', sizeScale(population))
-    //       .attr('height', sizeScale(population))
-    //       .attr('fill', 'rgba(118, 139, 193, 0.7)');
-    //   });
-    // },
-
-    // 
 
     // 设置 Map Representation
     setRepresentation(type) {
@@ -200,6 +207,45 @@ export default {
 
     setLabelPosition(type) {
       console.log("Label Position:", type)
+    },
+
+//encoding glyph
+//contryPopulation/worldPopulation
+    drawPieCharts() {
+      const radius = 15; // 饼状图的半径，可根据需要调整大小
+
+      const arcGenerator = d3.arc()
+        .innerRadius(0) // 0表示这是个饼状图，而不是环状图
+        .outerRadius(radius);
+
+      const pieGenerator = d3.pie()
+        .value(d => d.value)
+        .sort(null); // 不对切片进行排序
+
+      this.geoData.features.forEach(feature => {
+        const countryPopulation = feature.properties.population;
+        const populationPercentage = countryPopulation / this.worldPopulation;
+        // const data = [{ value: populationPercentage }, { value: 1 - populationPercentage }]; // 饼状图数据
+        const data = [
+          { value: populationPercentage, isCountryPopulation: true },
+          { value: 1 - populationPercentage, isCountryPopulation: false }
+        ];
+
+        const arcs = pieGenerator(data);
+
+        const center = this.geoPath.centroid(feature);
+
+        console.log(arcs); // To inspect the overall structure
+        
+        arcs.forEach(arc => {
+          this.svg.append('path')
+            .attr('d', arcGenerator(arc))
+            .attr('transform', `translate(${center[0]}, ${center[1]})`)
+            .attr('fill', function () {
+              return arc.data.isCountryPopulation ? 'rgba(0, 100, 255, 0.7)' : 'rgba(200, 200, 200, 0.3)';
+            });
+        });
+      });
     },
 
     setEncodingChannel(type) {
@@ -257,6 +303,11 @@ export default {
         });
 
       }
+      else if (type === this.myType['Glyph']) {
+        this.drawSvg(); // 绘制地图的基本轮廓
+        this.drawPieCharts(); // 在地图上叠加饼状图
+      }
+
       //Encoding Size
       else if (type === this.myType['Size']) {
         // 绘制地图的基本轮廓，不包含颜色编码或人口方块
