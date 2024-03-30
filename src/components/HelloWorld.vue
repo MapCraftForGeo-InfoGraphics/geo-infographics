@@ -53,7 +53,6 @@ export default {
     const setProjection = (type) => {
       // Call D3Panel's setProjection method
       d3PanelInstance.value.setProjection(type);
-      d3PanelInstance.value.initMap();
     };
 
     const setHighlight = (type) => {
