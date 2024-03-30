@@ -1,6 +1,7 @@
 <template>
   <v-container style="width: 100%; height: 100%; margin-left: 0; margin-right: 0">
     <svg ref="svg" style="width: 100%; height: 100%;"></svg>
+    <svg class="legend"></svg>
   </v-container>
 
 </template>
@@ -34,8 +35,8 @@ export default {
       "Grid Cartogram": 4,
 
 
-      "Mollweide": 0,
-      "Robinson": 1,
+      "Mercator": 0,
+      "Equirectangular": 1,
 
       "Light": 0,
       "Color": 1,
@@ -63,13 +64,6 @@ export default {
   }),
 
   mounted() {
-    // 获得html中的地图（svg）标签
-    this.svg = d3.select(this.$refs.svg);
-
-    //根据窗口大小设置地图的大小
-    this.mapWidth = this.svg.node().getBoundingClientRect().width;
-    this.mapHeight = this.svg.node().getBoundingClientRect().height;
-
     Promise.all([
       this.loadJson('countries.geojson'),
       this.loadJson('country-by-population.json')
@@ -102,6 +96,13 @@ export default {
 
   methods: {
     initMap() {
+      // 获得html中的地图（svg）标签
+      this.svg = d3.select(this.$refs.svg);
+
+      //根据窗口大小设置地图的大小
+      this.mapWidth = this.svg.node().getBoundingClientRect().width;
+      this.mapHeight = this.svg.node().getBoundingClientRect().height;
+
       this.setProjection(0);
     },
 
@@ -148,28 +149,33 @@ export default {
     setProjection(type) {
       console.log("Map Projection:", type);
 
-      if (type === this.myType['Mollweide']) {
-        this.geoProjection = d3.geoProjection(function (x, y) {
-          var lambda = x / 180 * Math.PI;
-          var phi = y / 180 * Math.PI;
-          var theta = Math.asin((2 * phi) / Math.PI);
-          var _x = (Math.sqrt(2) / Math.PI) * lambda * Math.cos(theta);
-          var _y = Math.sqrt(2) / Math.PI * Math.sin(theta);
-          return [_x, _y];
-        }).fitSize([this.mapWidth, this.mapHeight], this.geoData);
+      if (type === this.myType['Mercator']) {
+        // this.geoProjection = d3.geoProjection(function (x, y) {
+        //   var lambda = x / 180 * Math.PI;
+        //   var phi = y / 180 * Math.PI;
+        //   var theta = Math.asin((2 * phi) / Math.PI);
+        //   var _x = (Math.sqrt(2) / Math.PI) * lambda * Math.cos(theta);
+        //   var _y = Math.sqrt(2) / Math.PI * Math.sin(theta);
+        //   return [_x, _y];
+        // }).fitSize([this.mapWidth, this.mapHeight], this.geoData);
+        this.geoProjection = d3.geoMercator()
+          .fitSize([this.mapWidth, this.mapHeight], this.geoData);
       }
 
-      else if (type === this.myType['Robinson']) {
-        this.geoProjection = d3.geoProjection(function (x, y) {
-          // 投影函数
-          var lambda = x / 180 * Math.PI;
-          var phi = y / 180 * Math.PI;
-          var phi_1 = Math.asin(2 / Math.PI * Math.sin(phi));
-          var theta = 0.8 * lambda * Math.cos(phi_1);
-          var _x = 2 / Math.PI * theta;
-          var _y = Math.sin(phi_1);
-          return [_x, _y];
-        }).fitSize([this.mapWidth, this.mapHeight], this.geoData);
+      else if (type === this.myType['Equirectangular']) {
+        // this.geoProjection = d3.geoProjection(function (x, y) {
+        //   // 投影函数
+        //   var lambda = x / 180 * Math.PI;
+        //   var phi = y / 180 * Math.PI;
+        //   var phi_1 = Math.asin(2 / Math.PI * Math.sin(phi));
+        //   var theta = 0.8 * lambda * Math.cos(phi_1);
+        //   var _x = 2 / Math.PI * theta;
+        //   var _y = Math.sin(phi_1);
+        //   return [_x, _y];
+        // }).fitSize([this.mapWidth, this.mapHeight], this.geoData);
+        // this.geoProjection = d3.geoEquirectangular()
+        this.geoProjection = d3.geoEquirectangular()
+          .fitSize([this.mapWidth, this.mapHeight], this.geoData);
       }
 
       this.geoPath = d3.geoPath().projection(this.geoProjection);
@@ -324,7 +330,9 @@ export default {
           }
 
           this.svg.selectAll('path')
-            .attr('fill', d => colorFunction(d.properties.population))
+            .attr('fill', d => colorFunction(d.properties.population));
+
+          this.drawLegend();
         }
       }
 
@@ -458,6 +466,66 @@ export default {
       this.drawSvg();
     },
 
+    drawLegend() {
+      const legendContainer = d3.select('.legend');
+      const legendWidth = 200;
+      const legendHeight = 20;
+
+      const colorScale = d3.scaleSequential(d3.interpolateBlues)
+        .domain([0, d3.max(this.geoData.features, d => d.properties.population)]);
+
+      const legendGradient = legendContainer.append('svg')
+        .attr('width', legendWidth)
+        .attr('height', legendHeight);
+
+      // 创建渐变色彩
+      const gradient = legendGradient.append('defs')
+        .append('linearGradient')
+        .attr('id', 'legendGradient')
+        .attr('x1', '0%')
+        .attr('y1', '0%')
+        .attr('x2', '100%')
+        .attr('y2', '0%');
+
+      gradient.append('stop')
+        .attr('offset', '0%')
+        .attr('stop-color', colorScale.range()[0]);
+
+      gradient.append('stop')
+        .attr('offset', '100%')
+        .attr('stop-color', colorScale.range()[1]);
+
+      // 绘制渐变色块
+      legendGradient.append('rect')
+        .attr('width', legendWidth)
+        .attr('height', legendHeight)
+        .style('fill', 'url(#legendGradient)');
+
+      // 添加最小值标签
+      legendContainer.append('text')
+        .attr('x', 0)
+        .attr('y', legendHeight + 15)
+        .text('0');
+
+      // 添加最大值标签
+      legendContainer.append('text')
+        .attr('x', legendWidth - 20)
+        .attr('y', legendHeight + 15)
+        .text(d3.max(this.geoData.features, d => d.properties.population));
+    },
+
+
   },
 }
 </script>
+
+<style scoped>
+.legend {
+  position: absolute;
+  top: 75px;
+  right: 10px;
+  width: 200px;
+  height: 40px;
+  z-index: 2; /* 将悬浮元素置于其他元素之上 */
+}
+</style>

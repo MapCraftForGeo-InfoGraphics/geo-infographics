@@ -51,14 +51,14 @@
             <v-expansion-panel-text>
                 <v-container class="container">
                     <v-row>
-                        <v-col class="element" @click="setProjection(myType['Mollweide'])">
-                            Mollweide
-                            <v-img :src="require('../assets/Mollweide.svg')" contain />
+                        <v-col class="element" @click="setProjection(myType['Mercator'])">
+                            Mercator
+                            <v-img :src="require('../assets/mercator.svg')" contain />
                         </v-col>
 
-                        <v-col class="element" @click="setProjection(myType['Robinson'])">
-                            Robinson
-                            <v-img :src="require('../assets/Robinson.svg')" contain />
+                        <v-col class="element" @click="setProjection(myType['Equirectangular'])">
+                            Equirectangular
+                            <v-img :src="require('../assets/equirectangular.svg')" contain />
                         </v-col>
                     </v-row>
                 </v-container>
@@ -255,8 +255,8 @@ export default {
             "Grid Cartogram": 4,
             
 
-            "Mollweide": 0,
-            "Robinson": 1,
+            "Mercator": 0,
+            "Equirectangular": 1,
 
             "Light": 0,
             "Color": 1,
