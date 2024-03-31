@@ -1,86 +1,93 @@
 <template>
-  
-  <div style="display: flex; height: 100%; width: 100%;">
-    <v-card elevation="6" height="100%" width="35%" ref="card">
-      <v-container style="display: flex; overflow-y: auto;" id="seContainer">
-        <VisualSelector></VisualSelector>
-      </v-container>
-    </v-card>
-
-    <D3Panel ref="d3PanelInstance"></D3Panel>
-  </div>
 
   <v-app-bar :elevation="2">
     <v-app-bar-title>Geo-Info Graphics WebUI</v-app-bar-title>
     <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+
+    <template v-slot:extension>
+      <v-tabs v-model="currentItem" fixed-tabs>
+        <v-tab :value="'home'">
+          <v-icon>mdi-home</v-icon>
+        </v-tab>
+
+        <v-tab v-for="item in items" :key="item" :value="'tab-' + item">
+          {{ item }}
+        </v-tab>
+
+        <v-menu v-if="more.length">
+          <template v-slot:activator="{ props }">
+            <v-btn class="align-self-center me-4" height="100%" rounded="0" variant="plain" v-bind="props">
+              more
+              <v-icon end>
+                mdi-menu-down
+              </v-icon>
+            </v-btn>
+          </template>
+
+          <v-list class="bg-grey-lighten-3">
+            <v-list-item v-for="item in more" :key="item" @click="addItem(item)">
+              {{ item }}
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-tabs>
+    </template>
   </v-app-bar>
+
+  <v-window v-model="currentItem" style="height: 100%; width: 100%;">
+    <v-window-item :value="'home'" style="display: flex; height: 100%; width: 100%;">
+      <homeTab></homeTab>
+    </v-window-item>
+
+    <v-window-item :value="'tab-country-by-population'" style="display: flex; height: 100%; width: 100%;">
+      <instanceTab></instanceTab>
+    </v-window-item>
+  </v-window>
+
+  <!-- <instanceTab></instanceTab> -->
 
 </template>
 
 <script>
-import { ref, provide } from 'vue';
-import D3Panel from './D3Panel.vue';
-import VisualSelector from './Selector.vue'
+// import { ref, provide } from 'vue';
+// import D3Panel from './D3Panel.vue';
+// import VisualSelector from './Selector.vue'
+import homeTab from './home.vue'
+import instanceTab from './instance.vue'
 
 export default {
   name: 'HelloWorld',
 
   components: {
-    D3Panel,
-    VisualSelector
+    // D3Panel,
+    // VisualSelector,
+    homeTab,
+    instanceTab
   },
 
   data: () => ({
     drawer: true,
+
+    currentItem: 'home',
+    items: [
+      'country-by-population',
+    ],
+    more: [],
   }),
 
-  mounted() {
-    const cardEl = this.$refs.card.$el;
-    this.$nextTick(() => {
-      const height = cardEl.clientHeight;
-
-      const seContainer = document.getElementById('seContainer');
-      seContainer.style.maxHeight = (0.99 * height) + "px";
-    });
+  methods: {
+    addItem(item) {
+      const removed = this.items.splice(-1, 1)
+      this.items.unshift(
+        ...this.more.splice(this.more.indexOf(item), 1),
+      )
+      this.more.unshift(...removed)
+      this.$nextTick(() => { this.currentItem = 'tab-' + item })
+    },
   },
 
-  // 将函数提供的方法
-  setup() {
-    const setRepresentation = (type) => {
-      d3PanelInstance.value.setRepresentation(type);
-    };
-
-    const setProjection = (type) => {
-      // Call D3Panel's setProjection method
-      d3PanelInstance.value.setProjection(type);
-    };
-
-    const setHighlight = (type) => {
-      d3PanelInstance.value.setHighlight(type);
-    }
-
-    const setLabelPosition = (type) => {
-      d3PanelInstance.value.setLabelPosition(type);
-    }
-
-    const setEncodingChannel = (type) => {
-      d3PanelInstance.value.setEncodingChannel(type);
-    }
-
-    // Provide setProjection function to child components
-    provide('setRepresentation', setRepresentation);
-    provide('setProjection', setProjection);
-    provide('setHighlight', setHighlight);
-    provide('setLabelPosition', setLabelPosition);
-    provide('setEncodingChannel', setEncodingChannel);
-
-    // Reference to D3Panel component instance
-    const d3PanelInstance = ref(null);
-
-    return {
-      d3PanelInstance
-    };
-  }
+  mounted() {
+  },
 }
 
 </script>
