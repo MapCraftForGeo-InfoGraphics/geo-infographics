@@ -622,28 +622,31 @@ export default {
                     this.geoData.features.forEach(feature => {
                         const center = this.geoPath.centroid(feature);
                         const population = feature.properties.population;
-                        const height = baseHeight + (population / populationPerHeight); // 长方体的总高度
+                        if (population >= 1000000) { // 人口大于等于1000000时绘制长方体
+                            const height = baseHeight + (population / populationPerHeight); // 长方体的总高度
 
-                        // 绘制长方体的“前面”
-                        this.svg.append('rect')
-                            .attr('x', center[0] - cuboidWidth / 2)
-                            .attr('y', center[1] - height)
-                            .attr('width', cuboidWidth)
-                            .attr('height', height)
-                            .attr('fill', 'rgba(100, 100, 255, 0.7)');
+                            // 绘制长方体的“前面”
+                            this.svg.append('rect')
+                                .attr('x', center[0] - cuboidWidth / 2)
+                                .attr('y', center[1] - height)
+                                .attr('width', cuboidWidth)
+                                .attr('height', height)
+                                .attr('fill', 'rgba(125, 125, 255, 0.7)'); // 修改前面的颜色
 
-                        // 绘制长方体的“顶面”
-                        this.svg.append('polygon')
-                            .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
-                            .attr('fill', 'rgba(150, 150, 255, 0.7)');
+                            // 绘制长方体的“顶面”
+                            this.svg.append('polygon')
+                                .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
+                                .attr('fill', 'rgba(150, 150, 255, 0.7)');
 
-                        // 绘制长方体的“左侧面”
-                        this.svg.append('polygon')
-                            .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
-                            .attr('fill', `rgba(100, 100, 255, ${sideOpacity})`);
+                            // 绘制长方体的“左侧面”
+                            this.svg.append('polygon')
+                                .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
+                                .attr('fill', `rgba(75, 75, 255, ${sideOpacity})`); // 修改左侧面的颜色
+                        }
                     });
                 }
             }
+
 
             else if (type === this.myType['Glyph']) {
                 this.encodingChannelType = type;
@@ -653,7 +656,7 @@ export default {
                 }
             }
 
-            //Encoding Size
+            // Encoding Size
             else if (type === this.myType['Size']) {
                 this.encodingChannelType = type;
 
@@ -669,53 +672,60 @@ export default {
                     this.geoData.features.forEach(feature => {
                         const [x, y] = this.geoPath.centroid(feature);
                         const population = feature.properties.population;
-                        this.svg.append('rect')
-                            .attr('x', x - sizeScale(population) / 2)
-                            .attr('y', y - sizeScale(population) / 2)
-                            .attr('width', sizeScale(population))
-                            .attr('height', sizeScale(population))
-                            .attr('fill', 'rgba(118, 139, 193, 1)');
+                        if (population >= 1000000) { // 人口大于等于1000000时绘制方块
+                            this.svg.append('rect')
+                                .attr('x', x - sizeScale(population) / 2)
+                                .attr('y', y - sizeScale(population) / 2)
+                                .attr('width', sizeScale(population))
+                                .attr('height', sizeScale(population))
+                                .attr('fill', 'rgba(118, 139, 193, 1)');
+                        }
                     });
                 }
-
             }
+
 
             //Encoding Quantity
             else if (type === this.myType['Quantity']) {
                 this.encodingChannelType = type;
 
                 this.encodingChannel = () => {
-                    // 在地图上叠加人口方块
-                    const blockSize = 5; // 方块的边长
-                    const blockGap = 3; // 方块间的间隔
-                    const rowGap = 5; // 新增：行间距
-                    const populationPerBlock = 10000000; // 每个方块代表的人口数量
+                    // 在地图上叠加人口图标
+                    const iconWidth = 6; // 图标的宽度
+                    const iconHeight = 15; // 图标的高度
+                    const iconGap = 1; // 调整图标间的间隔
 
-                    // 直接在现有的SVG上绘制方块，不清除之前的内容
+                    // 直接在现有的SVG上绘制图标，不清除之前的内容
                     this.geoData.features.forEach(feature => {
                         const center = this.geoPath.centroid(feature);
                         const population = feature.properties.population;
-                        const totalBlocks = Math.ceil(population / populationPerBlock); // 总方块数
-                        let blocksDrawn = 0; // 已绘制的方块数
 
-                        for (let row = 1; blocksDrawn < totalBlocks; row++) {
-                            for (let i = 0; i < row && blocksDrawn < totalBlocks; i++) {
-                                // 对x坐标的计算不变
-                                const x = center[0] - (blockSize + blockGap) * (row - 1) / 2 + (blockSize + blockGap) * i;
-                                // 调整y坐标的计算，以增加行间距
-                                const y = center[1] + ((blockSize + rowGap) * (row - 1)) - (row * blockSize / 2);
-                                this.svg.append('rect')
+                        // 只有当人口大于等于1000000时才绘制图标
+                        if (population >= 1000000) {
+                            const totalIcons = Math.ceil(population / 30000000); // 总图标数
+
+                            for (let i = 0; i < totalIcons; i++) {
+                                // 计算图标的位置
+                                // 将图标排列成一行显示十二个图标的形式
+                                const x = center[0] - ((iconWidth + iconGap) * 12 / 2) + ((i % 12) * (iconWidth + iconGap));
+                                const y = center[1] + (Math.floor(i / 12) * (iconHeight + iconGap));
+                                // 添加图标
+                                this.svg.append('image')
+                                    .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
                                     .attr('x', x)
                                     .attr('y', y)
-                                    .attr('width', blockSize)
-                                    .attr('height', blockSize)
-                                    .attr('fill', 'rgba(118, 139, 193, 1)'); // 方块的颜色
-                                blocksDrawn++;
+                                    .attr('width', iconWidth)
+                                    .attr('height', iconHeight);
                             }
                         }
                     });
                 }
             }
+
+
+
+
+
 
             else {
                 this.encodingChannelType = -1;
