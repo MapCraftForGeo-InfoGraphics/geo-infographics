@@ -1,0 +1,93 @@
+[
+    {
+      "country": "United Kingdom",
+      "annotation": {
+        "city": "London",
+        "region": "Europe",
+        "summer_olympics": ["1908", "1948", "2012"],
+        "winter_olympics": [],
+        "total": 3
+      }
+    },
+    {
+      "country": "France",
+      "annotation": {
+        "city": "Paris",
+        "region": "Europe",
+        "summer_olympics": ["1900", "1924", "2024"],
+        "winter_olympics": [],
+        "total": 3
+      }
+    },
+    {
+      "country": "United States of America",
+      "annotation": {
+        "city": "Los Angeles, Lake Placid",
+        "region": "America",
+        "summer_olympics": ["1932", "1984", "2028"],
+        "winter_olympics": ["1932", "1980"],
+        "total": 5
+      }
+    },
+    {
+      "country": "Greece",
+      "annotation": {
+        "city": "Athens",
+        "region": "Europe",
+        "summer_olympics": ["1896", "2004"],
+        "winter_olympics": [],
+        "total": 2
+      }
+    },
+    {
+      "country": "Japan",
+      "annotation": {
+        "city": "Tokyo",
+        "region": "Asia",
+        "summer_olympics": ["1964", "2020"],
+        "winter_olympics": [],
+        "total": 2
+      }
+    },
+    {
+      "country": "China",
+      "annotation": {
+        "city": "Beijing",
+        "region": "Asia",
+        "summer_olympics": ["2008"],
+        "winter_olympics": ["2022"],
+        "total": 2
+      }
+    },
+    {
+      "country": "Switzerland",
+      "annotation": {
+        "city": "St. Moritz",
+        "region": "Europe",
+        "summer_olympics": [],
+        "winter_olympics": ["1928", "1948"],
+        "total": 2
+      }
+    },
+    {
+      "country": "Austria",
+      "annotation": {
+        "city": "Innsbruck",
+        "region": "Europe",
+        "summer_olympics": [],
+        "winter_olympics": ["1964", "1976"],
+        "total": 2
+      }
+    },
+    {
+      "country": "Italy",
+      "annotation": {
+        "city": "Cortina d'Ampezzo",
+        "region": "Europe",
+        "summer_olympics": [],
+        "winter_olympics": ["1956", "2026"],
+        "total": 2
+      }
+    }
+  ]
+  

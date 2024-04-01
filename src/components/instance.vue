@@ -560,7 +560,27 @@ export default {
 
         setLabelPosition(type) {
             console.log("Label Position:", type)
-            this.labelPositionType = type;
+            if (type === this.myType['Label Situated']) {
+                this.labelPositionType = type;
+            }
+            else if (type === this.myType['Label Text']) {
+                this.labelPositionType = type;
+            }
+            else if (type === this.myType['Label Icon']) {
+                this.labelPositionType = type;
+            }
+            else if (type === this.myType['Label Color']) {
+                this.labelPositionType = type;
+            }
+            else if (type === this.myType['Label Convenient']) {
+                this.labelPositionType = type;
+            }
+            else if (type === this.myType['Label Aligned']) {
+                this.labelPositionType = type;
+            }
+            else if (type === this.myType['Label Ordered']) {
+                this.labelPositionType = type;
+            }
         },
 
         setEncodingChannel(type) {
