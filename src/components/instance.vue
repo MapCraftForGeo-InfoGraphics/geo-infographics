@@ -447,7 +447,111 @@ export default {
         // 设置 Map Representation
         setRepresentation(type) {
             console.log("Representation:", type)
-            this.representationType = type;
+
+            if (type === this.myType['Political Map']) {
+                this.representationType = type;
+            }
+            else if (type === this.myType['Topographic Map']) {
+                this.representationType = type;
+            }
+            //澳大利亚成功点点图
+            // else if (type === this.myType['Shape-based Map']) {
+            //     this.representationType = type;
+
+            //     // 假定geoData中的features有一个属性可以用来识别国家，这里我们使用`properties.name`作为示例
+            //     const australiaFeature = this.geoData.features.find(feature => feature.properties.ADMIN === "Australia");
+
+            //     // 如果找到澳大利亚的地理特征，绘制点阵图
+            //     if (australiaFeature) {
+            //         // 计算澳大利亚边界框内网格的行数和列数
+            //         const bounds = d3.geoBounds(australiaFeature);
+            //         const [left, bottom] = this.geoProjection(bounds[0]);
+            //         const [right, top] = this.geoProjection(bounds[1]);
+            //         const w = right - left;
+            //         const h = bottom - top;
+            //         const rows = Math.ceil(h / 10); // 假设每20像素一个点的行距
+            //         const columns = Math.ceil(w / 10); // 假设每20像素一个点的列距
+            //         const pointRadius = 2; // 点的半径大小
+
+            //         // 生成澳大利亚边界框内的点
+            //         const points = [];
+            //         for (let i = 0; i < rows; i++) {
+            //             for (let j = 0; j < columns; j++) {
+            //                 const x = left + j * (w / columns);
+            //                 const y = top + i * (h / rows);
+            //                 const point = this.geoProjection.invert([x, y]);
+            //                 if (d3.geoContains(australiaFeature, point)) {
+            //                     points.push({ x: x, y: y });
+            //                 }
+            //             }
+            //         }
+
+            //         // 绘制点
+            //         this.svg.append("g")
+            //             .attr("fill", "black")
+            //             .attr("fill-opacity", 0.6)
+            //             .attr("stroke", "#fff")
+            //             .attr("stroke-width", 0.5)
+            //             .selectAll("circle")
+            //             .data(points)
+            //             .join("circle")
+            //             .attr("cx", d => d.x)
+            //             .attr("cy", d => d.y)
+            //             .attr("r", pointRadius);
+            //     }
+            // }
+            // else if (type === this.myType['Shape-based Map']) {
+            //     this.representationType = type;
+
+            //     // 移除现有的地图路径，准备绘制点阵地图
+            //     this.svg.selectAll('path').remove();
+
+            //     // 为地图上的每个国家绘制点阵图
+            //     this.geoData.features.forEach(feature => {
+            //         // 计算每个国家边界框内网格的行数和列数
+            //         const bounds = d3.geoBounds(feature);
+            //         const [left, bottom] = this.geoProjection(bounds[0]);
+            //         const [right, top] = this.geoProjection(bounds[1]);
+            //         const w = right - left;
+            //         const h = bottom - top;
+            //         const rows = Math.ceil(h / 20); // 假设每20像素一个点的行距
+            //         const columns = Math.ceil(w / 20); // 假设每20像素一个点的列距
+            //         const pointRadius = 2; // 点的半径大小
+
+            //         // 生成特定国家边界框内的点
+            //         const points = [];
+            //         for (let i = 0; i < rows; i++) {
+            //             for (let j = 0; j < columns; j++) {
+            //                 const x = left + j * (w / columns);
+            //                 const y = top + i * (h / rows);
+            //                 const point = this.geoProjection.invert([x, y]);
+            //                 if (d3.geoContains(feature, point)) {
+            //                     points.push({ x: x, y: y });
+            //                 }
+            //             }
+            //         }
+
+            //         // 绘制点
+            //         this.svg.append("g")
+            //             .attr("fill", "black")
+            //             .attr("fill-opacity", 0.6)
+            //             .attr("stroke", "#fff")
+            //             .attr("stroke-width", 0.5)
+            //             .selectAll("circle")
+            //             .data(points)
+            //             .join("circle")
+            //             .attr("cx", d => d.x)
+            //             .attr("cy", d => d.y)
+            //             .attr("r", pointRadius);
+            //     });
+            // }
+
+            else if (type === this.myType['Street Map']) {
+                this.representationType = type;
+            }
+            else if (type === this.myType['Grid Cartogram']) {
+                this.representationType = type;
+            }
         },
 
         // 设置 Map Projection
@@ -677,19 +781,26 @@ export default {
 
                 // 重写encodingChannel函数
                 this.encodingChannel = () => {
-                    //修改颜色映射的方法
-                    const colorFunction = (category) => {
-                        const transformFunction = (input) => Math.pow(input, 0.25)
-                        const colorScale = d3.scaleSequential(d3.interpolateYlGnBu)
-                            .domain([0, transformFunction(d3.max(this.geoData.features, d => d.properties.population))]);
-
-                        return colorScale(transformFunction(category));
-                    }
+                    // 修改颜色映射的方法
+                    const colorFunction = (population) => {
+                        if (population < 1e3) {
+                            return 'blue'; // 人口数量小于10^3
+                        } else if (population >= 1e3 && population < 1e5) {
+                            return 'green'; // 人口数量在10^3-10^5之间
+                        } else if (population >= 1e5 && population < 1e7) {
+                            return 'yellow'; // 人口数量在10^5-10^7之间
+                        } else if (population >= 1e7 && population < 1e9) {
+                            return 'orange'; // 人口数量在10^7-10^9之间
+                        } else {
+                            return 'red'; // 人口数量大于10^10
+                        }
+                    };
 
                     this.svg.selectAll('path')
-                        .attr('fill', d => colorFunction(d.properties.population))
-                }
+                        .attr('fill', d => colorFunction(d.properties.population));
+                };
             }
+
 
             //Encoding 3D Length
             else if (type === this.myType['3D Length']) {
