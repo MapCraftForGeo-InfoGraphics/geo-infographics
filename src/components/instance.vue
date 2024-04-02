@@ -1,7 +1,7 @@
 <template>
     <div style="display: flex; height: 100%; width: 100%;">
         <v-card elevation="2" height="100%" width="35%" ref="selectorCard">
-            <v-container style="display: flex; overflow-y: auto;" id="seContainer">
+            <v-container style="display: flex; overflow-y: auto;" :id="value + '-seContainer'">
                 <v-expansion-panels>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
@@ -242,7 +242,7 @@
                 </v-expansion-panels>
             </v-container>
         </v-card>
-        <v-container style="width: 100%; height: 100%; margin-left: 0; margin-right: 0" class="d3Panel">
+        <v-container style="width: 100%; height: 100%; margin-left: 0; margin-right: 0" :ref="'d3Panel'">
             <svg :class="value + '-svg'" style="width: 100%; height: 100%;"></svg>
             <svg :class="value + '-legend'"
                 style="position: absolute; top: 30px; right: 20px; width: 200px; height: 40px; z-index: 2;"></svg>
@@ -286,7 +286,7 @@ export default {
         highLightType: -1,
 
         svg: null,
-        legendContainer: null,
+        legend: null,
 
         mapWidth: 1000,
         mapHeight: 800,
@@ -335,14 +335,6 @@ export default {
 
     mounted() {
         const cardEl = this.$refs.selectorCard.$el;
-        this.$nextTick(() => {
-            const height = cardEl.clientHeight;
-
-            const seContainer = document.getElementById('seContainer');
-            seContainer.style.maxHeight = (0.99 * height) + "px";
-        });
-
-        console.log(this.geoData);
 
         let worldPopulation = 0;
         if (this.geoData && this.geoData.features && this.infoData) {
@@ -355,18 +347,28 @@ export default {
         }
         this.worldPopulation = worldPopulation;
 
-        this.initMap()
+        this.$nextTick(() => {
+            const height = cardEl.clientHeight;
+
+            const seContainer = document.getElementById(this.value + '-seContainer');
+            seContainer.style.maxHeight = (0.99 * height) + "px";
+
+            this.initMap();
+        });
     },
 
     methods: {
         initMap() {
             // 获得html中的地图（svg）标签
             this.svg = d3.select("." + this.value + "-svg");
-            this.legendContainer = d3.select("." + this.value + "-legend");
+            this.legend = d3.select("." + this.value + "-legend");
 
             //根据窗口大小设置地图的大小
-            // this.mapWidth = this.svg.node().getBoundingClientRect().width;
-            // this. mapHeight = this.svg.node().getBoundingClientRect().height;
+            this.mapWidth = this.svg.node().getBoundingClientRect().width;
+            this. mapHeight = this.svg.node().getBoundingClientRect().height;
+            // const d3PanelEl = this.$refs.d3Panel.$el;
+            // this.mapHeight = d3PanelEl.clientHeight;
+            console.log(this.mapWidth, this.mapHeight);
 
             this.setProjection(0);
         },
@@ -936,7 +938,7 @@ export default {
             const colorScale = d3.scaleSequential(d3.interpolateBlues)
                 .domain([0, d3.max(this.geoData.features, d => d.properties.population)]);
 
-            const legendGradient = this.legendContainer.append('svg')
+            const legendGradient = this.legend.append('svg')
                 .attr('width', legendWidth)
                 .attr('height', legendHeight);
 
@@ -964,13 +966,13 @@ export default {
                 .style('fill', 'url(#legendGradient)');
 
             // 添加最小值标签
-            this.legendContainer.append('text')
+            this.legend.append('text')
                 .attr('x', 0)
                 .attr('y', legendHeight + 15)
                 .text('0');
 
             // 添加最大值标签
-            this.legendContainer.append('text')
+            this.legend.append('text')
                 .attr('x', legendWidth - 20)
                 .attr('y', legendHeight + 15)
                 .text(d3.max(this.geoData.features, d => d.properties.population));
