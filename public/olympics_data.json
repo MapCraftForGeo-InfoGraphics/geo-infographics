@@ -12,21 +12,21 @@
     {
       "country": "France",
       "annotation": {
-        "city": "Paris",
+        "city": "Paris, Chamonix, Grenoble, Albertville",
         "region": "Europe",
         "summer_olympics": ["1900", "1924", "2024"],
-        "winter_olympics": [],
-        "total": 3
+        "winter_olympics": ["1924", "1968", "1992"],
+        "total": 6
       }
     },
     {
       "country": "United States of America",
       "annotation": {
-        "city": "Los Angeles, Lake Placid",
-        "region": "America",
-        "summer_olympics": ["1932", "1984", "2028"],
-        "winter_olympics": ["1932", "1980"],
-        "total": 5
+        "city": "St. Louis, Los Angeles, Lake Placid, Salt Lake, Atlanta, Squaw Valley",
+        "region": "North America",
+        "summer_olympics": ["1932", "1984","1996", "2028"],
+        "winter_olympics": ["1932", "1960", "1980"],
+        "total": 9
       }
     },
     {
@@ -42,11 +42,11 @@
     {
       "country": "Japan",
       "annotation": {
-        "city": "Tokyo",
+        "city": "Tokyo, Sapporo, Nagano",
         "region": "Asia",
         "summer_olympics": ["1964", "2020"],
-        "winter_olympics": [],
-        "total": 2
+        "winter_olympics": ["1972", "1998"],
+        "total": 4
       }
     },
     {
@@ -82,10 +82,70 @@
     {
       "country": "Italy",
       "annotation": {
-        "city": "Cortina d'Ampezzo",
+        "city": "Rome, Cortina d'Ampezzo, Torino, Milan and Cortina d'Ampezzo",
+        "region": "Europe",
+        "summer_olympics": ["1960"],
+        "winter_olympics": ["1956", "2006", "2026"],
+        "total": 4
+      }
+    },
+    {
+      "country": "Australia",
+      "annotation": {
+        "city": "Melbourne, Sydney, Brisbane",
+        "region": "Oceania",
+        "summer_olympics": ["1956", "2000", "2032"],
+        "winter_olympics": [],
+        "total": 3
+      }
+    },
+    {
+      "country": "Canada",
+      "annotation": {
+        "city": "Montreal, Calgary, Vancouver",
+        "region": "North America",
+        "summer_olympics": ["1976"],
+        "winter_olympics": ["1988", "2010"],
+        "total": 3
+      }
+    },
+    {
+      "country": "Germany",
+      "annotation": {
+        "city": "Berlin, Munich, Garmisch-Partenkirchen",
+        "region": "Europe",
+        "summer_olympics": ["1936", "1972"],
+        "winter_olympics": ["1936"],
+        "total": 3
+      }
+    },
+    {
+      "country": "South Korea",
+      "annotation": {
+        "city": "Seoul, PyeongChang",
+        "region": "Asia",
+        "summer_olympics": ["1988"],
+        "winter_olympics": ["2018"],
+        "total": 2
+      }
+    },
+    {
+      "country": "Russia",
+      "annotation": {
+        "city": "Moscow, Sochi",
+        "region": "Europe",
+        "summer_olympics": ["1980"],
+        "winter_olympics": ["2014"],
+        "total": 2
+      }
+    },
+    {
+      "country": "Norway",
+      "annotation": {
+        "city": "Oslo, Lillehammer",
         "region": "Europe",
         "summer_olympics": [],
-        "winter_olympics": ["1956", "2026"],
+        "winter_olympics": ["1952", "1994"],
         "total": 2
       }
     }
