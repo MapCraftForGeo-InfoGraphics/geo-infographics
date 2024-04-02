@@ -19,16 +19,7 @@
         "total": 6
       }
     },
-    {
-      "country": "United States of America",
-      "annotation": {
-        "city": "St. Louis, Los Angeles, Lake Placid, Salt Lake, Atlanta, Squaw Valley",
-        "region": "North America",
-        "summer_olympics": ["1932", "1984","1996", "2028"],
-        "winter_olympics": ["1932", "1960", "1980"],
-        "total": 9
-      }
-    },
+
     {
       "country": "Greece",
       "annotation": {
@@ -39,26 +30,8 @@
         "total": 2
       }
     },
-    {
-      "country": "Japan",
-      "annotation": {
-        "city": "Tokyo, Sapporo, Nagano",
-        "region": "Asia",
-        "summer_olympics": ["1964", "2020"],
-        "winter_olympics": ["1972", "1998"],
-        "total": 4
-      }
-    },
-    {
-      "country": "China",
-      "annotation": {
-        "city": "Beijing",
-        "region": "Asia",
-        "summer_olympics": ["2008"],
-        "winter_olympics": ["2022"],
-        "total": 2
-      }
-    },
+
+
     {
       "country": "Switzerland",
       "annotation": {
@@ -89,26 +62,7 @@
         "total": 4
       }
     },
-    {
-      "country": "Australia",
-      "annotation": {
-        "city": "Melbourne, Sydney, Brisbane",
-        "region": "Oceania",
-        "summer_olympics": ["1956", "2000", "2032"],
-        "winter_olympics": [],
-        "total": 3
-      }
-    },
-    {
-      "country": "Canada",
-      "annotation": {
-        "city": "Montreal, Calgary, Vancouver",
-        "region": "North America",
-        "summer_olympics": ["1976"],
-        "winter_olympics": ["1988", "2010"],
-        "total": 3
-      }
-    },
+
     {
       "country": "Germany",
       "annotation": {
@@ -119,16 +73,7 @@
         "total": 3
       }
     },
-    {
-      "country": "South Korea",
-      "annotation": {
-        "city": "Seoul, PyeongChang",
-        "region": "Asia",
-        "summer_olympics": ["1988"],
-        "winter_olympics": ["2018"],
-        "total": 2
-      }
-    },
+
     {
       "country": "Russia",
       "annotation": {

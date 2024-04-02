@@ -100,7 +100,7 @@ export default {
 
   mounted() {
     Promise.all([
-      this.loadJson('countries.geojson'),
+      this.loadJson('europe.geojson'),
       this.loadJson('country-by-population.json')
     ])
 
