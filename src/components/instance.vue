@@ -101,8 +101,8 @@
                                 </v-row>
 
                                 <v-row>
-                                    <v-col class="element" @click="setHighlight(myType['Enlarged Positions'])">
-                                        Enlarged Positions
+                                    <v-col class="element" @click="setHighlight(myType['Enlarged Portions'])">
+                                        Enlarged Portions
                                         <v-img :src="require('../assets/HighlightEnlarge.svg')" width="61%" contain />
                                     </v-col>
                                 </v-row>
@@ -244,7 +244,8 @@
         </v-card>
         <v-container style="width: 100%; height: 100%; margin-left: 0; margin-right: 0" class="d3Panel">
             <svg :class="value + '-svg'" style="width: 100%; height: 100%;"></svg>
-            <svg :class="value + '-legend'" style="position: absolute; top: 30px; right: 20px; width: 200px; height: 40px; z-index: 2;"></svg>
+            <svg :class="value + '-legend'"
+                style="position: absolute; top: 30px; right: 20px; width: 200px; height: 40px; z-index: 2;"></svg>
         </v-container>
     </div>
 </template>
@@ -345,12 +346,12 @@ export default {
 
         let worldPopulation = 0;
         if (this.geoData && this.geoData.features && this.infoData) {
-          this.geoData.features.forEach(feature => {
-            const populationInfo = this.infoData.find(item => item.country === feature.properties.ADMIN);
-            const population = populationInfo ? populationInfo.population : 0;
-            feature.properties.population = population;
-            worldPopulation += population;
-          });
+            this.geoData.features.forEach(feature => {
+                const populationInfo = this.infoData.find(item => item.country === feature.properties.ADMIN);
+                const population = populationInfo ? populationInfo.population : 0;
+                feature.properties.population = population;
+                worldPopulation += population;
+            });
         }
         this.worldPopulation = worldPopulation;
 
@@ -561,6 +562,61 @@ export default {
                     addHighLight(event, this);
                 });
             }
+            else if (type === this.myType['3D Transformation']) {
+                this.highLightType = type;
+
+                const addHighLight = (event, svg) => {
+                    // eslint-disable-next-line no-unused-vars
+                    const [x, y] = d3.pointer(event, svg);
+                    const feature = d3.select(event.target).datum(); // 获取被点击的地图区域的数据
+
+                    // 高亮函数
+                    const highLight = () => {
+                        // 首先移除之前的高亮效果
+                        //this.svg.selectAll('.highlight-3d-effect').remove();
+
+                        // 然后添加一个新的具有3D效果的path
+                        this.svg.append('path')
+                            .datum(feature) // 使用同一区域的数据
+                            .attr('class', 'highlight-3d-effect') // 为了方便之后可能的移除
+                            .attr('d', this.geoPath) // 使用geoPath来保持地理形状的一致性
+                            .attr('fill', 'rgba(33, 68, 158, 0.5)') // 为了简化，这里使用纯色填充表示阴影
+                            .attr('filter', 'url(#drop-shadow)'); // 应用下面定义的SVG滤镜实现阴影效果
+
+                        // 添加或确保SVG滤镜的存在
+                        const defs = this.svg.append('defs');
+
+                        const filter = defs.append('filter')
+                            .attr('id', 'drop-shadow')
+                            .attr('height', '130%');
+
+                        filter.append('feGaussianBlur')
+                            .attr('in', 'SourceAlpha')
+                            .attr('stdDeviation', 3)
+                            .attr('result', 'blur');
+
+                        filter.append('feOffset')
+                            .attr('in', 'blur')
+                            .attr('dx', 5)
+                            .attr('dy', 5)
+                            .attr('result', 'offsetBlur');
+
+                        const feMerge = filter.append('feMerge');
+                        feMerge.append('feMergeNode')
+                            .attr('in', 'offsetBlur');
+                        feMerge.append('feMergeNode')
+                            .attr('in', 'SourceGraphic');
+                    };
+
+                    highLight();
+                    this.highLights.push(highLight);
+                };
+
+                // 绑定点击事件到所有的path上
+                this.svg.selectAll('path').on('click', function (event) {
+                    addHighLight(event, this);
+                });
+            }
 
 
             // 添加更多的条件分支来处理其他类型的高亮方式
@@ -749,11 +805,6 @@ export default {
                     });
                 }
             }
-
-
-
-
-
 
             else {
                 this.encodingChannelType = -1;
