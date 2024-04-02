@@ -1,5 +1,5 @@
 <template>
-    <div style="display: flex; height: 100%; width: 100%;" class="selector">
+    <div style="display: flex; height: 100%; width: 100%;">
         <v-card elevation="2" height="100%" width="35%" ref="selectorCard">
             <v-container style="display: flex; overflow-y: auto;" id="seContainer">
                 <v-expansion-panels>
@@ -243,8 +243,8 @@
             </v-container>
         </v-card>
         <v-container style="width: 100%; height: 100%; margin-left: 0; margin-right: 0" class="d3Panel">
-            <svg class="svg" style="width: 100%; height: 100%;"></svg>
-            <svg class="legend"></svg>
+            <svg :class="value + '-svg'" style="width: 100%; height: 100%;"></svg>
+            <svg :class="value + '-legend'" style="position: absolute; top: 30px; right: 20px; width: 200px; height: 40px; z-index: 2;"></svg>
         </v-container>
     </div>
 </template>
@@ -255,6 +255,28 @@ import * as d3 from 'd3';
 export default {
     name: 'instanceTab',
 
+    props: {
+        geoData: {
+            type: Object,
+            required: true,
+        },
+
+        infoData: {
+            type: Object,
+            default: null,
+        },
+
+        userData: {
+            type: Object,
+            default: null,
+        },
+
+        value: {
+            type: String,
+            required: true,
+        }
+    },
+
     data: () => ({
         representationType: 0,
         projectionType: 0,
@@ -263,13 +285,10 @@ export default {
         highLightType: -1,
 
         svg: null,
+        legendContainer: null,
 
-        mapHeight: 100,
-        mapWidth: 100,
-
-        geoData: {},
-        geoProjection: null,
-        geoPath: null,
+        mapWidth: 1000,
+        mapHeight: 800,
 
         defaultColor: '#cccccc',
 
@@ -322,44 +341,31 @@ export default {
             seContainer.style.maxHeight = (0.99 * height) + "px";
         });
 
-        Promise.all([
-            this.loadJson('countries.geojson'),
-            this.loadJson('country-by-population.json')
-        ])
+        console.log(this.geoData);
 
-            .then(([geoData, popuData]) => {
-                this.geoData = geoData;
-                this.popuData = popuData["data"];
+        let worldPopulation = 0;
+        if (this.geoData && this.geoData.features && this.infoData) {
+          this.geoData.features.forEach(feature => {
+            const populationInfo = this.infoData.find(item => item.country === feature.properties.ADMIN);
+            const population = populationInfo ? populationInfo.population : 0;
+            feature.properties.population = population;
+            worldPopulation += population;
+          });
+        }
+        this.worldPopulation = worldPopulation;
 
-                let worldPopulation = 0;
-                if (this.geoData && this.geoData.features && this.popuData) {
-                    this.geoData.features.forEach(feature => {
-                        const populationInfo = this.popuData.find(item => item.country === feature.properties.ADMIN);
-                        const population = populationInfo ? populationInfo.population : 0;
-                        feature.properties.population = population;
-                        worldPopulation += population;
-                    });
-                }
-                this.worldPopulation = worldPopulation;
-
-                // Now setProjection and initMap once data is fully prepared
-                this.initMap();
-            })
-
-            .catch(error => {
-                console.error('Error loading data:', error);
-                // Handle loading errors
-            });
+        this.initMap()
     },
 
     methods: {
         initMap() {
             // 获得html中的地图（svg）标签
-            this.svg = d3.select('.svg');
+            this.svg = d3.select("." + this.value + "-svg");
+            this.legendContainer = d3.select("." + this.value + "-legend");
 
             //根据窗口大小设置地图的大小
-            this.mapWidth = this.svg.node().getBoundingClientRect().width;
-            this.mapHeight = this.svg.node().getBoundingClientRect().height;
+            // this.mapWidth = this.svg.node().getBoundingClientRect().width;
+            // this. mapHeight = this.svg.node().getBoundingClientRect().height;
 
             this.setProjection(0);
         },
@@ -368,6 +374,8 @@ export default {
         drawSvg() {
             // 移除现有的 SVG
             this.svg.selectAll('*').remove();
+
+            // console.log(this.geoPath);
 
             this.svg.selectAll('path')
                 .data(this.geoData.features)
@@ -760,14 +768,13 @@ export default {
         },
 
         drawLegend() {
-            const legendContainer = d3.select('.legend');
             const legendWidth = 200;
             const legendHeight = 20;
 
             const colorScale = d3.scaleSequential(d3.interpolateBlues)
                 .domain([0, d3.max(this.geoData.features, d => d.properties.population)]);
 
-            const legendGradient = legendContainer.append('svg')
+            const legendGradient = this.legendContainer.append('svg')
                 .attr('width', legendWidth)
                 .attr('height', legendHeight);
 
@@ -795,13 +802,13 @@ export default {
                 .style('fill', 'url(#legendGradient)');
 
             // 添加最小值标签
-            legendContainer.append('text')
+            this.legendContainer.append('text')
                 .attr('x', 0)
                 .attr('y', legendHeight + 15)
                 .text('0');
 
             // 添加最大值标签
-            legendContainer.append('text')
+            this.legendContainer.append('text')
                 .attr('x', legendWidth - 20)
                 .attr('y', legendHeight + 15)
                 .text(d3.max(this.geoData.features, d => d.properties.population));
@@ -843,15 +850,5 @@ export default {
     transform: scale(1.12);
     border: 0.67px solid;
     border-color: #E1CBD8;
-}
-
-.legend {
-    position: absolute;
-    top: 75px;
-    right: 10px;
-    width: 200px;
-    height: 40px;
-    z-index: 2;
-    /* 将悬浮元素置于其他元素之上 */
 }
 </style>

@@ -1,6 +1,4 @@
-{
-    "type": "numerical",
-    "data": [
+[
     {
         "country": "Afghanistan",
         "population": 37172386
@@ -771,7 +769,7 @@
     },
     {
         "country": "Serbia",
-        "population": 6963764	
+        "population": 6963764
     },
     {
         "country": "Seychelles",
@@ -982,4 +980,3 @@
         "population": 14439018
     }
 ]
-}
