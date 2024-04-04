@@ -68,7 +68,63 @@
                         </v-expansion-panel-text>
                     </v-expansion-panel>
 
+                    <v-expansion-panel>
+                        <v-expansion-panel-title>
+                            Encoding Channels
+                        </v-expansion-panel-title>
 
+                        <v-expansion-panel-text>
+                            <v-container class="container">
+                                <v-row>
+                                    <v-col class="element" @click="setEncodingChannel(myType['Color (Luminance)'])">
+                                        Color (Luminance)
+                                        <v-img :src="require('../assets/Color(Luminance).svg')" contain />
+                                    </v-col>
+
+                                    <v-col class="element" @click="setEncodingChannel(myType['Color (Hue)'])">
+                                        Color (Hue)
+                                        <v-img :src="require('../assets/Color(Hue).svg')" contain />
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col class="element" @click="setEncodingChannel(myType['3D Length'])">
+                                        3D Length
+                                        <v-img :src="require('../assets/3DLength.svg')" contain />
+                                    </v-col>
+
+                                    <v-col class="element" @click="setEncodingChannel(myType['Glyph'])">
+                                        Glyph
+                                        <v-img :src="require('../assets/Glyph.svg')" contain />
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col class="element" @click="setEncodingChannel(myType['Link (Line)'])">
+                                        Link (Line)
+                                        <v-img :src="require('../assets/Link(Line).svg')" contain />
+                                    </v-col>
+
+                                    <v-col class="element" @click="setEncodingChannel(myType['Link (Arrow)'])">
+                                        Link (Arrow)
+                                        <v-img :src="require('../assets/Link(Arrow).svg')" contain />
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col class="element" @click="setEncodingChannel(myType['Size'])">
+                                        Size
+                                        <v-img :src="require('../assets/Size.svg')" contain />
+                                    </v-col>
+
+                                    <v-col class="element" @click="setEncodingChannel(myType['Quantity'])">
+                                        Quantity
+                                        <v-img :src="require('../assets/Quantity.svg')" contain />
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-expansion-panel-text>
+                    </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
                             Highlight Techniques
@@ -182,63 +238,7 @@
                     </v-expansion-panel>
 
 
-                    <v-expansion-panel>
-                        <v-expansion-panel-title>
-                            Encoding Channels
-                        </v-expansion-panel-title>
 
-                        <v-expansion-panel-text>
-                            <v-container class="container">
-                                <v-row>
-                                    <v-col class="element" @click="setEncodingChannel(myType['Color (Luminance)'])">
-                                        Color (Luminance)
-                                        <v-img :src="require('../assets/Color(Luminance).svg')" contain />
-                                    </v-col>
-
-                                    <v-col class="element" @click="setEncodingChannel(myType['Color (Hue)'])">
-                                        Color (Hue)
-                                        <v-img :src="require('../assets/Color(Hue).svg')" contain />
-                                    </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col class="element" @click="setEncodingChannel(myType['3D Length'])">
-                                        3D Length
-                                        <v-img :src="require('../assets/3DLength.svg')" contain />
-                                    </v-col>
-
-                                    <v-col class="element" @click="setEncodingChannel(myType['Glyph'])">
-                                        Glyph
-                                        <v-img :src="require('../assets/Glyph.svg')" contain />
-                                    </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col class="element" @click="setEncodingChannel(myType['Link (Line)'])">
-                                        Link (Line)
-                                        <v-img :src="require('../assets/Link(Line).svg')" contain />
-                                    </v-col>
-
-                                    <v-col class="element" @click="setEncodingChannel(myType['Link (Arrow)'])">
-                                        Link (Arrow)
-                                        <v-img :src="require('../assets/Link(Arrow).svg')" contain />
-                                    </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col class="element" @click="setEncodingChannel(myType['Size'])">
-                                        Size
-                                        <v-img :src="require('../assets/Size.svg')" contain />
-                                    </v-col>
-
-                                    <v-col class="element" @click="setEncodingChannel(myType['Quantity'])">
-                                        Quantity
-                                        <v-img :src="require('../assets/Quantity.svg')" contain />
-                                    </v-col>
-                                </v-row>
-                            </v-container>
-                        </v-expansion-panel-text>
-                    </v-expansion-panel>
                 </v-expansion-panels>
             </v-container>
         </v-card>
@@ -247,6 +247,8 @@
             <svg :class="value + '-svg'" style="width: 100%; height: 100%;"></svg>
             <svg :class="value + '-legend'"
                 style="position: absolute; top: 30px; right: 20px; width: 200px; height: 40px; z-index: 2;"></svg>
+            <svg id="enlargedView"
+                style="width: 200px; height: 200px; position: absolute; top: 10px; right: 10px;"></svg>
         </v-container>
     </div>
 </template>
@@ -312,7 +314,7 @@ export default {
             "Color": 1,
             "Map Pin": 2,
             "3D Transformation": 3,
-            "Enlarged Positions": 4,
+            "Enlarged Portions": 4,
 
             "Label Situated": 0,
             "Label Text": 1,
@@ -455,7 +457,7 @@ export default {
                 this.drawSvg();
             }
             else if (type === this.myType['Topographic Map']) {
-                this.representationType = type; 
+                this.representationType = type;
             }
             else if (type === this.myType['Shape-based Map']) {
                 this.representationType = type;
@@ -508,7 +510,56 @@ export default {
             }
             else if (type === this.myType['Grid Cartogram']) {
                 this.representationType = type;
+
+                // 首先，移除旧的网格层和旧的clipPath（如果存在）
+                this.svg.select('.grid-layer').remove();
+                this.svg.select('defs').selectAll('clipPath').remove(); // 假设没有其他clipPath在使用
+
+                // 创建一个新的clipPath用于地图的轮廓
+                const defs = this.svg.append('defs');
+                defs.append('clipPath')
+                    .attr('id', 'clip-map')
+                    .append('path')
+                    .datum(this.geoData)
+                    .attr('d', this.geoPath);
+
+                // 设置网格大小
+                const gridSize = 30;
+
+                // 创建网格层并应用clipPath
+                const gridLayer = this.svg.append('g')
+                    .classed('grid-layer', true)
+                    .attr('clip-path', 'url(#clip-map)');
+
+                // 计算网格线数量
+                const numVerticalGrids = Math.ceil(this.mapWidth / gridSize);
+                const numHorizontalGrids = Math.ceil(this.mapHeight / gridSize);
+
+                // 绘制垂直网格线
+                for (let i = 0; i < numVerticalGrids; i++) {
+                    gridLayer.append('line')
+                        .attr('x1', i * gridSize)
+                        .attr('x2', i * gridSize)
+                        .attr('y1', 0)
+                        .attr('y2', this.mapHeight)
+                        .style('stroke', 'black')
+                        .style('stroke-opacity', 0.3);
+                }
+
+                // 绘制水平网格线
+                for (let i = 0; i < numHorizontalGrids; i++) {
+                    gridLayer.append('line')
+                        .attr('y1', i * gridSize)
+                        .attr('y2', i * gridSize)
+                        .attr('x1', 0)
+                        .attr('x2', this.mapWidth)
+                        .style('stroke', 'black')
+                        .style('stroke-opacity', 0.3);
+                }
             }
+
+
+
         },
 
         // 设置 Map Projection
@@ -548,8 +599,8 @@ export default {
             // 取消之前的所有点击事件监听器
             this.svg.selectAll('path').on('click', null);
             // 重要：移除绑定到SVG本身的点击事件监听器
-            this.svg.on('click', null);
-
+            // this.svg.on('click', null);
+            // d3.select("#enlargedView").selectAll("*").remove(); 
             // 根据类型应用新的高亮方式
             if (type === this.myType['Color']) {
                 this.highLightType = type;
@@ -678,6 +729,109 @@ export default {
                     addHighLight(event, this);
                 });
             }
+            else if (type === this.myType['Enlarged Portions']) {
+                this.highLightType = type;
+
+                // 移除之前可能绑定的点击事件以避免重复
+                this.svg.on('click', null);
+
+                // 直接在点击事件中实现放大效果的逻辑
+                this.svg.on('click', (event) => {
+                    // 移除上一次点击留下的圆圈
+                    this.svg.selectAll('circle.click-circle').remove();
+
+                    const [x, y] = d3.pointer(event, this.svg.node());
+
+                    // 在点击位置绘制一个圆圈作为反馈
+                    this.svg.append('circle')
+                        .classed('click-circle', true) // 添加一个类以便后续可以选择并移除
+                        .attr('cx', x)
+                        .attr('cy', y)
+                        .attr('r', 30) // 圆的半径
+                        .style('fill', 'none')
+                        .style('stroke', 'red')
+                        .style('stroke-width', 2);
+
+                    // 清除#enlargedView中的内容
+                    const enlargedView = d3.select('#enlargedView');
+                    enlargedView.selectAll('*').remove();
+
+                    // 在#enlargedView中创建一个新的svg元素
+                    const enlargedViewSvg = enlargedView.append('svg')
+                        .attr('width', '100%')
+                        .attr('height', '100%')
+                        .attr('viewBox', `${x - 30} ${y - 30} 60 60`);
+
+                    // 创建圆形裁剪路径
+                    const defs = enlargedViewSvg.append('defs');
+                    const clipPath = defs.append('clipPath')
+                        .attr('id', 'circle-clip');
+                    clipPath.append('circle')
+                        .attr('cx', x)
+                        .attr('cy', y)
+                        .attr('r', 30);
+
+                    // 复制原SVG内容到新的SVG元素中，并应用圆形裁剪路径
+                    enlargedViewSvg.append('g')
+                        .attr('clip-path', 'url(#circle-clip)')
+                        .html(this.svg.html());
+
+                    // 由于SVG元素被复制，我们需要重新计算transform属性以确保放大的区域正确对齐
+                    enlargedViewSvg.selectAll('g > svg')
+                        .attr('x', null)
+                        .attr('y', null)
+                        .style('transform', `translate(${-x + 100}px, ${-y + 100}px) scale(2)`);
+                });
+            }
+
+
+
+            // else if (type === this.myType['Enlarged Portions']) {
+            //     this.highLightType = type;
+
+            //     // 移除之前可能绑定的点击事件以避免重复
+            //     this.svg.on('click', null);
+
+            //     // 直接在点击事件中实现放大效果的逻辑
+            //     this.svg.on('click', (event) => {
+            //         const [x, y] = d3.pointer(event, this.svg.node());
+
+            //         // 在点击位置绘制一个圆圈作为反馈
+            //         this.svg.append('circle')
+            //             .attr('cx', x)
+            //             .attr('cy', y)
+            //             .attr('r', 30) // 圆的半径
+            //             .style('fill', 'none')
+            //             .style('stroke', 'red')
+            //             .style('stroke-width', 2);
+
+            //         // 准备在#enlargedView中显示放大的内容
+            //         const enlargedViewSvg = d3.select('#enlargedView').append('svg')
+            //             .attr('width', 200)
+            //             .attr('height', 200)
+            //             .style('overflow', 'visible');
+
+            //         // 计算viewBox的值来只显示点击点附近的区域
+            //         // 注意：这里的30和2分别对应于圆的半径和期望的放大倍数
+            //         const viewBoxX = x - 30;
+            //         const viewBoxY = y - 30;
+            //         const viewBoxWidth = 60; // 圆的直径
+            //         const viewBoxHeight = 60; // 圆的直径
+
+            //         enlargedViewSvg.attr('viewBox', `${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}`);
+
+            //         // 复制原SVG内容到新的SVG元素中
+            //         const content = this.svg.html();
+            //         enlargedViewSvg.html(content);
+            //     });
+            // }
+
+
+
+
+
+
+
 
 
             // 添加更多的条件分支来处理其他类型的高亮方式
