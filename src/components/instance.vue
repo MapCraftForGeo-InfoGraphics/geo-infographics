@@ -452,56 +452,11 @@ export default {
 
             if (type === this.myType['Political Map']) {
                 this.representationType = type;
+                this.drawSvg();
             }
             else if (type === this.myType['Topographic Map']) {
-                this.representationType = type;
+                this.representationType = type; 
             }
-            //澳大利亚成功点点图
-            // else if (type === this.myType['Shape-based Map']) {
-            //     this.representationType = type;
-
-            //     // 假定geoData中的features有一个属性可以用来识别国家，这里我们使用`properties.name`作为示例
-            //     const australiaFeature = this.geoData.features.find(feature => feature.properties.NAME === "Australia");
-
-            //     // 如果找到澳大利亚的地理特征，绘制点阵图
-            //     if (australiaFeature) {
-            //         // 计算澳大利亚边界框内网格的行数和列数
-            //         const bounds = d3.geoBounds(australiaFeature);
-            //         const [left, bottom] = this.geoProjection(bounds[0]);
-            //         const [right, top] = this.geoProjection(bounds[1]);
-            //         const w = right - left;
-            //         const h = bottom - top;
-            //         const rows = Math.ceil(h / 10); // 假设每20像素一个点的行距
-            //         const columns = Math.ceil(w / 10); // 假设每20像素一个点的列距
-            //         const pointRadius = 2; // 点的半径大小
-
-            //         // 生成澳大利亚边界框内的点
-            //         const points = [];
-            //         for (let i = 0; i < rows; i++) {
-            //             for (let j = 0; j < columns; j++) {
-            //                 const x = left + j * (w / columns);
-            //                 const y = top + i * (h / rows);
-            //                 const point = this.geoProjection.invert([x, y]);
-            //                 if (d3.geoContains(australiaFeature, point)) {
-            //                     points.push({ x: x, y: y });
-            //                 }
-            //             }
-            //         }
-
-            //         // 绘制点
-            //         this.svg.append("g")
-            //             .attr("fill", "black")
-            //             .attr("fill-opacity", 0.6)
-            //             .attr("stroke", "#fff")
-            //             .attr("stroke-width", 0.5)
-            //             .selectAll("circle")
-            //             .data(points)
-            //             .join("circle")
-            //             .attr("cx", d => d.x)
-            //             .attr("cy", d => d.y)
-            //             .attr("r", pointRadius);
-            //     }
-            // }
             else if (type === this.myType['Shape-based Map']) {
                 this.representationType = type;
 
@@ -516,9 +471,9 @@ export default {
                     const [right, top] = this.geoProjection(bounds[1]);
                     const w = right - left;
                     const h = bottom - top;
-                    const rows = Math.ceil(h / 20); // 假设每20像素一个点的行距
-                    const columns = Math.ceil(w / 20); // 假设每20像素一个点的列距
-                    const pointRadius = 2; // 点的半径大小
+                    const rows = Math.ceil(h / 15); // 假设每20像素一个点的行距
+                    const columns = Math.ceil(w / 15); // 假设每20像素一个点的列距
+                    const pointRadius = 3; // 点的半径大小
 
                     // 生成特定国家边界框内的点
                     const points = [];
@@ -788,16 +743,16 @@ export default {
                         if (population < 0) {
                             return this.defaultColor;
                         }
-                        else if (population >= 0 && population < 1e3) {
-                            return 'blue'; // 人口数量小于10^3
-                        } else if (population >= 1e3 && population < 1e5) {
-                            return 'green'; // 人口数量在10^3-10^5之间
-                        } else if (population >= 1e5 && population < 1e7) {
-                            return 'yellow'; // 人口数量在10^5-10^7之间
-                        } else if (population >= 1e7 && population < 1e9) {
-                            return 'orange'; // 人口数量在10^7-10^9之间
+                        else if (population >= 0 && population < 5000000) {
+                            return 'blue'; // 人口数量小于5000000
+                        } else if (population >= 5000000 && population < 10000000) {
+                            return 'green'; // 人口数量在5000000-10000000之间
+                        } else if (population >= 10000000 && population < 50000000) {
+                            return 'yellow'; // 人口数量在10000000-50000000之间
+                        } else if (population >= 50000000 && population < 100000000) {
+                            return 'orange'; // 人口数量在50000000-100000000之间
                         } else {
-                            return 'red'; // 人口数量大于10^10
+                            return 'red'; // 人口数量大于100000000
                         }
                     };
 
@@ -813,10 +768,10 @@ export default {
 
                 this.encodingChannel = () => {
                     // 在地图上绘制模拟的3D长方体
-                    const baseHeight = 5; // 长方体基础高度，所有长方体至少有这个高度
-                    const populationPerHeight = 10000000; // 每增加这么多人口，长方体的高度增加一单位
-                    const cuboidWidth = 10; // 长方体的宽度
-                    const cuboidLength = 20; // 长方体的长度（在SVG中模拟的“深度”）
+                    const baseHeight = 3; // 长方体基础高度，所有长方体至少有这个高度
+                    const populationPerHeight = 800000; // 每增加这么多人口，长方体的高度增加一单位
+                    const cuboidWidth = 20; // 长方体的宽度
+                    const cuboidLength = 30; // 长方体的长度（在SVG中模拟的“深度”）
                     const sideOpacity = 0.5; // 侧面的不透明度
 
                     this.geoData.features.forEach(feature => {
@@ -902,13 +857,13 @@ export default {
 
                         // 只有当人口大于等于1000000时才绘制图标
                         if (population >= 1000000) {
-                            const totalIcons = Math.ceil(population / 30000000); // 总图标数
+                            const totalIcons = Math.ceil(population / 8000000); // 总图标数
 
                             for (let i = 0; i < totalIcons; i++) {
                                 // 计算图标的位置
-                                // 将图标排列成一行显示十二个图标的形式
-                                const x = center[0] - ((iconWidth + iconGap) * 12 / 2) + ((i % 12) * (iconWidth + iconGap));
-                                const y = center[1] + (Math.floor(i / 12) * (iconHeight + iconGap));
+                                // 将图标排列成一行显示5个图标的形式
+                                const x = center[0] - ((iconWidth + iconGap) * 5 / 2) + ((i % 5) * (iconWidth + iconGap));
+                                const y = center[1] + (Math.floor(i / 5) * (iconHeight + iconGap));
                                 // 添加图标
                                 this.svg.append('image')
                                     .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
