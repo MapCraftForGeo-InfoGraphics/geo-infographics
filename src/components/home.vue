@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import { inject } from 'vue';
+
 export default {
     name: 'homeTab',
 
@@ -66,15 +68,17 @@ export default {
 
         uploadFile() {
             if (this.file) {
-                const fileName = this.file.name;
-                // 将文件名添加到 items 数组中
-                this.$emit('add-item', fileName);
-                // 处理文件传递给 instanceTab 组件
-                this.$emit('file-uploaded', this.file);
+                this.loadInfoData(this.file[0]);
                 this.dialog = false;
             }
         },
     },
+
+    setup() {
+        const loadInfoData = inject('loadInfoData');
+
+        return { loadInfoData };
+    }
 }
 </script>
 

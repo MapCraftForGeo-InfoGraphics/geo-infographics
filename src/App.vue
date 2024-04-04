@@ -40,7 +40,7 @@
 
         <v-window-item v-for="item in items.concat(more)" :key="item" :value="'tab-' + item"
           style="display: flex; height: 100%; width: 100%;">
-          <instanceTab :value="item" :geoData="geoData" :infoData="infoData"></instanceTab>
+          <instanceTab :value="item" :geoData="geoData" :infoData="infoDatas[item]"></instanceTab>
         </v-window-item>
       </v-window>
 
@@ -50,6 +50,7 @@
 
 <script>
 import * as d3 from 'd3';
+import { ref, provide } from 'vue';
 
 import homeTab from './components/home.vue'
 import instanceTab from './components/instance.vue'
@@ -66,15 +67,67 @@ export default {
     drawer: true,
 
     currentItem: 'home',
-    items: [
-      'country-by-population', 'abcde',
-    ],
-    more: ['hijkl'],
+    // items: [],
+    more: [],
 
     geoData: {},
-    infoData: {},
-    userData: {},
+    userDatas: {},
   }),
+
+  mounted() {
+    this.loadJson('europe.geojson')
+      .then((geoData) => {
+        this.geoData = geoData;
+        console.log("geo-data loaded!");
+      })
+  },
+
+  setup() {
+    const items = ref([]);
+    const infoDatas = ref({});
+
+    const uniqueName = (namesArray, name) => {
+      let newName = name.replace(/\..+$/, '');
+      let count = 1;
+
+      // 检查数组中是否包含该名字，如果包含，则在名字后添加后缀
+      while (namesArray.includes(newName)) {
+        newName = `${name} (${count})`;
+        count++;
+      }
+
+      return newName;
+    }
+
+    const loadInfoData = (file) => {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const fileContents = e.target.result; // 获取文件内容
+        // 将文件内容传递给 d3.json() 函数
+        d3.json(fileContents).then(data => {
+
+          const infoData = data.reduce((acc, cur) => {
+            acc[cur.country] = cur.annotation;
+            return acc;
+          }, {});
+
+          const value = uniqueName(items.value, file.name)
+          infoDatas.value[value] = infoData;
+          items.value.unshift(value);
+
+          // 处理加载的JSON数据
+        }).catch(error => {
+          // 处理加载数据时发生的错误
+          console.error(error);
+        });
+      };
+
+      reader.readAsDataURL(file);
+    };
+
+    provide('loadInfoData', loadInfoData);
+    return {items, infoDatas};
+  },
 
   methods: {
     addItem(item) {
@@ -96,19 +149,19 @@ export default {
         });
       });
     },
-  },
 
-  mounted() {
-    Promise.all([
-      this.loadJson('europe.geojson'),
-      this.loadJson('country-by-population.json')
-    ])
+    uniqueName(namesArray, name) {
+      let newName = name;
+      let count = 1;
 
-      .then(([geoData, infoData]) => {
-        this.geoData = geoData;
-        this.infoData = infoData;
-        console.log("geo-data loaded!")
-      })
+      // 检查数组中是否包含该名字，如果包含，则在名字后添加后缀
+      while (namesArray.includes(newName)) {
+        newName = `${name} (${count})`;
+        count++;
+      }
+
+      return newName;
+    }
   },
 }
 </script>

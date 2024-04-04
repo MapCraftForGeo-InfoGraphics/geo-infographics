@@ -242,6 +242,7 @@
                 </v-expansion-panels>
             </v-container>
         </v-card>
+
         <v-container style="width: 100%; height: 100%; margin-left: 0; margin-right: 0" :ref="'d3Panel'">
             <svg :class="value + '-svg'" style="width: 100%; height: 100%;"></svg>
             <svg :class="value + '-legend'"
@@ -339,10 +340,7 @@ export default {
         let worldPopulation = 0;
         if (this.geoData && this.geoData.features && this.infoData) {
             this.geoData.features.forEach(feature => {
-                const populationInfo = this.infoData.find(item => item.country === feature.properties.NAME);
-                const population = populationInfo ? populationInfo.population : 0;
-                feature.properties.population = population;
-                worldPopulation += population;
+                worldPopulation += this.getPopulation(feature.properties.NAME);
             });
         }
         this.worldPopulation = worldPopulation;
@@ -365,20 +363,17 @@ export default {
 
             //根据窗口大小设置地图的大小
             this.mapWidth = this.svg.node().getBoundingClientRect().width;
-            this. mapHeight = this.svg.node().getBoundingClientRect().height;
-            // const d3PanelEl = this.$refs.d3Panel.$el;
-            // this.mapHeight = d3PanelEl.clientHeight;
-            console.log(this.mapWidth, this.mapHeight);
+            this.mapHeight = this.svg.node().getBoundingClientRect().height;
 
+            // console.log(this.mapWidth, this.mapHeight);
             this.setProjection(0);
+            this.drawSvg();
         },
 
         //重新绘制svg
         drawSvg() {
             // 移除现有的 SVG
             this.svg.selectAll('*').remove();
-
-            // console.log(this.geoPath);
 
             this.svg.selectAll('path')
                 .data(this.geoData.features)
@@ -407,6 +402,11 @@ export default {
             });
         },
 
+        getPopulation(name) {
+            // console.log(name, this.infoData[name]);
+            return this.infoData[name] ? this.infoData[name]['population'] : -1
+        },
+
         //encoding glyph
         //contryPopulation/worldPopulation
         drawPieCharts() {
@@ -421,7 +421,7 @@ export default {
                 .sort(null); // 不对切片进行排序
 
             this.geoData.features.forEach(feature => {
-                const countryPopulation = feature.properties.population;
+                const countryPopulation = this.getPopulation(feature.properties.NAME);
                 const populationPercentage = countryPopulation / this.worldPopulation;
                 // const data = [{ value: populationPercentage }, { value: 1 - populationPercentage }]; // 饼状图数据
                 const data = [
@@ -766,12 +766,12 @@ export default {
                     const colorFunction = (scale) => {
                         const transformFunction = (input) => Math.pow(input, 0.25)
                         const colorScale = d3.scaleSequential(d3.interpolateBlues)
-                            .domain([0, transformFunction(d3.max(this.geoData.features, d => d.properties.population))]);
-                        return colorScale(transformFunction(scale));
+                            .domain([0, transformFunction(d3.max(this.geoData.features, d => this.getPopulation(d.properties.NAME)))]);
+                        return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
                     }
 
                     this.svg.selectAll('path')
-                        .attr('fill', d => colorFunction(d.properties.population));
+                        .attr('fill', d => colorFunction(this.getPopulation(d.properties.NAME)));
 
                     this.drawLegend();
                 }
@@ -785,7 +785,10 @@ export default {
                 this.encodingChannel = () => {
                     // 修改颜色映射的方法
                     const colorFunction = (population) => {
-                        if (population < 1e3) {
+                        if (population < 0) {
+                            return this.defaultColor;
+                        }
+                        else if (population >= 0 && population < 1e3) {
                             return 'blue'; // 人口数量小于10^3
                         } else if (population >= 1e3 && population < 1e5) {
                             return 'green'; // 人口数量在10^3-10^5之间
@@ -799,7 +802,7 @@ export default {
                     };
 
                     this.svg.selectAll('path')
-                        .attr('fill', d => colorFunction(d.properties.population));
+                        .attr('fill', d => colorFunction(this.getPopulation(d.properties.NAME)));
                 };
             }
 
@@ -818,7 +821,7 @@ export default {
 
                     this.geoData.features.forEach(feature => {
                         const center = this.geoPath.centroid(feature);
-                        const population = feature.properties.population;
+                        const population = this.getPopulation(feature.properties.NAME);
                         if (population >= 1000000) { // 人口大于等于1000000时绘制长方体
                             const height = baseHeight + (population / populationPerHeight); // 长方体的总高度
 
@@ -860,7 +863,7 @@ export default {
                 this.encodingChannel = () => {
                     // 在地图上绘制人口方块
                     // this.drawPopulationSquares();
-                    const populationExtent = d3.extent(this.geoData.features, d => d.properties.population);
+                    const populationExtent = d3.extent(this.geoData.features, d => this.getPopulation(d.properties.NAME));
                     const sizeScale = d3.scaleSqrt()
                         .domain(populationExtent)
                         .range([5, 50]); // 方块大小的范围
@@ -868,7 +871,7 @@ export default {
                     // 直接在现有的SVG上绘制方块，不清除之前的内容
                     this.geoData.features.forEach(feature => {
                         const [x, y] = this.geoPath.centroid(feature);
-                        const population = feature.properties.population;
+                        const population = this.getPopulation(feature.properties.NAME);
                         if (population >= 1000000) { // 人口大于等于1000000时绘制方块
                             this.svg.append('rect')
                                 .attr('x', x - sizeScale(population) / 2)
@@ -895,7 +898,7 @@ export default {
                     // 直接在现有的SVG上绘制图标，不清除之前的内容
                     this.geoData.features.forEach(feature => {
                         const center = this.geoPath.centroid(feature);
-                        const population = feature.properties.population;
+                        const population = this.getPopulation(feature.properties.NAME);
 
                         // 只有当人口大于等于1000000时才绘制图标
                         if (population >= 1000000) {
@@ -936,7 +939,7 @@ export default {
             const legendHeight = 20;
 
             const colorScale = d3.scaleSequential(d3.interpolateBlues)
-                .domain([0, d3.max(this.geoData.features, d => d.properties.population)]);
+                .domain([0, d3.max(this.geoData.features, d => this.getPopulation(d.properties.NAME))]);
 
             const legendGradient = this.legend.append('svg')
                 .attr('width', legendWidth)
@@ -975,7 +978,7 @@ export default {
             this.legend.append('text')
                 .attr('x', legendWidth - 20)
                 .attr('y', legendHeight + 15)
-                .text(d3.max(this.geoData.features, d => d.properties.population));
+                .text(d3.max(this.geoData.features, d => this.getPopulation(d.properties.NAME)));
         },
     },
 
