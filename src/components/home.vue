@@ -13,11 +13,7 @@
         </v-row>
 
         <v-row style="margin-top: 15px;">
-            <u>Start from empty</u>
-        </v-row>
-
-        <v-row style="margin-top: 15px;">
-            <u @click="openDialog()">Start from a JSON file</u>
+            <u @click="openDialog()">Upload a JSON file</u>
         </v-row>
 
         <v-row style="margin-top: 30px;">

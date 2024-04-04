@@ -66,25 +66,30 @@ export default {
   data: () => ({
     drawer: true,
 
-    currentItem: 'home',
+    
     // items: [],
     more: [],
 
-    geoData: {},
     userDatas: {},
   }),
-
-  mounted() {
-    this.loadJson('europe.geojson')
-      .then((geoData) => {
-        this.geoData = geoData;
-        console.log("geo-data loaded!");
-      })
-  },
 
   setup() {
     const items = ref([]);
     const infoDatas = ref({});
+    const geoData = ref({});
+
+    const currentItem = ref('home');
+
+    const loadJson = (na) => {
+      return new Promise((resolve, reject) => {
+        d3.json(na).then(data => {
+          resolve(data);
+        }).catch(error => {
+          console.error('Error loading GeoJSON data:', error);
+          reject(error);
+        });
+      });
+    };
 
     const uniqueName = (namesArray, name) => {
       let newName = name.replace(/\..+$/, '');
@@ -99,10 +104,16 @@ export default {
       return newName;
     }
 
+    loadJson('europe.geojson')
+      .then((data) => {
+        geoData.value = data;
+      });
+
     const loadInfoData = (file) => {
       const reader = new FileReader();
       reader.onload = function (e) {
         const fileContents = e.target.result; // 获取文件内容
+
         // 将文件内容传递给 d3.json() 函数
         d3.json(fileContents).then(data => {
 
@@ -115,6 +126,8 @@ export default {
           infoDatas.value[value] = infoData;
           items.value.unshift(value);
 
+          currentItem.value = 'tab-' + value;
+
           // 处理加载的JSON数据
         }).catch(error => {
           // 处理加载数据时发生的错误
@@ -126,7 +139,7 @@ export default {
     };
 
     provide('loadInfoData', loadInfoData);
-    return {items, infoDatas};
+    return { items, geoData, infoDatas, currentItem, loadJson, uniqueName };
   },
 
   methods: {
@@ -138,30 +151,6 @@ export default {
       this.more.unshift(...removed)
       this.$nextTick(() => { this.currentItem = 'tab-' + item })
     },
-
-    loadJson(na) {
-      return new Promise((resolve, reject) => {
-        d3.json(na).then(data => {
-          resolve(data);
-        }).catch(error => {
-          console.error('Error loading GeoJSON data:', error);
-          reject(error);
-        });
-      });
-    },
-
-    uniqueName(namesArray, name) {
-      let newName = name;
-      let count = 1;
-
-      // 检查数组中是否包含该名字，如果包含，则在名字后添加后缀
-      while (namesArray.includes(newName)) {
-        newName = `${name} (${count})`;
-        count++;
-      }
-
-      return newName;
-    }
   },
 }
 </script>
