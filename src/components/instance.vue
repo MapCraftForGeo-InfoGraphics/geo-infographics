@@ -338,7 +338,7 @@ export default {
 
     mounted() {
         console.log(this.value, "created, numerical:", this.isNumerical);
-        
+
         let worldPopulation = 0;
         if (this.geoData && this.geoData.features && this.infoData) {
             this.geoData.features.forEach(feature => {
@@ -411,44 +411,7 @@ export default {
             return this.infoData[name] ? this.infoData[name] : -1
         },
 
-        //encoding glyph
-        //contryPopulation/worldPopulation
-        drawPieCharts() {
-            const radius = 15; // 饼状图的半径，可根据需要调整大小
 
-            const arcGenerator = d3.arc()
-                .innerRadius(0) // 0表示这是个饼状图，而不是环状图
-                .outerRadius(radius);
-
-            const pieGenerator = d3.pie()
-                .value(d => d.value)
-                .sort(null); // 不对切片进行排序
-
-            this.geoData.features.forEach(feature => {
-                const countryPopulation = this.getPopulation(feature.properties.NAME);
-                const populationPercentage = countryPopulation / this.worldPopulation;
-                // const data = [{ value: populationPercentage }, { value: 1 - populationPercentage }]; // 饼状图数据
-                const data = [
-                    { value: populationPercentage, isCountryPopulation: true },
-                    { value: 1 - populationPercentage, isCountryPopulation: false }
-                ];
-
-                const arcs = pieGenerator(data);
-
-                const center = this.geoPath.centroid(feature);
-
-                console.log(arcs); // To inspect the overall structure
-
-                arcs.forEach(arc => {
-                    this.svg.append('path')
-                        .attr('d', arcGenerator(arc))
-                        .attr('transform', `translate(${center[0]}, ${center[1]})`)
-                        .attr('fill', function () {
-                            return arc.data.isCountryPopulation ? 'rgba(0, 100, 255, 0.7)' : 'rgba(200, 200, 200, 0.3)';
-                        });
-                });
-            });
-        },
 
         // 设置 Map Representation
         setRepresentation(type) {
@@ -512,7 +475,7 @@ export default {
             }
             else if (type === this.myType['Grid Cartogram']) {
                 this.representationType = type;
-
+                this.drawSvg();
                 // 首先，移除旧的网格层和旧的clipPath（如果存在）
                 this.svg.select('.grid-layer').remove();
                 this.svg.select('defs').selectAll('clipPath').remove(); // 假设没有其他clipPath在使用
@@ -601,7 +564,7 @@ export default {
             // 取消之前的所有点击事件监听器
             this.svg.selectAll('path').on('click', null);
             // 重要：移除绑定到SVG本身的点击事件监听器
-            // this.svg.on('click', null);
+            this.svg.on('click', null);
             // d3.select("#enlargedView").selectAll("*").remove(); 
             // 根据类型应用新的高亮方式
             if (type === this.myType['Color']) {
@@ -788,64 +751,120 @@ export default {
 
 
 
-            // else if (type === this.myType['Enlarged Portions']) {
-            //     this.highLightType = type;
-
-            //     // 移除之前可能绑定的点击事件以避免重复
-            //     this.svg.on('click', null);
-
-            //     // 直接在点击事件中实现放大效果的逻辑
-            //     this.svg.on('click', (event) => {
-            //         const [x, y] = d3.pointer(event, this.svg.node());
-
-            //         // 在点击位置绘制一个圆圈作为反馈
-            //         this.svg.append('circle')
-            //             .attr('cx', x)
-            //             .attr('cy', y)
-            //             .attr('r', 30) // 圆的半径
-            //             .style('fill', 'none')
-            //             .style('stroke', 'red')
-            //             .style('stroke-width', 2);
-
-            //         // 准备在#enlargedView中显示放大的内容
-            //         const enlargedViewSvg = d3.select('#enlargedView').append('svg')
-            //             .attr('width', 200)
-            //             .attr('height', 200)
-            //             .style('overflow', 'visible');
-
-            //         // 计算viewBox的值来只显示点击点附近的区域
-            //         // 注意：这里的30和2分别对应于圆的半径和期望的放大倍数
-            //         const viewBoxX = x - 30;
-            //         const viewBoxY = y - 30;
-            //         const viewBoxWidth = 60; // 圆的直径
-            //         const viewBoxHeight = 60; // 圆的直径
-
-            //         enlargedViewSvg.attr('viewBox', `${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}`);
-
-            //         // 复制原SVG内容到新的SVG元素中
-            //         const content = this.svg.html();
-            //         enlargedViewSvg.html(content);
-            //     });
-            // }
-
-
-
-
-
-
-
-
-
-            // 添加更多的条件分支来处理其他类型的高亮方式
         },
 
         setLabelPosition(type) {
-            console.log("Label Position:", type)
+            console.log("Label Position:", type);
             if (type === this.myType['Label Situated']) {
                 this.labelPositionType = type;
+
+                this.setLabelPosition = () => {
+                    // 移除之前添加的所有标签
+                    this.svg.selectAll(".olympic-label").remove();
+
+                    this.geoData.features.forEach(feature => {
+                        const center = this.geoPath.centroid(feature);
+                        const annotation = feature.properties.annotation;
+
+                        if (annotation && annotation.total !== undefined) {
+                            // 组合注解文本
+                            const textLines = [
+                                `The city that hosted the Olympics was: ${annotation.city}`,
+                                `A total of ${annotation.total} Olympic Games were organized`,
+                                `where ${annotation.summer_olympics.join(", ")} are summer Olympics`,
+                                `where ${annotation.winter_olympics.join(", ")} are winter Olympics`
+                            ];
+
+                            // 计算每行文本的位置并添加
+                            textLines.forEach((line, index) => {
+                                this.svg.append('text')
+                                    .attr('class', 'olympic-label') // 添加类名以便后续移除
+                                    .attr('x', center[0])
+                                    .attr('y', center[1] + (index * 15)) // 假设每行文本的高度为15px
+                                    .attr('text-anchor', 'middle') // 文本居中对齐
+                                    .attr('fill', 'black') // 文本颜色
+                                    .style('font-size', '10px') // 字体大小
+                                    .text(line);
+                            });
+                        }
+                    });
+                };
+
+                // 调用setLabelPosition函数来添加注解
+                this.setLabelPosition();
             }
+
+
             else if (type === this.myType['Label Text']) {
                 this.labelPositionType = type;
+
+                // 首先，清除旧的标签和注解框
+                this.svg.selectAll(".country-label, .annotation-box, .annotation-text").remove();
+
+                // 定义一个用于检查国家是否在olympics_data.json中的辅助函数
+        const isInOlympicsData = (countryName) => {
+            return annotationData.some(item => item.country === countryName);
+        };
+
+        // 仅为olympics_data.json中存在的国家显示国家名字
+        this.geoData.features.forEach(feature => {
+            if (isInOlympicsData(feature.properties.NAME)) {
+                const center = this.geoPath.centroid(feature);
+                this.svg.append('text')
+                    .attr('class', 'country-label')
+                    .attr('x', center[0])
+                    .attr('y', center[1])
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', 'black')
+                    .style('font-size', '10px')
+                    .text(feature.properties.NAME);
+            }
+        });
+
+                // 计算注解框的布局参数
+                const boxWidth = 120; // 每个注解框的宽度
+                const boxHeight = 60; // 每个注解框的高度
+                const boxesPerRow = Math.floor(this.mapWidth / boxWidth); // 每行可以容纳的注解框数量
+
+                // 在地图下方排列注解框
+                this.geoData.features.forEach((feature, index) => {
+                    const annotation = feature.properties.annotation;
+                    if (annotation) {
+                        const row = Math.floor(index / boxesPerRow);
+                        const col = index % boxesPerRow;
+                        const x = col * boxWidth;
+                        const y = this.mapHeight + row * (boxHeight + 100); // 在地图下方留出一定间距
+                        const summerOlympics = annotation.summer_olympics || [];
+                        const winterOlympics = annotation.winter_olympics || [];
+                        // 绘制注解框
+                        this.svg.append('rect')
+                            .attr('class', 'annotation-box')
+                            .attr('x', x)
+                            .attr('y', y)
+                            .attr('width', boxWidth)
+                            .attr('height', boxHeight)
+                            .attr('fill', 'none')
+                            .attr('stroke', 'black');
+
+                        // 在注解框内添加文本
+                        const textLines = [
+                            `City: ${annotation.city}`,
+                            `Total: ${annotation.total}`,
+                            `Summer: ${summerOlympics.length}`,
+                            `Winter: ${winterOlympics.length}`
+                        ];
+
+                        textLines.forEach((line, lineIndex) => {
+                            this.svg.append('text')
+                                .attr('class', 'annotation-text')
+                                .attr('x', x + 5) // 略微缩进
+                                .attr('y', y + 15 + (lineIndex * 12)) // 根据行数调整位置
+                                .attr('fill', 'black')
+                                .style('font-size', '10px')
+                                .text(line);
+                        });
+                    }
+                });
             }
             else if (type === this.myType['Label Icon']) {
                 this.labelPositionType = type;
@@ -866,181 +885,259 @@ export default {
 
         setEncodingChannel(type) {
             console.log("Encoding Channel:", type);
+            d3.select("." + this.value + "-legend").selectAll("*").remove();
+            if (this.isNumerical) {
+                //Encoding Color (Luminance)'
+                if (type === this.myType['Color (Luminance)']) {
+                    this.encodingChannelType = type;
 
-            //Encoding Color (Luminance)'
-            if (type === this.myType['Color (Luminance)']) {
-                this.encodingChannelType = type;
+                    // 重写encodingChannel函数
+                    this.encodingChannel = () => {
+                        // 修改颜色映射的方法
+                        const colorFunction = (scale) => {
+                            const transformFunction = (input) => Math.pow(input, 0.25)
+                            const colorScale = d3.scaleSequential(d3.interpolateBlues)
+                                .domain([0, transformFunction(d3.max(this.geoData.features, d => this.getPopulation(d.properties.NAME)))]);
+                            return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
+                        }
 
-                // 重写encodingChannel函数
-                this.encodingChannel = () => {
-                    // 修改颜色映射的方法
-                    const colorFunction = (scale) => {
-                        const transformFunction = (input) => Math.pow(input, 0.25)
-                        const colorScale = d3.scaleSequential(d3.interpolateBlues)
-                            .domain([0, transformFunction(d3.max(this.geoData.features, d => this.getPopulation(d.properties.NAME)))]);
-                        return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
+                        this.svg.selectAll('path')
+                            .attr('fill', d => colorFunction(this.getPopulation(d.properties.NAME)));
+
+                        this.drawLegend();
                     }
-
-                    this.svg.selectAll('path')
-                        .attr('fill', d => colorFunction(this.getPopulation(d.properties.NAME)));
-
-                    this.drawLegend();
                 }
-            }
 
-            //Encoding Color (Hue)'
-            else if (type === this.myType['Color (Hue)']) {
-                this.encodingChannelType = type;
+                //Encoding Color (Hue)'
+                else if (type === this.myType['Color (Hue)']) {
+                    this.encodingChannelType = type;
 
-                // 重写encodingChannel函数
-                this.encodingChannel = () => {
-                    // 修改颜色映射的方法
-                    const colorFunction = (population) => {
-                        if (population < 0) {
-                            return this.defaultColor;
-                        }
-                        else if (population >= 0 && population < 5000000) {
-                            return 'blue'; // 人口数量小于5000000
-                        } else if (population >= 5000000 && population < 10000000) {
-                            return 'green'; // 人口数量在5000000-10000000之间
-                        } else if (population >= 10000000 && population < 50000000) {
-                            return 'yellow'; // 人口数量在10000000-50000000之间
-                        } else if (population >= 50000000 && population < 100000000) {
-                            return 'orange'; // 人口数量在50000000-100000000之间
-                        } else {
-                            return 'red'; // 人口数量大于100000000
-                        }
-                    };
-
-                    this.svg.selectAll('path')
-                        .attr('fill', d => colorFunction(this.getPopulation(d.properties.NAME)));
-                };
-            }
-
-
-            //Encoding 3D Length
-            else if (type === this.myType['3D Length']) {
-                this.encodingChannelType = type;
-
-                this.encodingChannel = () => {
-                    // 在地图上绘制模拟的3D长方体
-                    const baseHeight = 3; // 长方体基础高度，所有长方体至少有这个高度
-                    const populationPerHeight = 800000; // 每增加这么多人口，长方体的高度增加一单位
-                    const cuboidWidth = 20; // 长方体的宽度
-                    const cuboidLength = 30; // 长方体的长度（在SVG中模拟的“深度”）
-                    const sideOpacity = 0.5; // 侧面的不透明度
-
-                    this.geoData.features.forEach(feature => {
-                        const center = this.geoPath.centroid(feature);
-                        const population = this.getPopulation(feature.properties.NAME);
-                        if (population >= 1000000) { // 人口大于等于1000000时绘制长方体
-                            const height = baseHeight + (population / populationPerHeight); // 长方体的总高度
-
-                            // 绘制长方体的“前面”
-                            this.svg.append('rect')
-                                .attr('x', center[0] - cuboidWidth / 2)
-                                .attr('y', center[1] - height)
-                                .attr('width', cuboidWidth)
-                                .attr('height', height)
-                                .attr('fill', 'rgba(125, 125, 255, 0.7)'); // 修改前面的颜色
-
-                            // 绘制长方体的“顶面”
-                            this.svg.append('polygon')
-                                .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
-                                .attr('fill', 'rgba(150, 150, 255, 0.7)');
-
-                            // 绘制长方体的“左侧面”
-                            this.svg.append('polygon')
-                                .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
-                                .attr('fill', `rgba(75, 75, 255, ${sideOpacity})`); // 修改左侧面的颜色
-                        }
-                    });
-                }
-            }
-
-
-            else if (type === this.myType['Glyph']) {
-                this.encodingChannelType = type;
-
-                this.encodingChannel = () => {
-                    this.drawPieCharts(); // 在地图上叠加饼状图
-                }
-            }
-
-            // Encoding Size
-            else if (type === this.myType['Size']) {
-                this.encodingChannelType = type;
-
-                this.encodingChannel = () => {
-                    // 在地图上绘制人口方块
-                    // this.drawPopulationSquares();
-                    const populationExtent = d3.extent(this.geoData.features, d => this.getPopulation(d.properties.NAME));
-                    const sizeScale = d3.scaleSqrt()
-                        .domain(populationExtent)
-                        .range([5, 50]); // 方块大小的范围
-
-                    // 直接在现有的SVG上绘制方块，不清除之前的内容
-                    this.geoData.features.forEach(feature => {
-                        const [x, y] = this.geoPath.centroid(feature);
-                        const population = this.getPopulation(feature.properties.NAME);
-                        if (population >= 1000000) { // 人口大于等于1000000时绘制方块
-                            this.svg.append('rect')
-                                .attr('x', x - sizeScale(population) / 2)
-                                .attr('y', y - sizeScale(population) / 2)
-                                .attr('width', sizeScale(population))
-                                .attr('height', sizeScale(population))
-                                .attr('fill', 'rgba(118, 139, 193, 1)');
-                        }
-                    });
-                }
-            }
-
-
-            //Encoding Quantity
-            else if (type === this.myType['Quantity']) {
-                this.encodingChannelType = type;
-
-                this.encodingChannel = () => {
-                    // 在地图上叠加人口图标
-                    const iconWidth = 6; // 图标的宽度
-                    const iconHeight = 15; // 图标的高度
-                    const iconGap = 1; // 调整图标间的间隔
-
-                    // 直接在现有的SVG上绘制图标，不清除之前的内容
-                    this.geoData.features.forEach(feature => {
-                        const center = this.geoPath.centroid(feature);
-                        const population = this.getPopulation(feature.properties.NAME);
-
-                        // 只有当人口大于等于1000000时才绘制图标
-                        if (population >= 1000000) {
-                            const totalIcons = Math.ceil(population / 8000000); // 总图标数
-
-                            for (let i = 0; i < totalIcons; i++) {
-                                // 计算图标的位置
-                                // 将图标排列成一行显示5个图标的形式
-                                const x = center[0] - ((iconWidth + iconGap) * 5 / 2) + ((i % 5) * (iconWidth + iconGap));
-                                const y = center[1] + (Math.floor(i / 5) * (iconHeight + iconGap));
-                                // 添加图标
-                                this.svg.append('image')
-                                    .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
-                                    .attr('x', x)
-                                    .attr('y', y)
-                                    .attr('width', iconWidth)
-                                    .attr('height', iconHeight);
+                    // 重写encodingChannel函数
+                    this.encodingChannel = () => {
+                        // 修改颜色映射的方法
+                        const colorFunction = (population) => {
+                            if (population < 0) {
+                                return this.defaultColor;
                             }
-                        }
-                    });
+                            else if (population >= 0 && population < 5000000) {
+                                return 'blue'; // 人口数量小于5000000
+                            } else if (population >= 5000000 && population < 10000000) {
+                                return 'green'; // 人口数量在5000000-10000000之间
+                            } else if (population >= 10000000 && population < 50000000) {
+                                return 'yellow'; // 人口数量在10000000-50000000之间
+                            } else if (population >= 50000000 && population < 100000000) {
+                                return 'orange'; // 人口数量在50000000-100000000之间
+                            } else {
+                                return 'red'; // 人口数量大于100000000
+                            }
+                        };
+
+                        this.svg.selectAll('path')
+                            .attr('fill', d => colorFunction(this.getPopulation(d.properties.NAME)));
+                    };
+                }
+
+
+                //Encoding 3D Length
+                else if (type === this.myType['3D Length']) {
+                    this.encodingChannelType = type;
+
+                    this.encodingChannel = () => {
+                        // 在地图上绘制模拟的3D长方体
+                        const baseHeight = 3; // 长方体基础高度，所有长方体至少有这个高度
+                        const populationPerHeight = 800000; // 每增加这么多人口，长方体的高度增加一单位
+                        const cuboidWidth = 20; // 长方体的宽度
+                        const cuboidLength = 30; // 长方体的长度（在SVG中模拟的“深度”）
+                        const sideOpacity = 0.5; // 侧面的不透明度
+
+                        this.geoData.features.forEach(feature => {
+                            const center = this.geoPath.centroid(feature);
+                            const population = this.getPopulation(feature.properties.NAME);
+                            if (population >= 1000000) { // 人口大于等于1000000时绘制长方体
+                                const height = baseHeight + (population / populationPerHeight); // 长方体的总高度
+
+                                // 绘制长方体的“前面”
+                                this.svg.append('rect')
+                                    .attr('x', center[0] - cuboidWidth / 2)
+                                    .attr('y', center[1] - height)
+                                    .attr('width', cuboidWidth)
+                                    .attr('height', height)
+                                    .attr('fill', 'rgba(125, 125, 255, 0.7)'); // 修改前面的颜色
+
+                                // 绘制长方体的“顶面”
+                                this.svg.append('polygon')
+                                    .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
+                                    .attr('fill', 'rgba(150, 150, 255, 0.7)');
+
+                                // 绘制长方体的“左侧面”
+                                this.svg.append('polygon')
+                                    .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
+                                    .attr('fill', `rgba(75, 75, 255, ${sideOpacity})`); // 修改左侧面的颜色
+                            }
+                        });
+                    }
+                }
+
+
+                // Encoding Size
+                else if (type === this.myType['Size']) {
+                    this.encodingChannelType = type;
+
+                    this.encodingChannel = () => {
+                        // 在地图上绘制人口方块
+                        // this.drawPopulationSquares();
+                        const populationExtent = d3.extent(this.geoData.features, d => this.getPopulation(d.properties.NAME));
+                        const sizeScale = d3.scaleSqrt()
+                            .domain(populationExtent)
+                            .range([5, 50]); // 方块大小的范围
+
+                        // 直接在现有的SVG上绘制方块，不清除之前的内容
+                        this.geoData.features.forEach(feature => {
+                            const [x, y] = this.geoPath.centroid(feature);
+                            const population = this.getPopulation(feature.properties.NAME);
+                            if (population >= 1000000) { // 人口大于等于1000000时绘制方块
+                                this.svg.append('rect')
+                                    .attr('x', x - sizeScale(population) / 2)
+                                    .attr('y', y - sizeScale(population) / 2)
+                                    .attr('width', sizeScale(population))
+                                    .attr('height', sizeScale(population))
+                                    .attr('fill', 'rgba(118, 139, 193, 1)');
+                            }
+                        });
+                    }
+                }
+                //Encoding Quantity
+                else if (type === this.myType['Quantity']) {
+                    this.encodingChannelType = type;
+
+                    this.encodingChannel = () => {
+                        // 在地图上叠加人口图标
+                        const iconWidth = 6; // 图标的宽度
+                        const iconHeight = 15; // 图标的高度
+                        const iconGap = 1; // 调整图标间的间隔
+
+                        // 直接在现有的SVG上绘制图标，不清除之前的内容
+                        this.geoData.features.forEach(feature => {
+                            const center = this.geoPath.centroid(feature);
+                            const population = this.getPopulation(feature.properties.NAME);
+
+                            // 只有当人口大于等于1000000时才绘制图标
+                            if (population >= 1000000) {
+                                const totalIcons = Math.ceil(population / 8000000); // 总图标数
+
+                                for (let i = 0; i < totalIcons; i++) {
+                                    // 计算图标的位置
+                                    // 将图标排列成一行显示5个图标的形式
+                                    const x = center[0] - ((iconWidth + iconGap) * 5 / 2) + ((i % 5) * (iconWidth + iconGap));
+                                    const y = center[1] + (Math.floor(i / 5) * (iconHeight + iconGap));
+                                    // 添加图标
+                                    this.svg.append('image')
+                                        .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
+                                        .attr('x', x)
+                                        .attr('y', y)
+                                        .attr('width', iconWidth)
+                                        .attr('height', iconHeight);
+                                }
+                            }
+                        });
+                    }
+                }
+
+                else {
+                    // 如果没有适用的编码方式
+                    this.encodingChannelType = -1; // 或其他表示无效编码方式的值
+
+                    // 显示一条消息
+                    this.encodingChannel = () => {
+                        // 首先，清除可能存在的旧消息
+                        d3.select("." + this.value + "-legend").selectAll("*").remove();
+
+                        // 向legend SVG元素中添加文本
+                        d3.select("." + this.value + "-legend")
+                            .append('text')
+                            .attr('x', 10) // 根据需要调整文本的x位置
+                            .attr('y', 20) // 根据需要调整文本的y位置
+                            .attr('fill', 'black') // 文本颜色
+                            .style('font-size', '14px') // 文本大小
+                            .text('This encoding method is not applicable to the current data provided.');
+                    };
                 }
             }
-
             else {
-                this.encodingChannelType = -1;
+                if (type === this.myType['Glyph']) {
+                    this.encodingChannelType = type;
+                    this.encodingChannel = () => {
+                        this.geoData.features.forEach(feature => {
+                            const countryName = feature.properties.NAME; // 从GeoJSON获取国家名称
+                            const flagBase64 = this.getPopulation(countryName); // 使用getPopulation方法尝试从infoData获取国旗的base64编码
 
-                // 默认情况下使用单一的灰色，并绘制地图的基本轮廓
-                this.encodingChannel = () => {
-                    this.svg.selectAll("path").attr("fill", this.defaultColor);
+                            // 检查flagBase64是否不等于-1，仅当不等于-1时，才显示国旗
+                            if (flagBase64 !== -1) {
+                                const center = this.geoPath.centroid(feature); // 计算国家地理中心点
+
+                                // 在地图的国家中心点上添加国旗图像
+                                this.svg.append('image')
+                                    .attr('xlink:href', flagBase64) // 使用国旗的base64编码
+                                    .attr('x', center[0] - 10) // 你可能需要调整这个以适合国旗图像的大小和位置
+                                    .attr('y', center[1] - 10) // 同上
+                                    .attr('width', 20) // 根据需要调整国旗的尺寸
+                                    .attr('height', 20);
+                            }
+                        });
+                    };
                 }
+                else if (type === this.myType['Color (Hue)']) {
+                    this.encodingChannelType = type;
+
+                    // 1. 创建一个包含所有国家名称的数组
+                    const countries = this.geoData.features.map(d => d.properties.NAME);
+
+                    // 2. 自定义一个包含51种颜色的数组
+                    const customColors = [
+                        "#e6194B", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0", "#f032e6",
+                        "#bcf60c", "#fabebe", "#008080", "#e6beff", "#9a6324", "#fffac8", "#800000", "#aaffc3",
+                        "#808000", "#ffd8b1", "#000075", "#808080", "#ffffff", "#000000",
+                        // 添加更多颜色以确保有51种不同的颜色
+                        "#59656d", "#c17b81", "#b5d99c", "#f5b971", "#8fb5aa", "#f28a9b", "#a4c3ed", "#8ec6c5",
+                        "#c6d7eb", "#ead3c1", "#92b4a7", "#f4ebc1", "#cbb3bf", "#acb7ae", "#e2c2de", "#cccccc",
+                        "#b97a57", "#ab69c6", "#966fd6", "#cfcfc4", "#b39eb5", "#779ecb", "#fdfd96", "#836953",
+                        "#779ecb", "#03c03c", "#966fd6", "#c23b22", "#f49ac2", "#fadadd"
+                    ];
+
+                    // 使用d3.scaleOrdinal来映射国家到颜色
+                    const colorScale = d3.scaleOrdinal(countries, customColors);
+
+                    // 重写encodingChannel函数
+                    this.encodingChannel = () => {
+                        // 在地图上为每个国家应用颜色
+                        this.svg.selectAll('path')
+                            .attr('fill', d => colorScale(d.properties.NAME)) // 使用比例尺确定颜色
+                            .attr('stroke', '#ffffff'); // 设置边框颜色，可根据需要调整
+                    };
+                }
+                else {
+                    // 如果没有适用的编码方式
+                    this.encodingChannelType = -1; // 或其他表示无效编码方式的值
+
+                    // 显示一条消息
+                    this.encodingChannel = () => {
+                        // 首先，清除可能存在的旧消息
+                        d3.select("." + this.value + "-legend").selectAll("*").remove();
+
+                        // 向legend SVG元素中添加文本
+                        d3.select("." + this.value + "-legend")
+                            .append('text')
+                            .attr('x', 10) // 根据需要调整文本的x位置
+                            .attr('y', 20) // 根据需要调整文本的y位置
+                            .attr('fill', 'black') // 文本颜色
+                            .style('font-size', '14px') // 文本大小
+                            .text('This encoding method is not applicable to the current data provided.');
+                    };
+                }
+
+
             }
+
 
             this.drawSvg();
         },

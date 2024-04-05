@@ -3,7 +3,6 @@
       "country": "United Kingdom",
       "annotation": {
         "city": "London",
-        "region": "Europe",
         "summer_olympics": ["1908", "1948", "2012"],
         "winter_olympics": [],
         "total": 3
@@ -13,7 +12,6 @@
       "country": "France",
       "annotation": {
         "city": "Paris, Chamonix, Grenoble, Albertville",
-        "region": "Europe",
         "summer_olympics": ["1900", "1924", "2024"],
         "winter_olympics": ["1924", "1968", "1992"],
         "total": 6
@@ -24,7 +22,6 @@
       "country": "Greece",
       "annotation": {
         "city": "Athens",
-        "region": "Europe",
         "summer_olympics": ["1896", "2004"],
         "winter_olympics": [],
         "total": 2
@@ -36,7 +33,6 @@
       "country": "Switzerland",
       "annotation": {
         "city": "St. Moritz",
-        "region": "Europe",
         "summer_olympics": [],
         "winter_olympics": ["1928", "1948"],
         "total": 2
@@ -46,7 +42,6 @@
       "country": "Austria",
       "annotation": {
         "city": "Innsbruck",
-        "region": "Europe",
         "summer_olympics": [],
         "winter_olympics": ["1964", "1976"],
         "total": 2
@@ -56,7 +51,6 @@
       "country": "Italy",
       "annotation": {
         "city": "Rome, Cortina d'Ampezzo, Torino, Milan and Cortina d'Ampezzo",
-        "region": "Europe",
         "summer_olympics": ["1960"],
         "winter_olympics": ["1956", "2006", "2026"],
         "total": 4
@@ -67,7 +61,6 @@
       "country": "Germany",
       "annotation": {
         "city": "Berlin, Munich, Garmisch-Partenkirchen",
-        "region": "Europe",
         "summer_olympics": ["1936", "1972"],
         "winter_olympics": ["1936"],
         "total": 3
@@ -78,7 +71,6 @@
       "country": "Russia",
       "annotation": {
         "city": "Moscow, Sochi",
-        "region": "Europe",
         "summer_olympics": ["1980"],
         "winter_olympics": ["2014"],
         "total": 2
@@ -88,7 +80,6 @@
       "country": "Norway",
       "annotation": {
         "city": "Oslo, Lillehammer",
-        "region": "Europe",
         "summer_olympics": [],
         "winter_olympics": ["1952", "1994"],
         "total": 2
