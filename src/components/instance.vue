@@ -297,7 +297,7 @@ export default {
         defaultColor: '#cccccc',
 
         encodingChannel: () => { },
-        representation: () => {},
+        representation: () => { },
         highLights: [],
 
         myType: {
@@ -369,7 +369,7 @@ export default {
 
             //根据窗口大小设置地图的大小
             this.mapWidth = this.svg.node().getBoundingClientRect().width;
-            this.mapHeight = 0.8*this.svg.node().getBoundingClientRect().height;
+            this.mapHeight = 0.8 * this.svg.node().getBoundingClientRect().height;
 
             this.encodingChannel = () => {
                 this.svg.selectAll('path').attr("fill", this.defaultColor);
@@ -416,7 +416,7 @@ export default {
 
         getPopulation(d) {
             // console.log(name, this.infoData[name]);
-            return d && d.properties && d.properties.NAME && this.infoData[d.properties.NAME] 
+            return d && d.properties && d.properties.NAME && this.infoData[d.properties.NAME]
                 ? this.infoData[d.properties.NAME] : -1
         },
 
@@ -441,21 +441,21 @@ export default {
             else if (type === this.myType['Topographic Map']) {
                 this.representationType = type;
             }
-            
+
             else if (type === this.myType['Shape-based Map']) {
                 this.representationType = type;
-                
-                    this.representation = () => {
-                        // this.svg.selectAll('path')
-                        //     .data(this.geoData.features)
-                        //     .enter()
-                        //     .append('path')
-                        //     .attr('d', this.geoPath)
-                        //     .attr('stroke', '#ffffff');
+
+                this.representation = () => {
+                    // this.svg.selectAll('path')
+                    //     .data(this.geoData.features)
+                    //     .enter()
+                    //     .append('path')
+                    //     .attr('d', this.geoPath)
+                    //     .attr('stroke', '#ffffff');
 
                     // 为地图上的每个国家绘制点阵图
                     this.geoData.features.forEach(feature => {
-                    // 绘制点
+                        // 绘制点
                         // 计算每个国家边界框内网格的行数和列数
                         const bounds = d3.geoBounds(feature);
                         const [left, bottom] = this.geoProjection(bounds[0]);
@@ -474,11 +474,11 @@ export default {
                                 const y = top + i * (h / rows);
                                 const point = this.geoProjection.invert([x, y]);
                                 if (d3.geoContains(feature, point)) {
-                                    points.push({ x: x, y: y });
+                                    points.push({ x: x, y: y, properties: feature.properties });
                                 }
                             }
                         }
-                        
+
                         this.svg.append('g')
                             .attr("fill", "black")
                             .attr("fill-opacity", 0.6)
@@ -510,7 +510,7 @@ export default {
                         .attr('d', this.geoPath)
                         .attr('stroke', '#ffffff');
 
-                        // 创建一个新的clipPath用于地图的轮廓
+                    // 创建一个新的clipPath用于地图的轮廓
                     const defs = this.svg.append('defs');
                     defs.append('clipPath')
                         .attr('id', 'clip-map')
@@ -553,7 +553,7 @@ export default {
                     }
                 }
 
-                
+
             }
 
             this.drawSvg();
@@ -834,24 +834,24 @@ export default {
                 this.svg.selectAll(".country-label, .annotation-box, .annotation-text").remove();
 
                 // 定义一个用于检查国家是否在olympics_data.json中的辅助函数
-        // const isInOlympicsData = (countryName) => {
-        //     return annotationData.some(item => item.country === countryName);
-        // };
+                // const isInOlympicsData = (countryName) => {
+                //     return annotationData.some(item => item.country === countryName);
+                // };
 
-        // 仅为olympics_data.json中存在的国家显示国家名字
-        this.geoData.features.forEach(feature => {
-            if (feature.properties.annotation != -1) {
-                const center = this.geoPath.centroid(feature);
-                this.svg.append('text')
-                    .attr('class', 'country-label')
-                    .attr('x', center[0])
-                    .attr('y', center[1])
-                    .attr('text-anchor', 'middle')
-                    .attr('fill', 'black')
-                    .style('font-size', '10px')
-                    .text(feature.properties.NAME);
-            }
-        });
+                // 仅为olympics_data.json中存在的国家显示国家名字
+                this.geoData.features.forEach(feature => {
+                    if (feature.properties.annotation != -1) {
+                        const center = this.geoPath.centroid(feature);
+                        this.svg.append('text')
+                            .attr('class', 'country-label')
+                            .attr('x', center[0])
+                            .attr('y', center[1])
+                            .attr('text-anchor', 'middle')
+                            .attr('fill', 'black')
+                            .style('font-size', '10px')
+                            .text(feature.properties.NAME);
+                    }
+                });
 
                 // 计算注解框的布局参数
                 const boxWidth = 120; // 每个注解框的宽度
@@ -937,6 +937,9 @@ export default {
                         this.svg.selectAll('path')
                             .attr('fill', d => colorFunction(this.getPopulation(d)));
 
+                        this.svg.selectAll('circle')
+                            .attr('fill', d => colorFunction(this.getPopulation(d)));
+
                         this.drawLegend();
                     }
                 }
@@ -967,6 +970,9 @@ export default {
 
                         this.svg.selectAll('path')
                             .attr('fill', d => colorFunction(this.getPopulation(d)));
+
+                        this.svg.selectAll('circle')
+                            .attr('fill', d => colorFunction(this.getPopulation(d)));
                     };
                 }
 
@@ -984,7 +990,7 @@ export default {
                         const cuboidWidth = 20; // 长方体的宽度
                         const cuboidLength = 30; // 长方体的长度（在SVG中模拟的“深度”）
                         const sideOpacity = 0.5; // 侧面的不透明度
-                        
+
                         this.geoData.features.forEach(feature => {
                             const center = this.geoPath.centroid(feature);
                             const population = this.getPopulation(feature);
@@ -1147,14 +1153,23 @@ export default {
                     ];
 
                     // 使用d3.scaleOrdinal来映射国家到颜色
-                    const colorScale = d3.scaleOrdinal(countries, customColors);
+                    const colorScale = (d) => {
+                        if (d && d.properties && d.properties.NAME)
+                            return d3.scaleOrdinal(countries, customColors)(d.properties.NAME);
+                        else
+                            return this.defaultColor;
+                    }
 
                     // 重写encodingChannel函数
                     this.encodingChannel = () => {
                         // 在地图上为每个国家应用颜色
                         this.svg.selectAll('path')
-                            .attr('fill', d => colorScale(d.properties.NAME)) // 使用比例尺确定颜色
+                            .attr('fill', d => colorScale(d)) // 使用比例尺确定颜色
                             .attr('stroke', '#ffffff'); // 设置边框颜色，可根据需要调整
+
+                        this.svg.selectAll('circle')
+                            .attr('fill', d => colorScale(d))
+                            .attr('stroke', '#ffffff');
                     };
                 }
                 else {
