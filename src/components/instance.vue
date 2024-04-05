@@ -262,22 +262,22 @@ export default {
     props: {
         geoData: {
             type: Object,
-            required: true,
+            required: true
         },
 
         infoData: {
             type: Object,
-            default: null,
-        },
-
-        userData: {
-            type: Object,
-            default: null,
+            required: true
         },
 
         value: {
             type: String,
-            required: true,
+            required: true
+        },
+
+        isNumerical: {
+            type: Boolean,
+            required: true
         }
     },
 
@@ -337,8 +337,8 @@ export default {
     }),
 
     mounted() {
-        const cardEl = this.$refs.selectorCard.$el;
-
+        console.log(this.value, "created, numerical:", this.isNumerical);
+        
         let worldPopulation = 0;
         if (this.geoData && this.geoData.features && this.infoData) {
             this.geoData.features.forEach(feature => {
@@ -346,6 +346,8 @@ export default {
             });
         }
         this.worldPopulation = worldPopulation;
+
+        const cardEl = this.$refs.selectorCard.$el;
 
         this.$nextTick(() => {
             const height = cardEl.clientHeight;
@@ -406,7 +408,7 @@ export default {
 
         getPopulation(name) {
             // console.log(name, this.infoData[name]);
-            return this.infoData[name] ? this.infoData[name]['population'] : -1
+            return this.infoData[name] ? this.infoData[name] : -1
         },
 
         //encoding glyph

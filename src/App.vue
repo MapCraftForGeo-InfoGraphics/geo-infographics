@@ -40,7 +40,7 @@
 
         <v-window-item v-for="item in items.concat(more)" :key="item" :value="'tab-' + item"
           style="display: flex; height: 100%; width: 100%;">
-          <instanceTab :value="item" :geoData="geoData" :infoData="infoDatas[item]"></instanceTab>
+          <instanceTab :value="item" :geoData="geoData" :infoData="infoDatas[item]" :isNumerical="infoDataType[item] == 'numerical'"></instanceTab>
         </v-window-item>
       </v-window>
 
@@ -65,18 +65,15 @@ export default {
 
   data: () => ({
     drawer: true,
-
-    
-    // items: [],
-    more: [],
-
-    userDatas: {},
   }),
 
   setup() {
     const items = ref([]);
-    const infoDatas = ref({});
+    const more = ref([]);
+
     const geoData = ref({});
+    const infoDatas = ref({});
+    const infoDataType = ref({});
 
     const currentItem = ref('home');
 
@@ -97,49 +94,40 @@ export default {
 
       // 检查数组中是否包含该名字，如果包含，则在名字后添加后缀
       while (namesArray.includes(newName)) {
-        newName = `${name} (${count})`;
+        newName = `${name.replace(/\..+$/, '')}-${count}`;
         count++;
       }
 
       return newName;
     }
 
-    loadJson('europe.geojson')
-      .then((data) => {
+    Promise.all([
+            loadJson('europe.geojson'),
+            loadJson('olympics_data.json')
+        ])
+      .then(([data, annotationData]) => {
         geoData.value = data;
+
+        if (geoData.value && geoData.value.features && annotationData) {
+          geoData.value.features.forEach(feature => {
+            const annotationInfo = annotationData.find(item => item.country === feature.properties.NAME);
+            const annotation = annotationInfo ? annotationInfo.annotation : -1;
+            feature.properties.annotation = annotation;
+          });
+        }
       });
 
-    const loadInfoData = (file) => {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const fileContents = e.target.result; // 获取文件内容
+    const loadInfoData = (data) => {
+      const value = uniqueName(items.value, data.name)
+      infoDatas.value[value] = data.data;
+      infoDataType.value[value] = data.datatype;
+      items.value.unshift(value);
 
-        // 将文件内容传递给 d3.json() 函数
-        d3.json(fileContents).then(data => {
-
-          const infoData = data.reduce((acc, cur) => {
-            acc[cur.country] = cur.annotation;
-            return acc;
-          }, {});
-
-          const value = uniqueName(items.value, file.name)
-          infoDatas.value[value] = infoData;
-          items.value.unshift(value);
-
-          currentItem.value = 'tab-' + value;
-
-          // 处理加载的JSON数据
-        }).catch(error => {
-          // 处理加载数据时发生的错误
-          console.error(error);
-        });
-      };
-
-      reader.readAsDataURL(file);
+      currentItem.value = 'tab-' + value;
     };
 
     provide('loadInfoData', loadInfoData);
-    return { items, geoData, infoDatas, currentItem, loadJson, uniqueName };
+    return { items, more, geoData, infoDatas, infoDataType, currentItem, loadJson, uniqueName };
   },
 
   methods: {

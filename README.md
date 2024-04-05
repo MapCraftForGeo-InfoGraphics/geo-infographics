@@ -3,6 +3,7 @@
 ## Project setup
 ```
 npm install --force
+npm install d3 --force
 ```
 
 ### Compiles and hot-reloads for development

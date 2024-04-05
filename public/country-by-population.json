@@ -1,1472 +1,982 @@
 [
     {
         "country": "Afghanistan",
-        "annotation": {
-            "population": 37172386
-        }
+        "population": 37172386
     },
     {
         "country": "Albania",
-        "annotation": {
-            "population": 2866376
-        }
+        "population": 2866376
     },
     {
         "country": "Algeria",
-        "annotation": {
-            "population": 42228429
-        }
+        "population": 42228429
     },
     {
         "country": "American Samoa",
-        "annotation": {
-            "population": 55465
-        }
+        "population": 55465
     },
     {
         "country": "Andorra",
-        "annotation": {
-            "population": 77006
-        }
+        "population": 77006
     },
     {
         "country": "Angola",
-        "annotation": {
-            "population": 30809762
-        }
+        "population": 30809762
     },
     {
         "country": "Anguilla",
-        "annotation": {
-            "population": 15094
-        }
+        "population": 15094
     },
     {
         "country": "Antarctica",
-        "annotation": {
-            "population": 1106
-        }
+        "population": 1106
     },
     {
         "country": "Antigua and Barbuda",
-        "annotation": {
-            "population": 96286
-        }
+        "population": 96286
     },
     {
         "country": "Argentina",
-        "annotation": {
-            "population": 44494502
-        }
+        "population": 44494502
     },
     {
         "country": "Armenia",
-        "annotation": {
-            "population": 2951776
-        }
+        "population": 2951776
     },
     {
         "country": "Aruba",
-        "annotation": {
-            "population": 105845
-        }
+        "population": 105845
     },
     {
         "country": "Australia",
-        "annotation": {
-            "population": 24982688
-        }
+        "population": 24982688
     },
     {
         "country": "Austria",
-        "annotation": {
-            "population": 8840521
-        }
+        "population": 8840521
     },
     {
         "country": "Azerbaijan",
-        "annotation": {
-            "population": 9939800
-        }
+        "population": 9939800
     },
     {
         "country": "Bahamas",
-        "annotation": {
-            "population": 385640
-        }
+        "population": 385640
     },
     {
         "country": "Bahrain",
-        "annotation": {
-            "population": 1569439
-        }
+        "population": 1569439
     },
     {
         "country": "Bangladesh",
-        "annotation": {
-            "population": 161356039
-        }
+        "population": 161356039
     },
     {
         "country": "Barbados",
-        "annotation": {
-            "population": 286641
-        }
+        "population": 286641
     },
     {
         "country": "Belarus",
-        "annotation": {
-            "population": 9483499
-        }
+        "population": 9483499
     },
     {
         "country": "Belgium",
-        "annotation": {
-            "population": 11433256
-        }
+        "population": 11433256
     },
     {
         "country": "Belize",
-        "annotation": {
-            "population": 383071
-        }
+        "population": 383071
     },
     {
         "country": "Benin",
-        "annotation": {
-            "population": 11485048
-        }
+        "population": 11485048
     },
     {
         "country": "Bermuda",
-        "annotation": {
-            "population": 63973
-        }
+        "population": 63973
     },
     {
         "country": "Bhutan",
-        "annotation": {
-            "population": 754394
-        }
+        "population": 754394
     },
     {
         "country": "Bolivia",
-        "annotation": {
-            "population": 11353142
-        }
+        "population": 11353142
     },
     {
         "country": "Bosnia and Herzegovina",
-        "annotation": {
-            "population": 3323929
-        }
+        "population": 3323929
     },
     {
         "country": "Botswana",
-        "annotation": {
-            "population": 2254126
-        }
+        "population": 2254126
     },
     {
         "country": "Bouvet Island",
-        "annotation": {
-            "population": 0
-        }
+        "population": 0
     },
     {
         "country": "Brazil",
-        "annotation": {
-            "population": 209469333
-        }
+        "population": 209469333
     },
     {
         "country": "British Indian Ocean Territory",
-        "annotation": {
-            "population": 0
-        }
+        "population": 0
     },
     {
         "country": "Brunei",
-        "annotation": {
-            "population": 428962
-        }
+        "population": 428962
     },
     {
         "country": "Bulgaria",
-        "annotation": {
-            "population": 7025037
-        }
+        "population": 7025037
     },
     {
         "country": "Burkina Faso",
-        "annotation": {
-            "population": 19751535
-        }
+        "population": 19751535
     },
     {
         "country": "Burundi",
-        "annotation": {
-            "population": 11175378
-        }
+        "population": 11175378
     },
     {
         "country": "Cabo Verde",
-        "annotation": {
-            "population": 555987
-        }
+        "population": 555987
     },
     {
         "country": "Cambodia",
-        "annotation": {
-            "population": 16249798
-        }
+        "population": 16249798
     },
     {
         "country": "Cameroon",
-        "annotation": {
-            "population": 25216237
-        }
+        "population": 25216237
     },
     {
         "country": "Canada",
-        "annotation": {
-            "population": 37057765
-        }
+        "population": 37057765
     },
     {
         "country": "Cape Verde",
-        "annotation": {
-            "population": 543767
-        }
+        "population": 543767
     },
     {
         "country": "Cayman Islands",
-        "annotation": {
-            "population": 64174
-        }
+        "population": 64174
     },
     {
         "country": "Central African Republic",
-        "annotation": {
-            "population": 4666377
-        }
+        "population": 4666377
     },
     {
         "country": "Chad",
-        "annotation": {
-            "population": 15477751
-        }
+        "population": 15477751
     },
     {
         "country": "Chile",
-        "annotation": {
-            "population": 18729160
-        }
+        "population": 18729160
     },
     {
         "country": "China",
-        "annotation": {
-            "population": 1392730000
-        }
+        "population": 1392730000
     },
     {
         "country": "Christmas Island",
-        "annotation": {
-            "population": 1402
-        }
+        "population": 1402
     },
     {
         "country": "Cocos (Keeling) Islands",
-        "annotation": {
-            "population": 596
-        }
+        "population": 596
     },
     {
         "country": "Colombia",
-        "annotation": {
-            "population": 49648685
-        }
+        "population": 49648685
     },
     {
         "country": "Comoros",
-        "annotation": {
-            "population": 832322
-        }
+        "population": 832322
     },
     {
         "country": "Congo",
-        "annotation": {
-            "population": 5244363
-        }
+        "population": 5244363
     },
     {
         "country": "Cook Islands",
-        "annotation": {
-            "population": 17379
-        }
+        "population": 17379
     },
     {
         "country": "Costa Rica",
-        "annotation": {
-            "population": 4999441
-        }
+        "population": 4999441
     },
     {
         "country": "Croatia",
-        "annotation": {
-            "population": 4087843
-        }
+        "population": 4087843
     },
     {
         "country": "Cuba",
-        "annotation": {
-            "population": 11338138
-        }
+        "population": 11338138
     },
     {
         "country": "Cyprus",
-        "annotation": {
-            "population": 1189265
-        }
+        "population": 1189265
     },
     {
         "country": "Czech Republic",
-        "annotation": {
-            "population": 10629928
-        }
+        "population": 10629928
     },
     {
         "country": "Denmark",
-        "annotation": {
-            "population": 5793636
-        }
+        "population": 5793636
     },
     {
         "country": "Djibouti",
-        "annotation": {
-            "population": 958920
-        }
+        "population": 958920
     },
     {
         "country": "Dominica",
-        "annotation": {
-            "population": 71625
-        }
+        "population": 71625
     },
     {
         "country": "Dominican Republic",
-        "annotation": {
-            "population": 10627165
-        }
+        "population": 10627165
     },
     {
         "country": "East Timor",
-        "annotation": {
-            "population": 1267972
-        }
+        "population": 1267972
     },
     {
         "country": "Ecuador",
-        "annotation": {
-            "population": 17084357
-        }
+        "population": 17084357
     },
     {
         "country": "Egypt",
-        "annotation": {
-            "population": 98423595
-        }
+        "population": 98423595
     },
     {
         "country": "El Salvador",
-        "annotation": {
-            "population": 6420744
-        }
+        "population": 6420744
     },
     {
         "country": "England",
-        "annotation": {
-            "population": 55619400
-        }
+        "population": 55619400
     },
     {
         "country": "Equatorial Guinea",
-        "annotation": {
-            "population": 1308974
-        }
+        "population": 1308974
     },
     {
         "country": "Eritrea",
-        "annotation": {
-            "population": 6213972
-        }
+        "population": 6213972
     },
     {
         "country": "Estonia",
-        "annotation": {
-            "population": 1321977
-        }
+        "population": 1321977
     },
     {
         "country": "Ethiopia",
-        "annotation": {
-            "population": 109224559
-        }
+        "population": 109224559
     },
     {
         "country": "Falkland Islands",
-        "annotation": {
-            "population": 2840
-        }
+        "population": 2840
     },
     {
         "country": "Faroe Islands",
-        "annotation": {
-            "population": 48497
-        }
+        "population": 48497
     },
     {
         "country": "Fiji Islands",
-        "annotation": {
-            "population": 883483
-        }
+        "population": 883483
     },
     {
         "country": "Finland",
-        "annotation": {
-            "population": 5515525
-        }
+        "population": 5515525
     },
     {
         "country": "France",
-        "annotation": {
-            "population": 66977107
-        }
+        "population": 66977107
     },
     {
         "country": "French Guiana",
-        "annotation": {
-            "population": 290691
-        }
+        "population": 290691
     },
     {
         "country": "French Polynesia",
-        "annotation": {
-            "population": 277679
-        }
+        "population": 277679
     },
     {
         "country": "French Southern territories",
-        "annotation": {
-            "population": 0
-        }
+        "population": 0
     },
     {
         "country": "Gabon",
-        "annotation": {
-            "population": 2119275
-        }
+        "population": 2119275
     },
     {
         "country": "Gambia",
-        "annotation": {
-            "population": 2280102
-        }
+        "population": 2280102
     },
     {
         "country": "Georgia",
-        "annotation": {
-            "population": 3726549
-        }
+        "population": 3726549
     },
     {
         "country": "Germany",
-        "annotation": {
-            "population": 82905782
-        }
+        "population": 82905782
     },
     {
         "country": "Ghana",
-        "annotation": {
-            "population": 29767108
-        }
+        "population": 29767108
     },
     {
         "country": "Gibraltar",
-        "annotation": {
-            "population": 33718
-        }
+        "population": 33718
     },
     {
         "country": "Greece",
-        "annotation": {
-            "population": 10731726
-        }
+        "population": 10731726
     },
     {
         "country": "Greenland",
-        "annotation": {
-            "population": 56025
-        }
+        "population": 56025
     },
     {
         "country": "Grenada",
-        "annotation": {
-            "population": 111454
-        }
+        "population": 111454
     },
     {
         "country": "Guadeloupe",
-        "annotation": {
-            "population": 395700
-        }
+        "population": 395700
     },
     {
         "country": "Guam",
-        "annotation": {
-            "population": 165768
-        }
+        "population": 165768
     },
     {
         "country": "Guatemala",
-        "annotation": {
-            "population": 17247807
-        }
+        "population": 17247807
     },
     {
         "country": "Guinea",
-        "annotation": {
-            "population": 12414318
-        }
+        "population": 12414318
     },
     {
         "country": "Guinea-Bissau",
-        "annotation": {
-            "population": 1874309
-        }
+        "population": 1874309
     },
     {
         "country": "Guyana",
-        "annotation": {
-            "population": 779004
-        }
+        "population": 779004
     },
     {
         "country": "Haiti",
-        "annotation": {
-            "population": 11123176
-        }
+        "population": 11123176
     },
     {
         "country": "Heard Island and McDonald Islands",
-        "annotation": {
-            "population": 0
-        }
+        "population": 0
     },
     {
         "country": "Holy See (Vatican City State)",
-        "annotation": {
-            "population": 825
-        }
+        "population": 825
     },
     {
         "country": "Honduras",
-        "annotation": {
-            "population": 9587522
-        }
+        "population": 9587522
     },
     {
         "country": "Hong Kong",
-        "annotation": {
-            "population": 7451000
-        }
+        "population": 7451000
     },
     {
         "country": "Hungary",
-        "annotation": {
-            "population": 9775564
-        }
+        "population": 9775564
     },
     {
         "country": "Iceland",
-        "annotation": {
-            "population": 352721
-        }
+        "population": 352721
     },
     {
         "country": "India",
-        "annotation": {
-            "population": 1352617328
-        }
+        "population": 1352617328
     },
     {
         "country": "Indonesia",
-        "annotation": {
-            "population": 267663435
-        }
+        "population": 267663435
     },
     {
         "country": "Iran",
-        "annotation": {
-            "population": 81800269
-        }
+        "population": 81800269
     },
     {
         "country": "Iraq",
-        "annotation": {
-            "population": 38433600
-        }
+        "population": 38433600
     },
     {
         "country": "Ireland",
-        "annotation": {
-            "population": 4867309
-        }
+        "population": 4867309
     },
     {
         "country": "Israel",
-        "annotation": {
-            "population": 8882800
-        }
+        "population": 8882800
     },
     {
         "country": "Italy",
-        "annotation": {
-            "population": 60421760
-        }
+        "population": 60421760
     },
     {
         "country": "Ivory Coast",
-        "annotation": {
-            "population": 25069229
-        }
+        "population": 25069229
     },
     {
         "country": "Jamaica",
-        "annotation": {
-            "population": 2934855
-        }
+        "population": 2934855
     },
     {
         "country": "Japan",
-        "annotation": {
-            "population": 126529100
-        }
+        "population": 126529100
     },
     {
         "country": "Jordan",
-        "annotation": {
-            "population": 9956011
-        }
+        "population": 9956011
     },
     {
         "country": "Kazakhstan",
-        "annotation": {
-            "population": 18272430
-        }
+        "population": 18272430
     },
     {
         "country": "Kenya",
-        "annotation": {
-            "population": 51393010
-        }
+        "population": 51393010
     },
     {
         "country": "Kiribati",
-        "annotation": {
-            "population": 115847
-        }
+        "population": 115847
     },
     {
         "country": "Kuwait",
-        "annotation": {
-            "population": 4137309
-        }
+        "population": 4137309
     },
     {
         "country": "Kyrgyzstan",
-        "annotation": {
-            "population": 6322800
-        }
+        "population": 6322800
     },
     {
         "country": "Laos",
-        "annotation": {
-            "population": 7061507
-        }
+        "population": 7061507
     },
     {
         "country": "Latvia",
-        "annotation": {
-            "population": 1927174
-        }
+        "population": 1927174
     },
     {
         "country": "Lebanon",
-        "annotation": {
-            "population": 6848925
-        }
+        "population": 6848925
     },
     {
         "country": "Lesotho",
-        "annotation": {
-            "population": 2108132
-        }
+        "population": 2108132
     },
     {
         "country": "Liberia",
-        "annotation": {
-            "population": 4818977
-        }
+        "population": 4818977
     },
     {
         "country": "Libyan Arab Jamahiriya",
-        "annotation": {
-            "population": 6678567
-        }
+        "population": 6678567
     },
     {
         "country": "Liechtenstein",
-        "annotation": {
-            "population": 37910
-        }
+        "population": 37910
     },
     {
         "country": "Lithuania",
-        "annotation": {
-            "population": 2801543
-        }
+        "population": 2801543
     },
     {
         "country": "Luxembourg",
-        "annotation": {
-            "population": 607950
-        }
+        "population": 607950
     },
     {
         "country": "Macao",
-        "annotation": {
-            "population": 631636
-        }
+        "population": 631636
     },
     {
         "country": "The former Yugoslav Republic of Macedonia",
-        "annotation": {
-            "population": 2084367
-        }
+        "population": 2084367
     },
     {
         "country": "Madagascar",
-        "annotation": {
-            "population": 26262368
-        }
+        "population": 26262368
     },
     {
         "country": "Malawi",
-        "annotation": {
-            "population": 18143315
-        }
+        "population": 18143315
     },
     {
         "country": "Malaysia",
-        "annotation": {
-            "population": 31528585
-        }
+        "population": 31528585
     },
     {
         "country": "Maldives",
-        "annotation": {
-            "population": 515696
-        }
+        "population": 515696
     },
     {
         "country": "Mali",
-        "annotation": {
-            "population": 19077690
-        }
+        "population": 19077690
     },
     {
         "country": "Malta",
-        "annotation": {
-            "population": 484630
-        }
+        "population": 484630
     },
     {
         "country": "Marshall Islands",
-        "annotation": {
-            "population": 58413
-        }
+        "population": 58413
     },
     {
         "country": "Martinique",
-        "annotation": {
-            "population": 376480
-        }
+        "population": 376480
     },
     {
         "country": "Mauritania",
-        "annotation": {
-            "population": 4403319
-        }
+        "population": 4403319
     },
     {
         "country": "Mauritius",
-        "annotation": {
-            "population": 1265303
-        }
+        "population": 1265303
     },
     {
         "country": "Mayotte",
-        "annotation": {
-            "population": 270372
-        }
+        "population": 270372
     },
     {
         "country": "Mexico",
-        "annotation": {
-            "population": 126190788
-        }
+        "population": 126190788
     },
     {
         "country": "Micronesia, Federated States of",
-        "annotation": {
-            "population": 112640
-        }
+        "population": 112640
     },
     {
         "country": "Republic of Moldova",
-        "annotation": {
-            "population": 2706049
-        }
+        "population": 2706049
     },
     {
         "country": "Monaco",
-        "annotation": {
-            "population": 38682
-        }
+        "population": 38682
     },
     {
         "country": "Mongolia",
-        "annotation": {
-            "population": 3170208
-        }
+        "population": 3170208
     },
     {
         "country": "Montenegro",
-        "annotation": {
-            "population": 631219
-        }
+        "population": 631219
     },
     {
         "country": "Montserrat",
-        "annotation": {
-            "population": 5900
-        }
+        "population": 5900
     },
     {
         "country": "Morocco",
-        "annotation": {
-            "population": 36029138
-        }
+        "population": 36029138
     },
     {
         "country": "Mozambique",
-        "annotation": {
-            "population": 29495962
-        }
+        "population": 29495962
     },
     {
         "country": "Myanmar",
-        "annotation": {
-            "population": 53708395
-        }
+        "population": 53708395
     },
     {
         "country": "Namibia",
-        "annotation": {
-            "population": 2448255
-        }
+        "population": 2448255
     },
     {
         "country": "Nauru",
-        "annotation": {
-            "population": 12704
-        }
+        "population": 12704
     },
     {
         "country": "Nepal",
-        "annotation": {
-            "population": 28087871
-        }
+        "population": 28087871
     },
     {
         "country": "Netherlands",
-        "annotation": {
-            "population": 17231624
-        }
+        "population": 17231624
     },
     {
         "country": "Netherlands Antilles",
-        "annotation": {
-            "population": 227049
-        }
+        "population": 227049
     },
     {
         "country": "New Caledonia",
-        "annotation": {
-            "population": 284060
-        }
+        "population": 284060
     },
     {
         "country": "New Zealand",
-        "annotation": {
-            "population": 4841000
-        }
+        "population": 4841000
     },
     {
         "country": "Nicaragua",
-        "annotation": {
-            "population": 6465513
-        }
+        "population": 6465513
     },
     {
         "country": "Niger",
-        "annotation": {
-            "population": 22442948
-        }
+        "population": 22442948
     },
     {
         "country": "Nigeria",
-        "annotation": {
-            "population": 195874740
-        }
+        "population": 195874740
     },
     {
         "country": "Niue",
-        "annotation": {
-            "population": 1624
-        }
+        "population": 1624
     },
     {
         "country": "Norfolk Island",
-        "annotation": {
-            "population": 2169
-        }
+        "population": 2169
     },
     {
         "country": "North Korea",
-        "annotation": {
-            "population": 25549819
-        }
+        "population": 25549819
     },
     {
         "country": "Northern Ireland",
-        "annotation": {
-            "population": 1885400
-        }
+        "population": 1885400
     },
     {
         "country": "Northern Mariana Islands",
-        "annotation": {
-            "population": 56882
-        }
+        "population": 56882
     },
     {
         "country": "Norway",
-        "annotation": {
-            "population": 5311916
-        }
+        "population": 5311916
     },
     {
         "country": "Oman",
-        "annotation": {
-            "population": 4829483
-        }
+        "population": 4829483
     },
     {
         "country": "Pakistan",
-        "annotation": {
-            "population": 212215030
-        }
+        "population": 212215030
     },
     {
         "country": "Palau",
-        "annotation": {
-            "population": 17907
-        }
+        "population": 17907
     },
     {
         "country": "Palestine",
-        "annotation": {
-            "population": 4569087
-        }
+        "population": 4569087
     },
     {
         "country": "Panama",
-        "annotation": {
-            "population": 4176873
-        }
+        "population": 4176873
     },
     {
         "country": "Papua New Guinea",
-        "annotation": {
-            "population": 8606316
-        }
+        "population": 8606316
     },
     {
         "country": "Paraguay",
-        "annotation": {
-            "population": 6956071
-        }
+        "population": 6956071
     },
     {
         "country": "Peru",
-        "annotation": {
-            "population": 31989256
-        }
+        "population": 31989256
     },
     {
         "country": "Philippines",
-        "annotation": {
-            "population": 106651922
-        }
+        "population": 106651922
     },
     {
         "country": "Pitcairn",
-        "annotation": {
-            "population": 67
-        }
+        "population": 67
     },
     {
         "country": "Poland",
-        "annotation": {
-            "population": 37974750
-        }
+        "population": 37974750
     },
     {
         "country": "Portugal",
-        "annotation": {
-            "population": 10283822
-        }
+        "population": 10283822
     },
     {
         "country": "Puerto Rico",
-        "annotation": {
-            "population": 3195153
-        }
+        "population": 3195153
     },
     {
         "country": "Qatar",
-        "annotation": {
-            "population": 2781677
-        }
+        "population": 2781677
     },
     {
         "country": "Reunion",
-        "annotation": {
-            "population": 859959
-        }
+        "population": 859959
     },
     {
         "country": "Romania",
-        "annotation": {
-            "population": 19466145
-        }
+        "population": 19466145
     },
     {
         "country": "Russia",
-        "annotation": {
-            "population": 144478050
-        }
+        "population": 144478050
     },
     {
         "country": "Rwanda",
-        "annotation": {
-            "population": 12301939
-        }
+        "population": 12301939
     },
     {
         "country": "Saint Helena",
-        "annotation": {
-            "population": 6600
-        }
+        "population": 6600
     },
     {
         "country": "Saint Kitts and Nevis",
-        "annotation": {
-            "population": 52441
-        }
+        "population": 52441
     },
     {
         "country": "Saint Lucia",
-        "annotation": {
-            "population": 181889
-        }
+        "population": 181889
     },
     {
         "country": "Saint Pierre and Miquelon",
-        "annotation": {
-            "population": 5888
-        }
+        "population": 5888
     },
     {
         "country": "Saint Vincent and the Grenadines",
-        "annotation": {
-            "population": 110210
-        }
+        "population": 110210
     },
     {
         "country": "Samoa",
-        "annotation": {
-            "population": 196130
-        }
+        "population": 196130
     },
     {
         "country": "San Marino",
-        "annotation": {
-            "population": 33785
-        }
+        "population": 33785
     },
     {
         "country": "Sao Tome and Principe",
-        "annotation": {
-            "population": 211028
-        }
+        "population": 211028
     },
     {
         "country": "Saudi Arabia",
-        "annotation": {
-            "population": 33699947
-        }
+        "population": 33699947
     },
     {
         "country": "Scotland",
-        "annotation": {
-            "population": 5424800
-        }
+        "population": 5424800
     },
     {
         "country": "Senegal",
-        "annotation": {
-            "population": 15854360
-        }
+        "population": 15854360
     },
     {
         "country": "Serbia",
-        "annotation": {
-            "population": 6963764
-        }
+        "population": 6963764
     },
     {
         "country": "Seychelles",
-        "annotation": {
-            "population": 96762
-        }
+        "population": 96762
     },
     {
         "country": "Sierra Leone",
-        "annotation": {
-            "population": 7650154
-        }
+        "population": 7650154
     },
     {
         "country": "Singapore",
-        "annotation": {
-            "population": 5638676
-        }
+        "population": 5638676
     },
     {
         "country": "Slovakia",
-        "annotation": {
-            "population": 5446771
-        }
+        "population": 5446771
     },
     {
         "country": "Slovenia",
-        "annotation": {
-            "population": 2073894
-        }
+        "population": 2073894
     },
     {
         "country": "Solomon Islands",
-        "annotation": {
-            "population": 652858
-        }
+        "population": 652858
     },
     {
         "country": "Somalia",
-        "annotation": {
-            "population": 15008154
-        }
+        "population": 15008154
     },
     {
         "country": "South Africa",
-        "annotation": {
-            "population": 57779622
-        }
+        "population": 57779622
     },
     {
         "country": "South Georgia and the South Sandwich Islands",
-        "annotation": {
-            "population": 30
-        }
+        "population": 30
     },
     {
         "country": "South Korea",
-        "annotation": {
-            "population": 51606633
-        }
+        "population": 51606633
     },
     {
         "country": "South Sudan",
-        "annotation": {
-            "population": 10975920
-        }
+        "population": 10975920
     },
     {
         "country": "Spain",
-        "annotation": {
-            "population": 46796540
-        }
+        "population": 46796540
     },
     {
         "country": "Sri Lanka",
-        "annotation": {
-            "population": 21670000
-        }
+        "population": 21670000
     },
     {
         "country": "Sudan",
-        "annotation": {
-            "population": 41801533
-        }
+        "population": 41801533
     },
     {
         "country": "Suriname",
-        "annotation": {
-            "population": 575991
-        }
+        "population": 575991
     },
     {
         "country": "Svalbard and Jan Mayen",
-        "annotation": {
-            "population": 2572
-        }
+        "population": 2572
     },
     {
         "country": "Swaziland",
-        "annotation": {
-            "population": 1136191
-        }
+        "population": 1136191
     },
     {
         "country": "Sweden",
-        "annotation": {
-            "population": 10175214
-        }
+        "population": 10175214
     },
     {
         "country": "Switzerland",
-        "annotation": {
-            "population": 8513227
-        }
+        "population": 8513227
     },
     {
         "country": "Syria",
-        "annotation": {
-            "population": 16906283
-        }
+        "population": 16906283
     },
     {
         "country": "Tajikistan",
-        "annotation": {
-            "population": 9100837
-        }
+        "population": 9100837
     },
     {
         "country": "Tanzania",
-        "annotation": {
-            "population": 56318348
-        }
+        "population": 56318348
     },
     {
         "country": "Thailand",
-        "annotation": {
-            "population": 69428524
-        }
+        "population": 69428524
     },
     {
         "country": "The Democratic Republic of Congo",
-        "annotation": {
-            "population": 84068091
-        }
+        "population": 84068091
     },
     {
         "country": "Togo",
-        "annotation": {
-            "population": 7889094
-        }
+        "population": 7889094
     },
     {
         "country": "Tokelau",
-        "annotation": {
-            "population": 1411
-        }
+        "population": 1411
     },
     {
         "country": "Tonga",
-        "annotation": {
-            "population": 103197
-        }
+        "population": 103197
     },
     {
         "country": "Trinidad and Tobago",
-        "annotation": {
-            "population": 1389858
-        }
+        "population": 1389858
     },
     {
         "country": "Tunisia",
-        "annotation": {
-            "population": 11565204
-        }
+        "population": 11565204
     },
     {
         "country": "Turkey",
-        "annotation": {
-            "population": 82319724
-        }
+        "population": 82319724
     },
     {
         "country": "Turkmenistan",
-        "annotation": {
-            "population": 5850908
-        }
+        "population": 5850908
     },
     {
         "country": "Turks and Caicos Islands",
-        "annotation": {
-            "population": 37665
-        }
+        "population": 37665
     },
     {
         "country": "Tuvalu",
-        "annotation": {
-            "population": 11508
-        }
+        "population": 11508
     },
     {
         "country": "Uganda",
-        "annotation": {
-            "population": 42723139
-        }
+        "population": 42723139
     },
     {
         "country": "Ukraine",
-        "annotation": {
-            "population": 44622516
-        }
+        "population": 44622516
     },
     {
         "country": "United Arab Emirates",
-        "annotation": {
-            "population": 9630959
-        }
+        "population": 9630959
     },
     {
         "country": "United Kingdom",
-        "annotation": {
-            "population": 66460344
-        }
+        "population": 66460344
     },
     {
         "country": "United States of America",
-        "annotation": {
-            "population": 326687501
-        }
+        "population": 326687501
     },
     {
         "country": "United States Minor Outlying Islands",
-        "annotation": {
-            "population": 300
-        }
+        "population": 300
     },
     {
         "country": "Uruguay",
-        "annotation": {
-            "population": 3449299
-        }
+        "population": 3449299
     },
     {
         "country": "Uzbekistan",
-        "annotation": {
-            "population": 32955400
-        }
+        "population": 32955400
     },
     {
         "country": "Vanuatu",
-        "annotation": {
-            "population": 292680
-        }
+        "population": 292680
     },
     {
         "country": "Venezuela",
-        "annotation": {
-            "population": 28870195
-        }
+        "population": 28870195
     },
     {
         "country": "Vietnam",
-        "annotation": {
-            "population": 95540395
-        }
+        "population": 95540395
     },
     {
         "country": "Virgin Islands, British",
-        "annotation": {
-            "population": 29802
-        }
+        "population": 29802
     },
     {
         "country": "Virgin Islands, U.S.",
-        "annotation": {
-            "population": 106977
-        }
+        "population": 106977
     },
     {
         "country": "Wales",
-        "annotation": {
-            "population": 3139000
-        }
+        "population": 3139000
     },
     {
         "country": "Wallis and Futuna",
-        "annotation": {
-            "population": 15289
-        }
+        "population": 15289
     },
     {
         "country": "Western Sahara",
-        "annotation": {
-            "population": 652271
-        }
+        "population": 652271
     },
     {
         "country": "Yemen",
-        "annotation": {
-            "population": 28498687
-        }
+        "population": 28498687
     },
     {
         "country": "Zambia",
-        "annotation": {
-            "population": 17351822
-        }
+        "population": 17351822
     },
     {
         "country": "Zimbabwe",
-        "annotation": {
-            "population": 14439018
-        }
+        "population": 14439018
     }
 ]
