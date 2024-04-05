@@ -297,6 +297,7 @@ export default {
         defaultColor: '#cccccc',
 
         encodingChannel: () => { },
+        representation: () => {},
         highLights: [],
 
         myType: {
@@ -338,6 +339,7 @@ export default {
 
     mounted() {
         console.log(this.value, "created, numerical:", this.isNumerical);
+        console.log(this.geoData);
 
         let worldPopulation = 0;
         if (this.geoData && this.geoData.features && this.infoData) {
@@ -367,7 +369,20 @@ export default {
 
             //根据窗口大小设置地图的大小
             this.mapWidth = this.svg.node().getBoundingClientRect().width;
-            this.mapHeight = this.svg.node().getBoundingClientRect().height;
+            this.mapHeight = 0.8*this.svg.node().getBoundingClientRect().height;
+
+            this.encodingChannel = () => {
+                this.svg.selectAll('path').attr("fill", this.defaultColor);
+            };
+
+            this.representation = () => {
+                this.svg.selectAll('path')
+                    .data(this.geoData.features)
+                    .enter()
+                    .append('path')
+                    .attr('d', this.geoPath)
+                    .attr('stroke', '#ffffff');
+            };
 
             // console.log(this.mapWidth, this.mapHeight);
             this.setProjection(0);
@@ -379,14 +394,7 @@ export default {
             // 移除现有的 SVG
             this.svg.selectAll('*').remove();
 
-            this.svg.selectAll('path')
-                .data(this.geoData.features)
-                .enter()
-                .append('path')
-                .attr('d', this.geoPath)
-                .attr('stroke', '#ffffff')
-                .attr("fill", this.defaultColor);
-
+            this.representation();
             this.encodingChannel();
 
             this.highLights.forEach(highLight => {
@@ -406,9 +414,10 @@ export default {
             });
         },
 
-        getPopulation(name) {
+        getPopulation(d) {
             // console.log(name, this.infoData[name]);
-            return this.infoData[name] ? this.infoData[name] : -1
+            return d && d.properties && d.properties.NAME && this.infoData[d.properties.NAME] 
+                ? this.infoData[d.properties.NAME] : -1
         },
 
 
@@ -419,55 +428,70 @@ export default {
 
             if (type === this.myType['Political Map']) {
                 this.representationType = type;
-                this.drawSvg();
+                this.representation = () => {
+                    this.svg.selectAll('path')
+                        .data(this.geoData.features)
+                        .enter()
+                        .append('path')
+                        .attr('d', this.geoPath)
+                        .attr('stroke', '#ffffff');
+                };
             }
+
             else if (type === this.myType['Topographic Map']) {
                 this.representationType = type;
             }
+            
             else if (type === this.myType['Shape-based Map']) {
                 this.representationType = type;
+                
+                    this.representation = () => {
+                        // this.svg.selectAll('path')
+                        //     .data(this.geoData.features)
+                        //     .enter()
+                        //     .append('path')
+                        //     .attr('d', this.geoPath)
+                        //     .attr('stroke', '#ffffff');
 
-                // 移除现有的地图路径，准备绘制点阵地图
-                this.svg.selectAll('path').remove();
+                    // 为地图上的每个国家绘制点阵图
+                    this.geoData.features.forEach(feature => {
+                    // 绘制点
+                        // 计算每个国家边界框内网格的行数和列数
+                        const bounds = d3.geoBounds(feature);
+                        const [left, bottom] = this.geoProjection(bounds[0]);
+                        const [right, top] = this.geoProjection(bounds[1]);
+                        const w = right - left;
+                        const h = bottom - top;
+                        const rows = Math.ceil(h / 15); // 假设每20像素一个点的行距
+                        const columns = Math.ceil(w / 15); // 假设每20像素一个点的列距
+                        const pointRadius = 3; // 点的半径大小
 
-                // 为地图上的每个国家绘制点阵图
-                this.geoData.features.forEach(feature => {
-                    // 计算每个国家边界框内网格的行数和列数
-                    const bounds = d3.geoBounds(feature);
-                    const [left, bottom] = this.geoProjection(bounds[0]);
-                    const [right, top] = this.geoProjection(bounds[1]);
-                    const w = right - left;
-                    const h = bottom - top;
-                    const rows = Math.ceil(h / 15); // 假设每20像素一个点的行距
-                    const columns = Math.ceil(w / 15); // 假设每20像素一个点的列距
-                    const pointRadius = 3; // 点的半径大小
-
-                    // 生成特定国家边界框内的点
-                    const points = [];
-                    for (let i = 0; i < rows; i++) {
-                        for (let j = 0; j < columns; j++) {
-                            const x = left + j * (w / columns);
-                            const y = top + i * (h / rows);
-                            const point = this.geoProjection.invert([x, y]);
-                            if (d3.geoContains(feature, point)) {
-                                points.push({ x: x, y: y });
+                        // 生成特定国家边界框内的点
+                        const points = [];
+                        for (let i = 0; i < rows; i++) {
+                            for (let j = 0; j < columns; j++) {
+                                const x = left + j * (w / columns);
+                                const y = top + i * (h / rows);
+                                const point = this.geoProjection.invert([x, y]);
+                                if (d3.geoContains(feature, point)) {
+                                    points.push({ x: x, y: y });
+                                }
                             }
                         }
-                    }
-
-                    // 绘制点
-                    this.svg.append("g")
-                        .attr("fill", "black")
-                        .attr("fill-opacity", 0.6)
-                        .attr("stroke", "#fff")
-                        .attr("stroke-width", 0.5)
-                        .selectAll("circle")
-                        .data(points)
-                        .join("circle")
-                        .attr("cx", d => d.x)
-                        .attr("cy", d => d.y)
-                        .attr("r", pointRadius);
-                });
+                        
+                        this.svg.append('g')
+                            .attr("fill", "black")
+                            .attr("fill-opacity", 0.6)
+                            .attr("stroke", "#fff")
+                            .attr("stroke-width", 0.5)
+                            .selectAll("circle")
+                            .data(points)
+                            .join("circle")
+                            .attr("cx", d => d.x)
+                            .attr("cy", d => d.y)
+                            .attr("r", pointRadius);
+                    })
+                };
             }
 
             else if (type === this.myType['Street Map']) {
@@ -475,56 +499,64 @@ export default {
             }
             else if (type === this.myType['Grid Cartogram']) {
                 this.representationType = type;
-                this.drawSvg();
-                // 首先，移除旧的网格层和旧的clipPath（如果存在）
-                this.svg.select('.grid-layer').remove();
-                this.svg.select('defs').selectAll('clipPath').remove(); // 假设没有其他clipPath在使用
+                // this.svg.select('.grid-layer').remove();
+                // this.svg.select('defs').selectAll('clipPath').remove(); // 假设没有其他clipPath在使用
 
-                // 创建一个新的clipPath用于地图的轮廓
-                const defs = this.svg.append('defs');
-                defs.append('clipPath')
-                    .attr('id', 'clip-map')
-                    .append('path')
-                    .datum(this.geoData)
-                    .attr('d', this.geoPath);
+                this.representation = () => {
+                    this.svg.selectAll('path')
+                        .data(this.geoData.features)
+                        .enter()
+                        .append('path')
+                        .attr('d', this.geoPath)
+                        .attr('stroke', '#ffffff');
 
-                // 设置网格大小
-                const gridSize = 30;
+                        // 创建一个新的clipPath用于地图的轮廓
+                    const defs = this.svg.append('defs');
+                    defs.append('clipPath')
+                        .attr('id', 'clip-map')
+                        .append('path')
+                        .datum(this.geoData)
+                        .attr('d', this.geoPath);
 
-                // 创建网格层并应用clipPath
-                const gridLayer = this.svg.append('g')
-                    .classed('grid-layer', true)
-                    .attr('clip-path', 'url(#clip-map)');
+                    // 设置网格大小
+                    const gridSize = 30;
 
-                // 计算网格线数量
-                const numVerticalGrids = Math.ceil(this.mapWidth / gridSize);
-                const numHorizontalGrids = Math.ceil(this.mapHeight / gridSize);
+                    // 创建网格层并应用clipPath
+                    const gridLayer = this.svg.append('g')
+                        .classed('grid-layer', true)
+                        .attr('clip-path', 'url(#clip-map)');
 
-                // 绘制垂直网格线
-                for (let i = 0; i < numVerticalGrids; i++) {
-                    gridLayer.append('line')
-                        .attr('x1', i * gridSize)
-                        .attr('x2', i * gridSize)
-                        .attr('y1', 0)
-                        .attr('y2', this.mapHeight)
-                        .style('stroke', 'black')
-                        .style('stroke-opacity', 0.3);
+                    // 计算网格线数量
+                    const numVerticalGrids = Math.ceil(this.mapWidth / gridSize);
+                    const numHorizontalGrids = Math.ceil(this.mapHeight / gridSize);
+
+                    // 绘制垂直网格线
+                    for (let i = 0; i < numVerticalGrids; i++) {
+                        gridLayer.append('line')
+                            .attr('x1', i * gridSize)
+                            .attr('x2', i * gridSize)
+                            .attr('y1', 0)
+                            .attr('y2', this.mapHeight)
+                            .style('stroke', 'black')
+                            .style('stroke-opacity', 0.3);
+                    }
+
+                    // 绘制水平网格线
+                    for (let i = 0; i < numHorizontalGrids; i++) {
+                        gridLayer.append('line')
+                            .attr('y1', i * gridSize)
+                            .attr('y2', i * gridSize)
+                            .attr('x1', 0)
+                            .attr('x2', this.mapWidth)
+                            .style('stroke', 'black')
+                            .style('stroke-opacity', 0.3);
+                    }
                 }
 
-                // 绘制水平网格线
-                for (let i = 0; i < numHorizontalGrids; i++) {
-                    gridLayer.append('line')
-                        .attr('y1', i * gridSize)
-                        .attr('y2', i * gridSize)
-                        .attr('x1', 0)
-                        .attr('x2', this.mapWidth)
-                        .style('stroke', 'black')
-                        .style('stroke-opacity', 0.3);
-                }
+                
             }
 
-
-
+            this.drawSvg();
         },
 
         // 设置 Map Projection
@@ -725,7 +757,7 @@ export default {
                     const enlargedViewSvg = enlargedView.append('svg')
                         .attr('width', '100%')
                         .attr('height', '100%')
-                        .attr('viewBox', `${x - 30} ${y - 30} 60 60`);
+                        .attr('viewBox', `${x - 30} ${y - 60} 60 90`);
 
                     // 创建圆形裁剪路径
                     const defs = enlargedViewSvg.append('defs');
@@ -745,7 +777,7 @@ export default {
                     enlargedViewSvg.selectAll('g > svg')
                         .attr('x', null)
                         .attr('y', null)
-                        .style('transform', `translate(${-x + 100}px, ${-y + 100}px) scale(2)`);
+                        .style('transform', 'translate(${-x + 100}px, ${-y + 100}px) scale(2)');
                 });
             }
 
@@ -766,7 +798,7 @@ export default {
                         const center = this.geoPath.centroid(feature);
                         const annotation = feature.properties.annotation;
 
-                        if (annotation && annotation.total !== undefined) {
+                        if (annotation && annotation != -1) {
                             // 组合注解文本
                             const textLines = [
                                 `The city that hosted the Olympics was: ${annotation.city}`,
@@ -795,77 +827,78 @@ export default {
             }
 
 
-        //     else if (type === this.myType['Label Text']) {
-        //         this.labelPositionType = type;
+            else if (type === this.myType['Label Text']) {
+                this.labelPositionType = type;
 
-        //         // 首先，清除旧的标签和注解框
-        //         this.svg.selectAll(".country-label, .annotation-box, .annotation-text").remove();
+                // 首先，清除旧的标签和注解框
+                this.svg.selectAll(".country-label, .annotation-box, .annotation-text").remove();
 
-        //         // 定义一个用于检查国家是否在olympics_data.json中的辅助函数
+                // 定义一个用于检查国家是否在olympics_data.json中的辅助函数
         // const isInOlympicsData = (countryName) => {
         //     return annotationData.some(item => item.country === countryName);
         // };
 
-        // // 仅为olympics_data.json中存在的国家显示国家名字
-        // this.geoData.features.forEach(feature => {
-        //     if (isInOlympicsData(feature.properties.NAME)) {
-        //         const center = this.geoPath.centroid(feature);
-        //         this.svg.append('text')
-        //             .attr('class', 'country-label')
-        //             .attr('x', center[0])
-        //             .attr('y', center[1])
-        //             .attr('text-anchor', 'middle')
-        //             .attr('fill', 'black')
-        //             .style('font-size', '10px')
-        //             .text(feature.properties.NAME);
-        //     }
-        // });
+        // 仅为olympics_data.json中存在的国家显示国家名字
+        this.geoData.features.forEach(feature => {
+            if (feature.properties.annotation != -1) {
+                const center = this.geoPath.centroid(feature);
+                this.svg.append('text')
+                    .attr('class', 'country-label')
+                    .attr('x', center[0])
+                    .attr('y', center[1])
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', 'black')
+                    .style('font-size', '10px')
+                    .text(feature.properties.NAME);
+            }
+        });
 
-        //         // 计算注解框的布局参数
-        //         const boxWidth = 120; // 每个注解框的宽度
-        //         const boxHeight = 60; // 每个注解框的高度
-        //         const boxesPerRow = Math.floor(this.mapWidth / boxWidth); // 每行可以容纳的注解框数量
+                // 计算注解框的布局参数
+                const boxWidth = 120; // 每个注解框的宽度
+                const boxHeight = 60; // 每个注解框的高度
+                const boxesPerRow = Math.floor(this.mapWidth / boxWidth); // 每行可以容纳的注解框数量
 
-        //         // 在地图下方排列注解框
-        //         this.geoData.features.forEach((feature, index) => {
-        //             const annotation = feature.properties.annotation;
-        //             if (annotation) {
-        //                 const row = Math.floor(index / boxesPerRow);
-        //                 const col = index % boxesPerRow;
-        //                 const x = col * boxWidth;
-        //                 const y = this.mapHeight + row * (boxHeight + 100); // 在地图下方留出一定间距
-        //                 const summerOlympics = annotation.summer_olympics || [];
-        //                 const winterOlympics = annotation.winter_olympics || [];
-        //                 // 绘制注解框
-        //                 this.svg.append('rect')
-        //                     .attr('class', 'annotation-box')
-        //                     .attr('x', x)
-        //                     .attr('y', y)
-        //                     .attr('width', boxWidth)
-        //                     .attr('height', boxHeight)
-        //                     .attr('fill', 'none')
-        //                     .attr('stroke', 'black');
+                // 在地图下方排列注解框d
+                this.geoData.features.forEach((feature, index) => {
+                    const annotation = feature.properties.annotation;
+                    if (annotation && annotation != -1) {
+                        const row = Math.floor(index / boxesPerRow);
+                        const col = index % boxesPerRow;
+                        const x = col * boxWidth;
+                        const y = this.mapHeight + row * (boxHeight + 100); // 在地图下方留出一定间距
+                        const summerOlympics = annotation.summer_olympics || [];
+                        const winterOlympics = annotation.winter_olympics || [];
+                        // 绘制注解框
+                        this.svg.append('rect')
+                            .attr('class', 'annotation-box')
+                            .attr('x', x)
+                            .attr('y', y)
+                            .attr('width', boxWidth)
+                            .attr('height', boxHeight)
+                            .attr('fill', 'none')
+                            .attr('stroke', 'black');
 
-        //                 // 在注解框内添加文本
-        //                 const textLines = [
-        //                     `City: ${annotation.city}`,
-        //                     `Total: ${annotation.total}`,
-        //                     `Summer: ${summerOlympics.length}`,
-        //                     `Winter: ${winterOlympics.length}`
-        //                 ];
+                        // 在注解框内添加文本
+                        const textLines = [
+                            `City: ${annotation.city}`,
+                            `Total: ${annotation.total}`,
+                            `Summer: ${summerOlympics.length}`,
+                            `Winter: ${winterOlympics.length}`
+                        ];
 
-        //                 textLines.forEach((line, lineIndex) => {
-        //                     this.svg.append('text')
-        //                         .attr('class', 'annotation-text')
-        //                         .attr('x', x + 5) // 略微缩进
-        //                         .attr('y', y + 15 + (lineIndex * 12)) // 根据行数调整位置
-        //                         .attr('fill', 'black')
-        //                         .style('font-size', '10px')
-        //                         .text(line);
-        //                 });
-        //             }
-        //         });
-        //     }
+                        textLines.forEach((line, lineIndex) => {
+                            this.svg.append('text')
+                                .attr('class', 'annotation-text')
+                                .attr('x', x + 5) // 略微缩进
+                                .attr('y', y + 15 + (lineIndex * 12)) // 根据行数调整位置
+                                .attr('fill', 'black')
+                                .style('font-size', '10px')
+                                .text(line);
+                        });
+                        console.log(annotation);
+                    }
+                });
+            }
             else if (type === this.myType['Label Icon']) {
                 this.labelPositionType = type;
             }
@@ -897,12 +930,12 @@ export default {
                         const colorFunction = (scale) => {
                             const transformFunction = (input) => Math.pow(input, 0.25)
                             const colorScale = d3.scaleSequential(d3.interpolateBlues)
-                                .domain([0, transformFunction(d3.max(this.geoData.features, d => this.getPopulation(d.properties.NAME)))]);
+                                .domain([0, transformFunction(d3.max(this.geoData.features, d => this.getPopulation(d)))]);
                             return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
                         }
 
                         this.svg.selectAll('path')
-                            .attr('fill', d => colorFunction(this.getPopulation(d.properties.NAME)));
+                            .attr('fill', d => colorFunction(this.getPopulation(d)));
 
                         this.drawLegend();
                     }
@@ -933,7 +966,7 @@ export default {
                         };
 
                         this.svg.selectAll('path')
-                            .attr('fill', d => colorFunction(this.getPopulation(d.properties.NAME)));
+                            .attr('fill', d => colorFunction(this.getPopulation(d)));
                     };
                 }
 
@@ -943,16 +976,18 @@ export default {
                     this.encodingChannelType = type;
 
                     this.encodingChannel = () => {
+                        this.svg.selectAll('path').attr("fill", this.defaultColor);
+
                         // 在地图上绘制模拟的3D长方体
                         const baseHeight = 3; // 长方体基础高度，所有长方体至少有这个高度
                         const populationPerHeight = 800000; // 每增加这么多人口，长方体的高度增加一单位
                         const cuboidWidth = 20; // 长方体的宽度
                         const cuboidLength = 30; // 长方体的长度（在SVG中模拟的“深度”）
                         const sideOpacity = 0.5; // 侧面的不透明度
-
+                        
                         this.geoData.features.forEach(feature => {
                             const center = this.geoPath.centroid(feature);
-                            const population = this.getPopulation(feature.properties.NAME);
+                            const population = this.getPopulation(feature);
                             if (population >= 1000000) { // 人口大于等于1000000时绘制长方体
                                 const height = baseHeight + (population / populationPerHeight); // 长方体的总高度
 
@@ -984,9 +1019,11 @@ export default {
                     this.encodingChannelType = type;
 
                     this.encodingChannel = () => {
+                        this.svg.selectAll('path').attr("fill", this.defaultColor);
+
                         // 在地图上绘制人口方块
                         // this.drawPopulationSquares();
-                        const populationExtent = d3.extent(this.geoData.features, d => this.getPopulation(d.properties.NAME));
+                        const populationExtent = d3.extent(this.geoData.features, d => this.getPopulation(d));
                         const sizeScale = d3.scaleSqrt()
                             .domain(populationExtent)
                             .range([5, 50]); // 方块大小的范围
@@ -994,7 +1031,7 @@ export default {
                         // 直接在现有的SVG上绘制方块，不清除之前的内容
                         this.geoData.features.forEach(feature => {
                             const [x, y] = this.geoPath.centroid(feature);
-                            const population = this.getPopulation(feature.properties.NAME);
+                            const population = this.getPopulation(feature);
                             if (population >= 1000000) { // 人口大于等于1000000时绘制方块
                                 this.svg.append('rect')
                                     .attr('x', x - sizeScale(population) / 2)
@@ -1011,6 +1048,8 @@ export default {
                     this.encodingChannelType = type;
 
                     this.encodingChannel = () => {
+                        this.svg.selectAll('path').attr("fill", this.defaultColor);
+
                         // 在地图上叠加人口图标
                         const iconWidth = 6; // 图标的宽度
                         const iconHeight = 15; // 图标的高度
@@ -1019,7 +1058,7 @@ export default {
                         // 直接在现有的SVG上绘制图标，不清除之前的内容
                         this.geoData.features.forEach(feature => {
                             const center = this.geoPath.centroid(feature);
-                            const population = this.getPopulation(feature.properties.NAME);
+                            const population = this.getPopulation(feature);
 
                             // 只有当人口大于等于1000000时才绘制图标
                             if (population >= 1000000) {
@@ -1049,6 +1088,8 @@ export default {
 
                     // 显示一条消息
                     this.encodingChannel = () => {
+                        this.svg.selectAll('path').attr("fill", this.defaultColor);
+
                         // 首先，清除可能存在的旧消息
                         d3.select("." + this.value + "-legend").selectAll("*").remove();
 
@@ -1067,9 +1108,10 @@ export default {
                 if (type === this.myType['Glyph']) {
                     this.encodingChannelType = type;
                     this.encodingChannel = () => {
+                        this.svg.selectAll('path').attr("fill", this.defaultColor);
+
                         this.geoData.features.forEach(feature => {
-                            const countryName = feature.properties.NAME; // 从GeoJSON获取国家名称
-                            const flagBase64 = this.getPopulation(countryName); // 使用getPopulation方法尝试从infoData获取国旗的base64编码
+                            const flagBase64 = this.getPopulation(feature); // 使用getPopulation方法尝试从infoData获取国旗的base64编码
 
                             // 检查flagBase64是否不等于-1，仅当不等于-1时，才显示国旗
                             if (flagBase64 !== -1) {
@@ -1121,6 +1163,8 @@ export default {
 
                     // 显示一条消息
                     this.encodingChannel = () => {
+                        this.svg.selectAll('path').attr("fill", this.defaultColor);
+
                         // 首先，清除可能存在的旧消息
                         d3.select("." + this.value + "-legend").selectAll("*").remove();
 
@@ -1147,7 +1191,7 @@ export default {
             const legendHeight = 20;
 
             const colorScale = d3.scaleSequential(d3.interpolateBlues)
-                .domain([0, d3.max(this.geoData.features, d => this.getPopulation(d.properties.NAME))]);
+                .domain([0, d3.max(this.geoData.features, d => this.getPopulation(d))]);
 
             const legendGradient = this.legend.append('svg')
                 .attr('width', legendWidth)
@@ -1186,7 +1230,7 @@ export default {
             this.legend.append('text')
                 .attr('x', legendWidth - 20)
                 .attr('y', legendHeight + 15)
-                .text(d3.max(this.geoData.features, d => this.getPopulation(d.properties.NAME)));
+                .text(d3.max(this.geoData.features, d => this.getPopulation(d)));
         },
     },
 
