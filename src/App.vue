@@ -40,7 +40,7 @@
 
         <v-window-item v-for="item in items.concat(more)" :key="item" :value="'tab-' + item"
           style="display: flex; height: 100%; width: 100%;">
-          <instanceTab :value="item" :geoData="geoData" :infoData="infoDatas[item]" :isNumerical="infoDataType[item] == 'numerical'"></instanceTab>
+          <instanceTab :value="item" :geoData="geoData" :infoData="infoData[item]" :isNumerical="infoDataType[item] == 'numerical'" :propName="infoDataName[item]"></instanceTab>
         </v-window-item>
       </v-window>
 
@@ -72,8 +72,9 @@ export default {
     const more = ref([]);
 
     const geoData = ref({});
-    const infoDatas = ref({});
+    const infoData = ref({});
     const infoDataType = ref({});
+    const infoDataName = ref({})
 
     const currentItem = ref('home');
 
@@ -119,15 +120,16 @@ export default {
 
     const loadInfoData = (data) => {
       const value = uniqueName(items.value, data.name)
-      infoDatas.value[value] = data.data;
+      infoData.value[value] = data.data;
       infoDataType.value[value] = data.datatype;
+      infoDataName.value[value] = data.prop;
       items.value.unshift(value);
 
       currentItem.value = 'tab-' + value;
     };
 
     provide('loadInfoData', loadInfoData);
-    return { items, more, geoData, infoDatas, infoDataType, currentItem, loadJson, uniqueName };
+    return { items, more, geoData, infoData, infoDataType, infoDataName, currentItem, loadJson, uniqueName };
   },
 
   methods: {

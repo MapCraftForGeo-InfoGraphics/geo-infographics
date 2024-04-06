@@ -244,13 +244,28 @@
         </v-card>
 
         <v-container style="width: 100%; height: 100%; margin-left: 0; margin-right: 0" :ref="'d3Panel'">
+            <v-row>
+                <v-col>{{ propName }} : {{ isNumerical ? "Numerical" : "Nominal" }} </v-col>
+                <v-col></v-col>
+                <v-col ref="legendCol">
+                    <svg :class="value + '-legend'" style="height: 40px; width: 100%;"></svg>
+                </v-col>
+
+            </v-row>
             <svg :class="value + '-svg'" style="width: 100%; height: 100%;"></svg>
-            <svg :class="value + '-legend'"
-                style="position: absolute; top: 30px; right: 20px; width: 200px; height: 40px; z-index: 2;"></svg>
-            <svg id="enlargedView"
+            <!-- <svg :class="value + '-legend'" style="position: absolute; top: 30px; right: 20px; width: 200px; height: 40px; z-index: 2;"></svg> -->
+            <svg :id="value + '-enlargedView'"
                 style="width: 200px; height: 200px; position: absolute; top: 10px; right: 10px;"></svg>
         </v-container>
     </div>
+
+    <v-dialog v-model="errorDialog" width="auto">
+        <v-card max-width="400" prepend-icon="mdi-alert-circle-outline" :title="errorTitle" :text="errorMessage">
+            <template v-slot:actions>
+                <v-btn class="ms-auto" text="Ok" @click="errorDialog = false"></v-btn>
+            </template>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -275,6 +290,11 @@ export default {
             required: true
         },
 
+        propName: {
+            type: String,
+            required: false
+        },
+
         isNumerical: {
             type: Boolean,
             required: true
@@ -288,16 +308,28 @@ export default {
         encodingChannelType: -1,
         highLightType: -1,
 
+        worldPopulation: 0,
+        mostPopulation: 0,
+
         svg: null,
         legend: null,
 
         mapWidth: 1000,
         mapHeight: 800,
 
+        legendWidth: 200,
+
         defaultColor: '#cccccc',
+
+        errorTitle: '',
+        errorMessage: '',
+        errorDialog: false,
 
         encodingChannel: () => { },
         representation: () => { },
+
+        colorFunctionL: () => { },
+
         highLights: [],
 
         myType: {
@@ -344,18 +376,25 @@ export default {
         let worldPopulation = 0;
         if (this.geoData && this.geoData.features && this.infoData) {
             this.geoData.features.forEach(feature => {
-                worldPopulation += this.getPopulation(feature.properties.NAME);
+                const curPopulation = this.getPopulation(feature)
+                worldPopulation += curPopulation;
+                this.mostPopulation = this.mostPopulation < curPopulation ? curPopulation : this.mostPopulation;
             });
+
+            console.log(this.mostPopulation);
         }
         this.worldPopulation = worldPopulation;
 
         const cardEl = this.$refs.selectorCard.$el;
+        const legendColEl = this.$refs.legendCol.$el;
 
         this.$nextTick(() => {
             const height = cardEl.clientHeight;
 
             const seContainer = document.getElementById(this.value + '-seContainer');
             seContainer.style.maxHeight = (0.99 * height) + "px";
+
+            this.legendWidth = 0.87 * legendColEl.clientWidth;
 
             this.initMap();
         });
@@ -420,7 +459,11 @@ export default {
                 ? this.infoData[d.properties.NAME] : -1
         },
 
-
+        showErrorDialog(title, msg) {
+            this.errorTitle = title;
+            this.errorMessage = msg;
+            this.errorDialog = true;
+        },
 
         // 设置 Map Representation
         setRepresentation(type) {
@@ -597,7 +640,7 @@ export default {
             this.svg.selectAll('path').on('click', null);
             // 重要：移除绑定到SVG本身的点击事件监听器
             this.svg.on('click', null);
-            // d3.select("#enlargedView").selectAll("*").remove(); 
+            // d3.select('#' + this.value + '-enlargedView').selectAll("*").remove(); 
             // 根据类型应用新的高亮方式
             if (type === this.myType['Color']) {
                 this.highLightType = type;
@@ -750,7 +793,7 @@ export default {
                         .style('stroke-width', 2);
 
                     // 清除#enlargedView中的内容
-                    const enlargedView = d3.select('#enlargedView');
+                    const enlargedView = d3.select('#' + this.value + '-enlargedView');
                     enlargedView.selectAll('*').remove();
 
                     // 在#enlargedView中创建一个新的svg元素
@@ -929,8 +972,10 @@ export default {
                         // 修改颜色映射的方法
                         const colorFunction = (scale) => {
                             const transformFunction = (input) => Math.pow(input, 0.25)
+                            // const transformFunction = (input) => input
+
                             const colorScale = d3.scaleSequential(d3.interpolateBlues)
-                                .domain([0, transformFunction(d3.max(this.geoData.features, d => this.getPopulation(d)))]);
+                                .domain([0, transformFunction(this.mostPopulation)]);
                             return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
                         }
 
@@ -940,6 +985,7 @@ export default {
                         this.svg.selectAll('circle')
                             .attr('fill', d => colorFunction(this.getPopulation(d)));
 
+                        this.colorFunctionL = colorFunction;
                         this.drawLegend();
                     }
                 }
@@ -1089,25 +1135,27 @@ export default {
                 }
 
                 else {
-                    // 如果没有适用的编码方式
-                    this.encodingChannelType = -1; // 或其他表示无效编码方式的值
+                    // // 如果没有适用的编码方式
+                    // this.encodingChannelType = -1; // 或其他表示无效编码方式的值
 
-                    // 显示一条消息
-                    this.encodingChannel = () => {
-                        this.svg.selectAll('path').attr("fill", this.defaultColor);
+                    // // 显示一条消息
+                    // this.encodingChannel = () => {
+                    //     this.svg.selectAll('path').attr("fill", this.defaultColor);
 
-                        // 首先，清除可能存在的旧消息
-                        d3.select("." + this.value + "-legend").selectAll("*").remove();
+                    //     // 首先，清除可能存在的旧消息
+                    //     d3.select("." + this.value + "-legend").selectAll("*").remove();
 
-                        // 向legend SVG元素中添加文本
-                        d3.select("." + this.value + "-legend")
-                            .append('text')
-                            .attr('x', 10) // 根据需要调整文本的x位置
-                            .attr('y', 20) // 根据需要调整文本的y位置
-                            .attr('fill', 'black') // 文本颜色
-                            .style('font-size', '14px') // 文本大小
-                            .text('This encoding method is not applicable to the current data provided.');
-                    };
+                    //     // 向legend SVG元素中添加文本
+                    //     d3.select("." + this.value + "-legend")
+                    //         .append('text')
+                    //         .attr('x', 10) // 根据需要调整文本的x位置
+                    //         .attr('y', 20) // 根据需要调整文本的y位置
+                    //         .attr('fill', 'black') // 文本颜色
+                    //         .style('font-size', '14px') // 文本大小
+                    //         .text('This encoding method is not applicable to the current data provided.');
+                    // };
+
+                    this.showErrorDialog("Encoding Channel Not Support", "The selected encoding channel only support the data your uploaded!")
                 }
             }
             else {
@@ -1173,25 +1221,27 @@ export default {
                     };
                 }
                 else {
-                    // 如果没有适用的编码方式
-                    this.encodingChannelType = -1; // 或其他表示无效编码方式的值
+                    // // 如果没有适用的编码方式
+                    // this.encodingChannelType = -1; // 或其他表示无效编码方式的值
 
-                    // 显示一条消息
-                    this.encodingChannel = () => {
-                        this.svg.selectAll('path').attr("fill", this.defaultColor);
+                    // // 显示一条消息
+                    // this.encodingChannel = () => {
+                    //     this.svg.selectAll('path').attr("fill", this.defaultColor);
 
-                        // 首先，清除可能存在的旧消息
-                        d3.select("." + this.value + "-legend").selectAll("*").remove();
+                    //     // 首先，清除可能存在的旧消息
+                    //     d3.select("." + this.value + "-legend").selectAll("*").remove();
 
-                        // 向legend SVG元素中添加文本
-                        d3.select("." + this.value + "-legend")
-                            .append('text')
-                            .attr('x', 10) // 根据需要调整文本的x位置
-                            .attr('y', 20) // 根据需要调整文本的y位置
-                            .attr('fill', 'black') // 文本颜色
-                            .style('font-size', '14px') // 文本大小
-                            .text('This encoding method is not applicable to the current data provided.');
-                    };
+                    //     // 向legend SVG元素中添加文本
+                    //     d3.select("." + this.value + "-legend")
+                    //         .append('text')
+                    //         .attr('x', 10) // 根据需要调整文本的x位置
+                    //         .attr('y', 20) // 根据需要调整文本的y位置
+                    //         .attr('fill', 'black') // 文本颜色
+                    //         .style('font-size', '14px') // 文本大小
+                    //         .text('This encoding method is not applicable to the current data provided.');
+                    // };
+
+                    this.showErrorDialog("Encoding Channel Not Support", "The selected encoding channel only support the data your uploaded!")
                 }
 
 
@@ -1201,51 +1251,127 @@ export default {
             this.drawSvg();
         },
 
-        drawLegend() {
-            const legendWidth = 200;
-            const legendHeight = 20;
+        // drawLegend() {
+        //     const legendWidth = this.legendWidth;
+        //     const legendHeight = 20;
 
-            const colorScale = d3.scaleSequential(d3.interpolateBlues)
-                .domain([0, d3.max(this.geoData.features, d => this.getPopulation(d))]);
+        //     const colorScale = d3.scaleSequential(d3.interpolateBlues)
+        //         .domain([0, this.mostPopulation]);
+
+        //     const legendGradient = this.legend.append('svg')
+        //         .attr('width', legendWidth)
+        //         .attr('height', legendHeight);
+
+        //     // 创建渐变色彩
+        //     const gradient = legendGradient.append('defs')
+        //         .append('linearGradient')
+        //         .attr('id', 'legendGradient')
+        //         .attr('x1', '0%')
+        //         .attr('y1', '0%')
+        //         .attr('x2', '100%')
+        //         .attr('y2', '0%');
+
+        //     gradient.append('stop')
+        //         .attr('offset', '0%')
+        //         .attr('stop-color', colorScale.range()[0]);
+
+        //     gradient.append('stop')
+        //         .attr('offset', '100%')
+        //         .attr('stop-color', colorScale.range()[1]);
+
+        //     // 绘制渐变色块
+        //     legendGradient.append('rect')
+        //         .attr('width', legendWidth)
+        //         .attr('height', legendHeight)
+        //         .style('fill', 'url(#legendGradient)');
+
+        //     // 添加最小值标签
+        //     this.legend.append('text')
+        //         .attr('x', 0)
+        //         .attr('y', legendHeight + 15)
+        //         .text('0');
+
+        //     // 添加最大值标签
+        //     this.legend.append('text')
+        //         .attr('x', legendWidth - 20)
+        //         .attr('y', legendHeight + 15)
+        //         .text(Math.floor(this.mostPopulation / 1000000) + "m");
+        // },
+
+        drawLegend() {
+            const legendWidth = this.legendWidth;
+            const legendHeight = 20;
+            const numSegments = 8; // 将色彩标尺等分成5段
+
+            const segmentWidth = legendWidth / numSegments; // 每个段的宽度
+            const populationWidth = Math.pow(this.mostPopulation, 0.25) / numSegments
 
             const legendGradient = this.legend.append('svg')
                 .attr('width', legendWidth)
                 .attr('height', legendHeight);
 
-            // 创建渐变色彩
-            const gradient = legendGradient.append('defs')
-                .append('linearGradient')
-                .attr('id', 'legendGradient')
-                .attr('x1', '0%')
-                .attr('y1', '0%')
-                .attr('x2', '100%')
-                .attr('y2', '0%');
-
-            gradient.append('stop')
-                .attr('offset', '0%')
-                .attr('stop-color', colorScale.range()[0]);
-
-            gradient.append('stop')
-                .attr('offset', '100%')
-                .attr('stop-color', colorScale.range()[1]);
-
-            // 绘制渐变色块
-            legendGradient.append('rect')
-                .attr('width', legendWidth)
-                .attr('height', legendHeight)
-                .style('fill', 'url(#legendGradient)');
-
-            // 添加最小值标签
             this.legend.append('text')
                 .attr('x', 0)
                 .attr('y', legendHeight + 15)
-                .text('0');
+                // .attr('text-anchor', 'middle')
+                .text('0')
+                .style('font-size', '10px');
 
-            // 添加最大值标签
-            this.legend.append('text')
-                .attr('x', legendWidth - 20)
-                .attr('y', legendHeight + 15)
-                .text(d3.max(this.geoData.features, d => this.getPopulation(d)));
+            // 绘制每个段的渐变色块和白色分隔线
+            for (let i = 0; i < numSegments; i++) {
+                const segmentStart = i * segmentWidth;
+                const segmentEnd = (i + 1) * segmentWidth;
+
+                const populationStart = Math.pow(i * populationWidth, 4);
+                const populationEnd = Math.pow((i + 1) * populationWidth, 4);
+
+                // 添加渐变色块
+                const gradient = legendGradient.append('defs')
+                    .append('linearGradient')
+                    .attr('id', `legendGradient${i}`)
+                    .attr('x1', '0%')
+                    .attr('y1', '0%')
+                    .attr('x2', '100%')
+                    .attr('y2', '0%');
+
+                gradient.append('stop')
+                    .attr('offset', '0%')
+                    .attr('stop-color', this.colorFunctionL(populationStart));
+
+                gradient.append('stop')
+                    .attr('offset', '100%')
+                    .attr('stop-color', this.colorFunctionL(populationEnd));
+
+                // 绘制渐变色块
+                legendGradient.append('rect')
+                    .attr('x', segmentStart)
+                    .attr('y', 0)
+                    .attr('width', segmentWidth)
+                    .attr('height', legendHeight)
+                    .style('fill', `url(#legendGradient${i})`);
+
+                // 添加白色分隔线
+                if (i < numSegments - 1) {
+                    legendGradient.append('line')
+                        .attr('x1', segmentEnd)
+                        .attr('y1', 0)
+                        .attr('x2', segmentEnd)
+                        .attr('y2', legendHeight)
+                        .style('stroke', '#ffffff')
+                        .style('stroke-width', 1);
+                }
+
+                // 添加数值标签
+                const label = populationEnd < 1000 ? Math.floor(populationEnd) :
+                    populationEnd < 1000000 ? Math.floor(populationEnd / 1000) + "k" :
+                        Math.floor(populationEnd / 1000000) + "m"
+                this.legend.append('text')
+                    .attr('x', segmentEnd)
+                    .attr('y', legendHeight + 15)
+                    .attr('text-anchor', 'middle')
+                    .text(label)
+                    .style('font-size', '10px');
+            }
         },
     },
 
