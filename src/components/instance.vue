@@ -1251,53 +1251,6 @@ export default {
             this.drawSvg();
         },
 
-        // drawLegend() {
-        //     const legendWidth = this.legendWidth;
-        //     const legendHeight = 20;
-
-        //     const colorScale = d3.scaleSequential(d3.interpolateBlues)
-        //         .domain([0, this.mostPopulation]);
-
-        //     const legendGradient = this.legend.append('svg')
-        //         .attr('width', legendWidth)
-        //         .attr('height', legendHeight);
-
-        //     // 创建渐变色彩
-        //     const gradient = legendGradient.append('defs')
-        //         .append('linearGradient')
-        //         .attr('id', 'legendGradient')
-        //         .attr('x1', '0%')
-        //         .attr('y1', '0%')
-        //         .attr('x2', '100%')
-        //         .attr('y2', '0%');
-
-        //     gradient.append('stop')
-        //         .attr('offset', '0%')
-        //         .attr('stop-color', colorScale.range()[0]);
-
-        //     gradient.append('stop')
-        //         .attr('offset', '100%')
-        //         .attr('stop-color', colorScale.range()[1]);
-
-        //     // 绘制渐变色块
-        //     legendGradient.append('rect')
-        //         .attr('width', legendWidth)
-        //         .attr('height', legendHeight)
-        //         .style('fill', 'url(#legendGradient)');
-
-        //     // 添加最小值标签
-        //     this.legend.append('text')
-        //         .attr('x', 0)
-        //         .attr('y', legendHeight + 15)
-        //         .text('0');
-
-        //     // 添加最大值标签
-        //     this.legend.append('text')
-        //         .attr('x', legendWidth - 20)
-        //         .attr('y', legendHeight + 15)
-        //         .text(Math.floor(this.mostPopulation / 1000000) + "m");
-        // },
-
         drawLegend() {
             const legendWidth = this.legendWidth;
             const legendHeight = 20;
