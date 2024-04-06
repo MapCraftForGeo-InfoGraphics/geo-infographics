@@ -127,49 +127,6 @@
                     </v-expansion-panel>
                     <v-expansion-panel>
                         <v-expansion-panel-title>
-                            Highlight Techniques
-                        </v-expansion-panel-title>
-
-                        <v-expansion-panel-text>
-                            <v-container class="container">
-                                <v-row>
-                                    <v-col class="element" @click="setHighlight(myType['Light'])">
-                                        Light
-                                        <v-img :src="require('../assets/HighlightLight.svg')" contain />
-                                    </v-col>
-
-                                    <v-col class="element" @click="setHighlight(myType['Color'])">
-                                        Color
-                                        <v-img :src="require('../assets/HighlightColor.svg')" contain />
-                                    </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col class="element" @click="setHighlight(myType['Map Pin'])">
-                                        Map Pin
-                                        <v-img :src="require('../assets/HighlightMappin.svg')" contain />
-                                    </v-col>
-
-                                    <v-col class="element" @click="setHighlight(myType['3D Transformation'])">
-                                        3D Transformation
-                                        <v-img :src="require('../assets/Highlight3d.svg')" contain />
-                                    </v-col>
-                                </v-row>
-
-                                <v-row>
-                                    <v-col class="element" @click="setHighlight(myType['Enlarged Portions'])">
-                                        Enlarged Portions
-                                        <v-img :src="require('../assets/HighlightEnlarge.svg')" width="61%" contain />
-                                    </v-col>
-                                </v-row>
-                            </v-container>
-                        </v-expansion-panel-text>
-                    </v-expansion-panel>
-
-
-
-                    <v-expansion-panel>
-                        <v-expansion-panel-title>
                             Label Positions
                         </v-expansion-panel-title>
 
@@ -236,6 +193,50 @@
                             </v-container>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
+                    <v-expansion-panel>
+                        <v-expansion-panel-title>
+                            Highlight Techniques
+                        </v-expansion-panel-title>
+
+                        <v-expansion-panel-text>
+                            <v-container class="container">
+                                <v-row>
+                                    <v-col class="element" @click="setHighlight(myType['Light'])">
+                                        Light
+                                        <v-img :src="require('../assets/HighlightLight.svg')" contain />
+                                    </v-col>
+
+                                    <v-col class="element" @click="setHighlight(myType['Color'])">
+                                        Color
+                                        <v-img :src="require('../assets/HighlightColor.svg')" contain />
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col class="element" @click="setHighlight(myType['Map Pin'])">
+                                        Map Pin
+                                        <v-img :src="require('../assets/HighlightMappin.svg')" contain />
+                                    </v-col>
+
+                                    <v-col class="element" @click="setHighlight(myType['3D Transformation'])">
+                                        3D Transformation
+                                        <v-img :src="require('../assets/Highlight3d.svg')" contain />
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col class="element" @click="setHighlight(myType['Enlarged Portions'])">
+                                        Enlarged Portions
+                                        <v-img :src="require('../assets/HighlightEnlarge.svg')" width="61%" contain />
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-expansion-panel-text>
+                    </v-expansion-panel>
+
+
+
+
 
 
 
@@ -848,8 +849,14 @@ export default {
         setLabelPosition(type) {
             console.log("Label Position:", type);
             // 移除之前添加的所有标签
-            this.svg.selectAll(".country-label, .annotation-box, .annotation-text, .olympic-label").remove();
-
+            this.svg.selectAll(".country-label, .annotation-box, .annotation-text, .olympic-label, .country-flag, .annotation-line").remove();
+            this.svg.selectAll(".country-color")
+                .style('fill', null) // 或设置为你的默认颜色
+                .classed("country-color", false); // 移除类，以避免对后续操作的影响
+            // 定义注解框的宽度、高度和间距
+            const boxWidth = 200; // 固定宽度
+            const boxHeight = 60; // 固定高度
+            const boxSpacing = 20; // 注解框之间的间距
             if (type === this.myType['Label Situated']) {
                 this.labelPositionType = type;
 
@@ -899,13 +906,9 @@ export default {
             }
 
 
-
             else if (type === this.myType['Label Text']) {
                 this.labelPositionType = type;
-                // 定义注解框的宽度、高度和间距
-                const boxWidth = 320; // 固定宽度
-                const boxHeight = 60; // 固定高度
-                const boxSpacing = 20; // 注解框之间的间距
+
 
                 // 仅为olympics_data.json中存在的国家显示国家名字
                 this.geoData.features.forEach(feature => {
@@ -931,10 +934,6 @@ export default {
                 annotatedFeatures.forEach((feature, index) => {
                     const annotation = feature.properties.annotation;
 
-                    // 从注解中提取夏季和冬季奥运会的数据
-                    const summerOlympics = annotation.summer_olympics || [];
-                    const winterOlympics = annotation.winter_olympics || [];
-
                     // 计算注解框在其行中的位置
                     const row = Math.floor(index / boxesPerRow);
                     const col = index % boxesPerRow;
@@ -956,13 +955,18 @@ export default {
                         .attr('stroke', 'black');
 
                     // 在注解框内添加文本
-                    const textLines = [
+                    let textLines = [
                         `Country: ${feature.properties.NAME}`,
-                        `City: ${annotation.city}`,
-                        `Total: ${annotation.total}`,
-                        `Summer: ${summerOlympics}`,
-                        `Winter: ${winterOlympics}`
+                        `City: ${annotation.city}`
                     ];
+
+                    // 根据条件动态添加Summer和Winter的行
+                    if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
+                        textLines.push(`Summer: ${annotation.summer_olympics}`);
+                    }
+                    if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
+                        textLines.push(`Winter: ${annotation.winter_olympics}`);
+                    }
 
                     textLines.forEach((line, lineIndex) => {
                         this.svg.append('text')
@@ -976,63 +980,266 @@ export default {
                 });
             }
 
-
-//             else if (type === this.myType['Label Icon']) {
-//     this.labelPositionType = type;
-//     const boxWidth = 200;  // 注解框的宽度
-//     const boxHeight = 100; // 注解框的高度
-
-//     // 使用固定的y位置作为示例，适当调整
-//     const startY = this.mapHeight + 20; // 假设地图的底部加一些间隔
-//     const boxSpacing = 20;  // 注解框之间的间距
-
-//     this.geoData.features.forEach((feature, index) => {
-//         const annotation = feature.properties.annotation;
-//         if (annotation && annotation.flag_base64) {
-//             // 确保有中心点坐标
-//             const center = this.geoPath.centroid(feature);
-//             const x = center[0] - boxWidth / 2;
-//             const y = startY + index * (boxHeight + boxSpacing); // 每个框向下移动
-
-//             // 绘制带有国旗背景的注解框
-//             this.svg.append('image')
-//                 .attr('x', x)
-//                 .attr('y', y)
-//                 .attr('width', boxWidth)
-//                 .attr('height', boxHeight)
-//                 .attr('href', annotation.flag_base64);
-
-//             // 在注解框内添加文本
-//             const textLines = [
-//                 `Country: ${feature.properties.NAME}`,
-//                 `City: ${annotation.city}`,
-//                 `Total: ${annotation.total}`,
-//                 `Summer: ${annotation.summer_olympics ? annotation.summer_olympics.length : 'N/A'}`,
-//                 `Winter: ${annotation.winter_olympics ? annotation.winter_olympics.length : 'N/A'}`
-//             ];
-
-//             textLines.forEach((line, lineIndex) => {
-//                 this.svg.append('text')
-//                     .attr('x', x + 10) // 略微缩进
-//                     .attr('y', y + 20 + (lineIndex * 15)) // 根据行数调整位置
-//                     .attr('fill', 'black')
-//                     .style('font-size', '10px')
-//                     .text(line);
-//             });
-//         }
-//     });
-// }
+            else if (type === this.myType['Label Icon']) {
+                this.labelPositionType = type;
 
 
+                // 过滤掉不需要展示注解的数据
+                const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
+
+                // 计算每行的注解框数量，考虑到了间距
+                const boxesPerRow = Math.floor((this.mapWidth + boxSpacing) / (boxWidth + boxSpacing));
+
+                // 用于注解的特征进行循环
+                annotatedFeatures.forEach((feature, index) => {
+                    const annotation = feature.properties.annotation;
+                    if (annotation && annotation.flag_base64) {
+                        const center = this.geoPath.centroid(feature);
+                        // 在地图的国家中心点上添加国旗图像
+                        this.svg.append('image')
+                            .attr('xlink:href', annotation.flag_base64)
+                            .attr('x', center[0] - 15) // 调整这个值以适合国旗图像的大小和位置
+                            .attr('y', center[1] - 10)
+                            .attr('width', 30) // 根据需要调整国旗的尺寸
+                            .attr('height', 20)
+                            .attr('class', 'country-flag');
+                        // 计算注解框在其行中的位置
+                        const row = Math.floor(index / boxesPerRow);
+                        const col = index % boxesPerRow;
+
+                        // 动态计算x坐标，考虑间距，以保证注解框在水平方向上均匀对齐
+                        const x = col * (boxWidth + boxSpacing);
+
+                        // 调整y坐标，为每个注解框下方留出一定的间距
+                        const y = this.mapHeight + row * (boxHeight + 20 + boxSpacing); // 调整了间距的计算
+
+                        // 先绘制注解框作为背景
+                        this.svg.append('rect')
+                            .attr('class', 'annotation-box')
+                            .attr('x', x)
+                            .attr('y', y)
+                            .attr('width', boxWidth)
+                            .attr('height', boxHeight)
+                            .attr('fill', 'url(#flagPattern' + index + ')') // 使用图案填充
+                            .attr('stroke', 'black');
+
+                        let textLines = [
+                            `Country: ${feature.properties.NAME}`,
+                            `City: ${annotation.city}`
+                        ];
+
+                        // 根据条件动态添加Summer和Winter的行
+                        if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
+                            textLines.push(`Summer: ${annotation.summer_olympics}`);
+                        }
+                        if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
+                            textLines.push(`Winter: ${annotation.winter_olympics}`);
+                        }
+
+                        textLines.forEach((line, lineIndex) => {
+                            this.svg.append('text')
+                                .attr('class', 'annotation-text')
+                                .attr('x', x + 5) // 略微缩进
+                                .attr('y', y + 10 + (lineIndex * 12)) // 根据行数调整位置
+                                .attr('fill', 'black')
+                                .style('font-size', '10px')
+                                .text(line);
+                        });
+
+                        // 创建用于国旗背景的图案
+                        this.svg.append('pattern')
+                            .attr('id', 'flagPattern' + index)
+                            .attr('patternUnits', 'objectBoundingBox')
+                            .attr('width', '100%')
+                            .attr('height', '100%')
+                            .append('image')
+                            .attr('xlink:href', annotation.flag_base64)
+                            .attr('width', boxWidth)
+                            .attr('height', boxHeight)
+                            .attr('preserveAspectRatio', 'xMidYMid slice');
+                    }
+                });
+            }
             else if (type === this.myType['Label Color']) {
                 this.labelPositionType = type;
+
+
+                // 颜色数组
+                const countryColors = ["#e6194B", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0", "#f032e6", "#bcf60c"];
+                const getCountryColor = (index) => countryColors[index % countryColors.length];
+
+                // 过滤出需要注解的国家特征
+                const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
+
+                // 为有注解的国家设置颜色
+                annotatedFeatures.forEach((feature, index) => {
+                    // 计算每个注解框的位置
+                    const boxesPerRow = Math.floor((this.mapWidth + boxSpacing) / (boxWidth + boxSpacing));
+                    const row = Math.floor(index / boxesPerRow);
+                    const col = index % boxesPerRow;
+                    const x = col * (boxWidth + boxSpacing);
+                    const y = this.mapHeight + row * (boxHeight + 20 + boxSpacing);
+
+                    const fillColor = getCountryColor(index); // 获取颜色
+
+                    // 设置国家颜色
+                    this.svg.selectAll('path')
+                        .filter(d => d === feature)
+                        .style('fill', fillColor)
+                        .classed("country-color", true);
+
+                    // 创建注解框
+                    this.svg.append('rect')
+                        .attr('class', 'annotation-box')
+                        .attr('x', x)
+                        .attr('y', y)
+                        .attr('width', boxWidth)
+                        .attr('height', boxHeight)
+                        .attr('fill', fillColor) // 确保注解框颜色与国家颜色相同
+                        .attr('stroke', 'black');
+
+                    // 添加注解文本
+                    const annotation = feature.properties.annotation;
+                    let textLines = [
+                        `Country: ${feature.properties.NAME}`,
+                        `City: ${annotation.city}`
+                    ];
+
+                    // 根据条件动态添加Summer和Winter的行
+                    if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
+                        textLines.push(`Summer: ${annotation.summer_olympics}`);
+                    }
+                    if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
+                        textLines.push(`Winter: ${annotation.winter_olympics}`);
+                    }
+
+                    textLines.forEach((line, lineIndex) => {
+                        this.svg.append('text')
+                            .attr('class', 'annotation-text')
+                            .attr('x', x + 5)
+                            .attr('y', y + 10 + (lineIndex * 12))
+                            .attr('fill', 'black')
+                            .style('font-size', '10px')
+                            .text(line);
+                    });
+                });
+
             }
+
             else if (type === this.myType['Label Convenient']) {
                 this.labelPositionType = type;
+
+                const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
+                const totalAnnotations = annotatedFeatures.length;
+
+                // 假设每边分配的注解数量大致相等
+                const annotationsPerSide = Math.ceil(totalAnnotations / 3);
+                // eslint-disable-next-line
+                let leftAnnotationsCount = 0, bottomAnnotationsCount = 0, rightAnnotationsCount = 0;
+
+                annotatedFeatures.forEach((feature) => {
+                    const countryCenter = this.geoPath.centroid(feature);
+                    const annotation = feature.properties.annotation;
+
+                    // 特定国家（如"Austria"）的连线长度
+                    const lineLength = feature.properties.NAME === "Austria" ? 400 : 300;
+
+                    // 计算到三边的距离
+                    const distanceToLeft = countryCenter[0];
+                    const distanceToBottom = this.mapHeight - countryCenter[1];
+                    const distanceToRight = this.mapWidth - countryCenter[0];
+
+                    // 确定注解应放置在哪个边缘
+                    let edge = 'left'; // 默认左边
+                    let minDistance = distanceToLeft;
+
+                    if (distanceToBottom < minDistance && bottomAnnotationsCount < annotationsPerSide) {
+                        minDistance = distanceToBottom;
+                        edge = 'bottom';
+                    }
+                    if (distanceToRight < minDistance && rightAnnotationsCount < annotationsPerSide) {
+                        edge = 'right';
+                    }
+
+                    // 更新对应边缘的注解计数
+                    if (edge === 'left') leftAnnotationsCount++;
+                    else if (edge === 'bottom') bottomAnnotationsCount++;
+                    else rightAnnotationsCount++;
+
+                    // 计算线的终点位置
+                    let lineEndX = countryCenter[0], lineEndY = countryCenter[1];
+                    let textOffsetX = countryCenter[0], textOffsetY = countryCenter[1];
+
+                    switch (edge) {
+                        case 'left':
+                            lineEndX -= lineLength;
+                            textOffsetX = lineEndX - boxWidth - 5;
+                            textOffsetY = countryCenter[1] - boxHeight / 2;
+                            break;
+                        case 'bottom':
+                            lineEndY += lineLength;
+                            textOffsetX = countryCenter[0] - boxWidth / 2;
+                            textOffsetY = lineEndY + 5;
+                            break;
+                        case 'right':
+                            lineEndX += lineLength;
+                            textOffsetX = lineEndX + 5;
+                            textOffsetY = countryCenter[1] - boxHeight / 2;
+                            break;
+                    }
+                    // 绘制注解连线
+                    this.svg.append('line')
+                        .attr('x1', countryCenter[0])
+                        .attr('y1', countryCenter[1])
+                        .attr('x2', lineEndX)
+                        .attr('y2', lineEndY)
+                        .attr('stroke', 'black')
+                        .attr('stroke-width', 1)
+                        .attr('class', 'annotation-line');
+
+                    // 绘制文本框背景
+                    this.svg.append('rect')
+                        .attr('x', textOffsetX)
+                        .attr('y', textOffsetY)
+                        .attr('width', boxWidth)
+                        .attr('height', boxHeight)
+                        .attr('fill', 'white')
+                        .attr('stroke', 'black')
+                        .attr('class', 'annotation-box');
+
+                    let textLines = [
+                        `Country: ${feature.properties.NAME}`,
+                        `City: ${annotation.city}`
+                    ];
+
+                    // 根据条件动态添加Summer和Winter的行
+                    if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
+                        textLines.push(`Summer: ${annotation.summer_olympics}`);
+                    }
+                    if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
+                        textLines.push(`Winter: ${annotation.winter_olympics}`);
+                    }
+
+                    // 添加多行注解文本
+                    textLines.forEach((line, i) => {
+                        this.svg.append('text')
+                            .attr('x', textOffsetX + 5)
+                            .attr('y', textOffsetY + 13 + i * 13)
+                            .attr('fill', 'black')
+                            .style('font-size', '10px')
+                            .text(line)
+                            .attr('class', 'annotation-text');
+                    });
+                });
             }
+
+
+
             else if (type === this.myType['Label Aligned']) {
                 this.labelPositionType = type;
             }
+
+
             else if (type === this.myType['Label Ordered']) {
                 this.labelPositionType = type;
             }

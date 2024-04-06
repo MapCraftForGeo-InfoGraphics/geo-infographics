@@ -56,10 +56,10 @@
     {
       "country": "Italy",
       "annotation": {
-        "city": "Rome, Cortina d'Ampezzo, Torino, Milan and Cortina d'Ampezzo",
+        "city": "Rome, Cortina d'Ampezzo, Torino",
         "summer_olympics": ["1960"],
-        "winter_olympics": ["1956", "2006", "2026"],
-        "total": 4,
+        "winter_olympics": ["1956", "2006"],
+        "total": 3,
         "flag_base64": "data:image\/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBoZWlnaHQ9IjEwMDAiIHZpZXdCb3g9IjAgMCAzIDIiPg0KPHBhdGggZmlsbD0iIzAwOTI0NiIgZD0ibTAsMGgxdjJoLTF6Ii8+DQo8cGF0aCBmaWxsPSIjZmZmIiBkPSJtMSwwaDF2MmgtMXoiLz4NCjxwYXRoIGZpbGw9IiNjZTJiMzciIGQ9Im0yLDBoMXYyaC0xeiIvPg0KPC9zdmc+DQo="
       }
     },
