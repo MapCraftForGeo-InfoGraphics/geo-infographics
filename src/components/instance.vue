@@ -16,13 +16,17 @@
                                         <v-img :src="require('../assets/PoliticalMap.svg')" contain />
                                     </v-col>
 
-                                    <v-col class="element" @click="setRepresentation(myType['Topographic Map'])">
+                                    <!-- <v-col class="element" @click="setRepresentation(myType['Topographic Map'])">
                                         Topographic Map
                                         <v-img :src="require('../assets/TopographicMap.svg')" contain />
+                                    </v-col> -->
+                                    <v-col class="element" @click="setRepresentation(myType['Shape-based Map'])">
+                                        Shape-based Map
+                                        <v-img :src="require('../assets/Shape-basedMap.svg')" contain />
                                     </v-col>
                                 </v-row>
 
-                                <v-row>
+                                <!-- <v-row>
                                     <v-col class="element" @click="setRepresentation(myType['Shape-based Map'])">
                                         Shape-based Map
                                         <v-img :src="require('../assets/Shape-basedMap.svg')" contain />
@@ -32,7 +36,7 @@
                                         Street Map
                                         <v-img :src="require('../assets/StreetMap.svg')" contain />
                                     </v-col>
-                                </v-row>
+                                </v-row> -->
 
                                 <v-row>
                                     <v-col class="element" @click="setRepresentation(myType['Grid Cartogram'])">
