@@ -126,6 +126,13 @@
                                         <v-img :src="require('../assets/Quantity.svg')" contain />
                                     </v-col>
                                 </v-row>
+
+                                <v-row>
+                                    <v-col class="element" @click="setEncodingChannel(myType['Bar'])">
+                                        Bar
+                                        <v-img :src="require('../assets/Bar.png')" contain />
+                                    </v-col>
+                                </v-row>
                             </v-container>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -370,6 +377,7 @@ export default {
             "Link (Arrow)": 5,
             "Size": 6,
             "Quantity": 7,
+            "Bar": 8,
 
         },
     }),
@@ -721,10 +729,10 @@ export default {
                         d3.select(svg).append('image')
                             .classed('highlight-marker', true) // 使用类来标记这是一个高亮标记
                             .attr('xlink:href', require('../assets/locationIcon.png'))// 设置图像的路径
-                            .attr('x', x - 40) // 调整图像位置，使其中心对准点击位置
-                            .attr('y', y - 96) // 同上，这里的15是假设图像大小为30x30像素，需要根据实际大小调整
-                            .attr('width', 80) // 设置图像的宽度
-                            .attr('height', 96); // 设置图像的高度
+                            .attr('x', x - 20) // 调整图像位置，使其中心对准点击位置
+                            .attr('y', y - 48) // 同上，根据实际大小调整
+                            .attr('width', 40) // 设置图像的宽度
+                            .attr('height', 48); // 设置图像的高度
                     };
 
                     highLight();
@@ -755,7 +763,9 @@ export default {
                             .attr('class', 'highlight-3d-effect') // 为了方便之后可能的移除
                             .attr('d', this.geoPath) // 使用geoPath来保持地理形状的一致性
                             .attr('fill', 'rgba(33, 68, 158, 0.5)') // 为了简化，这里使用纯色填充表示阴影
-                            .attr('filter', 'url(#drop-shadow)'); // 应用下面定义的SVG滤镜实现阴影效果
+                            .attr('filter', 'url(#drop-shadow)')
+                            .attr('stroke-width', 2)
+                            .attr('stroke', 'red'); // 应用下面定义的SVG滤镜实现阴影效果
 
                         // 添加或确保SVG滤镜的存在
                         const defs = this.svg.append('defs');
@@ -822,7 +832,7 @@ export default {
                     const enlargedViewSvg = enlargedView.append('svg')
                         .attr('width', '100%')
                         .attr('height', '100%')
-                        .attr('viewBox', `${x - 30} ${y - 60} 60 90`);
+                        .attr('viewBox', `${x - 30} ${y - 30} 60 60`);
 
                     // 创建圆形裁剪路径
                     const defs = enlargedViewSvg.append('defs');
@@ -1382,11 +1392,11 @@ export default {
                     this.encodingChannel = () => {
                         // 修改颜色映射的方法
                         const colorFunction = (scale) => {
-                            const transformFunction = (input) => Math.pow(input, 0.25)
+                            const transformFunction = (input) => Math.pow(input, 0.25);
                             // const transformFunction = (input) => input
 
-                            const colorScale = d3.scaleSequential(d3.interpolateBlues)
-                                .domain([0, transformFunction(this.mostPopulation)]);
+                            const colorScale = d3.scaleSequential(d3.interpolateRgb(d3.rgb(255, 172, 183), d3.rgb(255, 255, 255)))
+                            .domain([transformFunction(this.mostPopulation), 0]);
                             return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
                         }
 
@@ -1461,17 +1471,46 @@ export default {
                                     .attr('y', center[1] - height)
                                     .attr('width', cuboidWidth)
                                     .attr('height', height)
-                                    .attr('fill', 'rgba(125, 125, 255, 0.7)'); // 修改前面的颜色
+                                    .attr('fill', 'rgba(255, 125, 125, 0.7)'); // 修改前面的颜色
 
                                 // 绘制长方体的“顶面”
                                 this.svg.append('polygon')
                                     .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
-                                    .attr('fill', 'rgba(150, 150, 255, 0.7)');
+                                    .attr('fill', 'rgba(255, 150, 150, 0.7)');
 
                                 // 绘制长方体的“左侧面”
                                 this.svg.append('polygon')
                                     .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
-                                    .attr('fill', `rgba(75, 75, 255, ${sideOpacity})`); // 修改左侧面的颜色
+                                    .attr('fill', `rgba(255, 75, 75, ${sideOpacity})`); // 修改左侧面的颜色
+                            }
+                        });
+                    }
+                }
+
+                else if (type === this.myType['Bar']) {
+                    this.encodingChannelType = type;
+
+                    this.encodingChannel = () => {
+                        this.svg.selectAll('path').attr("fill", this.defaultColor);
+
+                        // draw bar chart
+                        const baseHeight = 3; // 长方体基础高度，所有长方体至少有这个高度
+                        const populationPerHeight = 800000; // 每增加这么多人口，长方体的高度增加一单位
+                        const cuboidWidth = 20; // 长方体的宽度
+
+                        this.geoData.features.forEach(feature => {
+                            const center = this.geoPath.centroid(feature);
+                            const population = this.getPopulation(feature);
+                            if (population >= 1000000) { // 人口大于等于1000000时绘制长方体
+                                const height = baseHeight + (population / populationPerHeight); // 长方体的总高度
+
+                                // 绘制长方体的“前面”
+                                this.svg.append('rect')
+                                    .attr('x', center[0] - cuboidWidth / 2)
+                                    .attr('y', center[1] - height)
+                                    .attr('width', cuboidWidth)
+                                    .attr('height', height)
+                                    .attr('fill', 'rgba(255, 125, 125, 0.7)'); // 修改前面的颜色
                             }
                         });
                     }
@@ -1502,7 +1541,7 @@ export default {
                                     .attr('y', y - sizeScale(population) / 2)
                                     .attr('width', sizeScale(population))
                                     .attr('height', sizeScale(population))
-                                    .attr('fill', 'rgba(118, 139, 193, 1)');
+                                    .attr('fill', 'rgba(255, 150, 150, 1)');
                             }
                         });
                     }
@@ -1605,7 +1644,7 @@ export default {
                     const customColors = [
                         "#e6194B", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0", "#f032e6",
                         "#bcf60c", "#fabebe", "#008080", "#e6beff", "#9a6324", "#fffac8", "#800000", "#aaffc3",
-                        "#808000", "#ffd8b1", "#000075", "#808080", "#ffffff", "#000000",
+                        "#808000", "#ffd8b1", "#000075", "#808080", "#123123", "#000000",
                         // 添加更多颜色以确保有51种不同的颜色
                         "#59656d", "#c17b81", "#b5d99c", "#f5b971", "#8fb5aa", "#f28a9b", "#a4c3ed", "#8ec6c5",
                         "#c6d7eb", "#ead3c1", "#92b4a7", "#f4ebc1", "#cbb3bf", "#acb7ae", "#e2c2de", "#cccccc",
