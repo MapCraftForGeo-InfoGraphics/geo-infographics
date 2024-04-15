@@ -130,7 +130,7 @@
                                 <v-row>
                                     <v-col class="element" @click="setEncodingChannel(myType['Bar'])">
                                         Bar
-                                        <v-img :src="require('../assets/Bar.png')" contain />
+                                        <v-img :src="require('../assets/BarChart.svg')" width="50%" contain />
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -238,7 +238,11 @@
                                 <v-row>
                                     <v-col class="element" @click="setHighlight(myType['Enlarged Portions'])">
                                         Enlarged Portions
-                                        <v-img :src="require('../assets/HighlightEnlarge.svg')" width="61%" contain />
+                                        <v-img :src="require('../assets/HighlightEnlarge.svg')" contain />
+                                    </v-col>
+                                    <v-col class="element" @click="setHighlight(myType['Edge Stroke'])">
+                                        Edge Stroke
+                                        <v-img :src="require('../assets/HighlightEdgeStroking.svg')" contain />
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -360,6 +364,7 @@ export default {
             "Map Pin": 2,
             "3D Transformation": 3,
             "Enlarged Portions": 4,
+            "Edge stroke": 5,
 
             "Label Situated": 0,
             "Label Text": 1,
@@ -764,8 +769,7 @@ export default {
                             .attr('d', this.geoPath) // 使用geoPath来保持地理形状的一致性
                             .attr('fill', 'rgba(33, 68, 158, 0.5)') // 为了简化，这里使用纯色填充表示阴影
                             .attr('filter', 'url(#drop-shadow)')
-                            .attr('stroke-width', 2)
-                            .attr('stroke', 'red'); // 应用下面定义的SVG滤镜实现阴影效果
+                            .attr('stroke-width', 2); // 应用下面定义的SVG滤镜实现阴影效果
 
                         // 添加或确保SVG滤镜的存在
                         const defs = this.svg.append('defs');
@@ -852,7 +856,35 @@ export default {
                     enlargedViewSvg.selectAll('g > svg')
                         .attr('x', null)
                         .attr('y', null)
-                        .style('transform', 'translate(${-x + 100}px, ${-y + 100}px) scale(2)');
+                        .style('transform', `translate(${-x + 100}px, ${-y + 100}px) scale(2)`);
+                });
+            }
+            else if (type === this.myType['Edge Stroke']) {
+                this.highLightType = type;
+
+                const addHighLight = (event, svg) => {
+
+                    const [x, y] = d3.pointer(event, svg);
+                    const feature = d3.select(event.target).datum(); // 获取被点击的地图区域的数据
+
+                    // 高亮函数
+                    const highLight = () => {
+                        this.svg.append('path')
+                            .datum(feature) // 使用同一区域的数据
+                            .attr('class', 'highlight-edge-stroke') // 为了方便之后可能的移除
+                            .attr('d', this.geoPath) // 使用geoPath来保持地理形状的一致性
+                            .attr('stroke-width', 2)
+                            .attr('stroke', 'yellow')
+                            .style('fill', 'none');
+                    };
+
+                    highLight();
+                    this.highLights.push(highLight);
+                };
+
+                // 绑定点击事件到所有的path上
+                this.svg.selectAll('path').on('click', function (event) {
+                    addHighLight(event, this);
                 });
             }
 
@@ -1395,7 +1427,7 @@ export default {
                             const transformFunction = (input) => Math.pow(input, 0.25);
                             // const transformFunction = (input) => input
 
-                            const colorScale = d3.scaleSequential(d3.interpolateRgb(d3.rgb(255, 172, 183), d3.rgb(255, 255, 255)))
+                            const colorScale = d3.scaleSequential(d3.interpolateRgb(d3.rgb(220, 120, 130), d3.rgb(255, 255, 255)))
                             .domain([transformFunction(this.mostPopulation), 0]);
                             return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
                         }
@@ -1544,6 +1576,30 @@ export default {
                                     .attr('fill', 'rgba(255, 150, 150, 1)');
                             }
                         });
+
+                        //draw size legend
+                        for (let i = 0, delta = 20, py = 100; i < 4; i++) {
+                            let t = 1000000*Math.pow(5, i)
+                            let v = sizeScale(t);
+                            this.svg.append('rect')
+                                .attr('x', 100)
+                                .attr('y', py)
+                                .attr('width', v)
+                                .attr('height', v)
+                                .attr('fill', 'rgba(255, 150, 150, 1)');
+
+                            const label = t < 1000 ? Math.floor(t) :
+                                t < 1000000 ? Math.floor(t / 1000) + "k" :
+                                Math.floor(t / 1000000) + "m";
+                            this.svg.append('text')
+                                .attr('x', 105+v)
+                                .attr('y', py + v)
+                                .text(label);
+
+                            py += v + delta;
+
+
+                        }
                     }
                 }
 
@@ -1583,7 +1639,20 @@ export default {
                                 }
                             }
                         });
+                        //draw quantity legend
+                        this.svg.append('image')
+                            .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
+                            .attr('x', 100)
+                            .attr('y', 100)
+                            .attr('width', iconWidth*2)
+                            .attr('height', iconHeight*2);
+                        this.svg.append('text')
+                            .attr('x', 120)
+                            .attr('y', 120)
+                            .text(':1000000');
                     }
+
+                    
                 }
 
                 else {
@@ -1779,46 +1848,49 @@ export default {
             }
         },
         drawColorHueLegend() {
-    const legendData = [
-        { color: 'blue', text: '< 5M', minPopulation: 0, maxPopulation: 5000000 },
-        { color: 'green', text: '5M - 10M', minPopulation: 5000000, maxPopulation: 10000000 },
-        { color: 'yellow', text: '10M - 50M', minPopulation: 10000000, maxPopulation: 50000000 },
-        { color: 'orange', text: '50M - 100M', minPopulation: 50000000, maxPopulation: 100000000 },
-        { color: 'red', text: '> 100M', minPopulation: 100000000, maxPopulation: Infinity }
-    ];
+            const legendData = [
+                { color: 'blue', text: '< 5M', minPopulation: 0, maxPopulation: 5000000 },
+                { color: 'green', text: '5M - 10M', minPopulation: 5000000, maxPopulation: 10000000 },
+                { color: 'yellow', text: '10M - 50M', minPopulation: 10000000, maxPopulation: 50000000 },
+                { color: 'orange', text: '50M - 100M', minPopulation: 50000000, maxPopulation: 100000000 },
+                { color: 'red', text: '> 100M', minPopulation: 100000000, maxPopulation: Infinity }
+            ];
 
-    const legendWidth = 20;
-    const legendHeight = 20;
-    const legendSpacing = 5;
-    const legendX = 10; // Starting x position for the legend
-    const legendY = 10; // Starting y position for the legend
+            const legendWidth = 20;
+            const legendHeight = 20;
+            const legendSpacing = 5;
+            const legendX = 10; // Starting x position for the legend
+            const legendY = 10; // Starting y position for the legend
 
-    // Create a group for the legend
-    const legend = this.svg.append('g')
-        .attr('class', 'legend')
-        .attr('transform', `translate(${legendX},${legendY})`);
+            // Create a group for the legend
+            // const legend = this.svg.append('g')
+            //     .attr('class', 'legend')
+            //     .attr('transform', `translate(${legendX},${legendY})`);
 
-    // Add color swatches
-    legend.selectAll('rect')
-        .data(legendData)
-        .enter().append('rect')
-        .attr('x', 0)
-        .attr('y', (d, i) => i * (legendHeight + legendSpacing))
-        .attr('width', legendWidth)
-        .attr('height', legendHeight)
-        .style('fill', d => d.color);
+            this.legend.append('g')
+                .attr('class', 'legend')
+                .attr('transform', `translate(${legendX},${legendY})`);
 
-    // Add text labels
-    legend.selectAll('text')
-        .data(legendData)
-        .enter().append('text')
-        .attr('x', legendWidth + 5)
-        .attr('y', (d, i) => i * (legendHeight + legendSpacing) + (legendHeight / 2))
-        .attr('dy', '.35em') // Vertically center
-        .style('font-size', '10px')
-        .text(d => d.text);
-},
+            // Add color swatches
+            this.legend.selectAll('rect')
+                .data(legendData)
+                .enter().append('rect')
+                .attr('x', 0)
+                .attr('y', (d, i) => i * (legendHeight + legendSpacing))
+                .attr('width', legendWidth)
+                .attr('height', legendHeight)
+                .style('fill', d => d.color);
 
+            // Add text labels
+            this.legend.selectAll('text')
+                .data(legendData)
+                .enter().append('text')
+                .attr('x', legendWidth + 5)
+                .attr('y', (d, i) => i * (legendHeight + legendSpacing) + (legendHeight / 2))
+                .attr('dy', '.35em') // Vertically center
+                .style('font-size', '10px')
+                .text(d => d.text);
+        },
 
     },
 
