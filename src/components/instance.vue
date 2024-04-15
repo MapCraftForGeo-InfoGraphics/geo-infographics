@@ -261,17 +261,17 @@
 
         <v-container style="width: 100%; height: 100%; margin-left: 0; margin-right: 0" :ref="'d3Panel'">
             <v-row>
-                <v-col>{{ propName }} : {{ isNumerical ? "Numerical" : "Nominal" }} </v-col>
-                <v-col></v-col>
                 <v-col ref="legendCol">
                     <svg :class="value + '-legend'" style="height: 40px; width: 100%;"></svg>
-                </v-col>
-
+                </v-col><v-col></v-col>
+                <v-col>{{ propName }} : {{ isNumerical ? "Numerical" : "Nominal" }} </v-col>
+                
+                
             </v-row>
             <svg :class="value + '-svg'" style="width: 100%; height: 100%;"></svg>
             <!-- <svg :class="value + '-legend'" style="position: absolute; top: 30px; right: 20px; width: 200px; height: 40px; z-index: 2;"></svg> -->
             <svg :id="value + '-enlargedView'"
-                style="width: 200px; height: 200px; position: absolute; top: 10px; right: 10px;"></svg>
+                style="width: 200px; height: 400px; position: absolute; top: 10px; right: 10px;"></svg>
         </v-container>
     </div>
 
@@ -343,6 +343,7 @@ export default {
 
         encodingChannel: () => { },
         representation: () => { },
+        LabelPosition: () => { },
 
         colorFunctionL: () => { },
 
@@ -442,7 +443,7 @@ export default {
             };
 
             // console.log(this.mapWidth, this.mapHeight);
-            this.setProjection(0);
+            this.setProjection(1);
             this.drawSvg();
         },
         splitTextToLines(text, maxLineWidth) {
@@ -470,6 +471,7 @@ export default {
 
             this.representation();
             this.encodingChannel();
+            this.LabelPosition();
 
             this.highLights.forEach(highLight => {
                 highLight();
@@ -874,7 +876,7 @@ export default {
                             .attr('class', 'highlight-edge-stroke') // 为了方便之后可能的移除
                             .attr('d', this.geoPath) // 使用geoPath来保持地理形状的一致性
                             .attr('stroke-width', 2)
-                            .attr('stroke', 'yellow')
+                            .attr('stroke', d3.rgb(33, 68, 158))
                             .style('fill', 'none');
                     };
 
@@ -906,7 +908,8 @@ export default {
             if (type === this.myType['Label Situated']) {
                 this.labelPositionType = type;
 
-                this.geoData.features.forEach(feature => {
+                this.LabelPosition = () => {
+                    this.geoData.features.forEach(feature => {
                     const center = this.geoPath.centroid(feature);
                     const annotation = feature.properties.annotation;
 
@@ -948,126 +951,64 @@ export default {
                             // 注意：这里不再需要调整index
                         });
                     }
-                });
+                    });
+                }
+
+                
             }
 
 
             else if (type === this.myType['Label Text']) {
                 this.labelPositionType = type;
 
-
-                // 仅为olympics_data.json中存在的国家显示国家名字
-                this.geoData.features.forEach(feature => {
-                    if (feature.properties.annotation != -1) {
-                        const center = this.geoPath.centroid(feature);
-                        this.svg.append('text')
-                            .attr('class', 'country-label')
-                            .attr('x', center[0])
-                            .attr('y', center[1])
-                            .attr('text-anchor', 'middle')
-                            .attr('fill', 'black')
-                            .style('font-size', '15px')
-                            .text(feature.properties.NAME);
-                    }
-                });
-
-                // 过滤掉不需要展示注解的数据
-                const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
-
-                // 用于注解的特征进行循环，而不是所有特征
-                annotatedFeatures.forEach((feature, index) => {
-                    const annotation = feature.properties.annotation;
-
-
-
-                    // // 动态计算x坐标，考虑间距，以保证注解框在水平方向上均匀对齐
-                    // const x = col * (boxWidth + boxSpacing);
-
-                    // 计算每个注解的起始x坐标
-                    const totalAnnotationsWidth = annotatedFeatures.length * (boxWidth + boxSpacing) - boxSpacing; // 总宽度减去最后一个间距
-                    const startX = (this.mapWidth - totalAnnotationsWidth) / 2; // 为了居中对齐
-                    // // 调整y坐标，为每个注解框下方留出一定的间距
-                    // const y = this.mapHeight + row * (boxHeight + 20 + boxSpacing); // 调整了间距的计算
-                    const annotationX = startX + index * (boxWidth + boxSpacing);
-                    const annotationY = this.mapHeight + 50; // 地图下方50px
-
-
-                    // 绘制注解框
-                    this.svg.append('rect')
-                        .attr('class', 'annotation-box')
-                        .attr('x', annotationX)
-                        .attr('y', annotationY)
-                        .attr('width', boxWidth)
-                        .attr('height', boxHeight)
-                        .attr('fill', 'none')
-                        .attr('stroke', 'black');
-
-                    // 在注解框内添加文本
-                    let textLines = [
-                        `Country: ${feature.properties.NAME}`,
-                        `City: ${annotation.city}`
-                    ];
-
-                    // 根据条件动态添加Summer和Winter的行
-                    if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
-                        textLines.push(`Summer: ${annotation.summer_olympics}`);
-                    }
-                    if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
-                        textLines.push(`Winter: ${annotation.winter_olympics}`);
-                    }
-
-                    textLines.forEach((line, lineIndex) => {
-                        this.svg.append('text')
-                            .attr('class', 'annotation-text')
-                            .attr('x', annotationX + 5) // 略微缩进
-                            .attr('y', annotationY + 15 + (lineIndex * 12)) // 根据行数调整位置
-                            .attr('fill', 'black')
-                            .style('font-size', '10px')
-                            .text(line);
+                this.LabelPosition = () => {
+                        // 仅为olympics_data.json中存在的国家显示国家名字
+                    this.geoData.features.forEach(feature => {
+                        if (feature.properties.annotation != -1) {
+                            const center = this.geoPath.centroid(feature);
+                            this.svg.append('text')
+                                .attr('class', 'country-label')
+                                .attr('x', center[0])
+                                .attr('y', center[1])
+                                .attr('text-anchor', 'middle')
+                                .attr('fill', 'black')
+                                .style('font-size', '15px')
+                                .text(feature.properties.NAME);
+                        }
                     });
-                });
-            }
 
-            else if (type === this.myType['Label Icon']) {
-                this.labelPositionType = type;
+                    // 过滤掉不需要展示注解的数据
+                    const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
 
-
-                // 过滤掉不需要展示注解的数据
-                const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
+                    // 用于注解的特征进行循环，而不是所有特征
+                    annotatedFeatures.forEach((feature, index) => {
+                        const annotation = feature.properties.annotation;
 
 
-                // 用于注解的特征进行循环
-                annotatedFeatures.forEach((feature, index) => {
-                    const annotation = feature.properties.annotation;
-                    // 计算每个注解的起始x坐标
-                    const totalAnnotationsWidth = annotatedFeatures.length * (boxWidth + boxSpacing) - boxSpacing; // 总宽度减去最后一个间距
-                    const startX = (this.mapWidth - totalAnnotationsWidth) / 2; // 为了居中对齐
-                    // // 调整y坐标，为每个注解框下方留出一定的间距
-                    // const y = this.mapHeight + row * (boxHeight + 20 + boxSpacing); // 调整了间距的计算
-                    const annotationX = startX + index * (boxWidth + boxSpacing);
-                    const annotationY = this.mapHeight + 50; // 地图下方50px
-                    if (annotation && annotation.flag_base64) {
-                        const center = this.geoPath.centroid(feature);
-                        // 在地图的国家中心点上添加国旗图像
-                        this.svg.append('image')
-                            .attr('xlink:href', annotation.flag_base64)
-                            .attr('x', center[0] - 15) // 调整这个值以适合国旗图像的大小和位置
-                            .attr('y', center[1] - 10)
-                            .attr('width', 30) // 根据需要调整国旗的尺寸
-                            .attr('height', 20)
-                            .attr('class', 'country-flag');
+
+                        // // 动态计算x坐标，考虑间距，以保证注解框在水平方向上均匀对齐
+                        // const x = col * (boxWidth + boxSpacing);
+
+                        // 计算每个注解的起始x坐标
+                        const totalAnnotationsWidth = annotatedFeatures.length * (boxWidth + boxSpacing) - boxSpacing; // 总宽度减去最后一个间距
+                        const startX = (this.mapWidth - totalAnnotationsWidth) / 2; // 为了居中对齐
+                        // // 调整y坐标，为每个注解框下方留出一定的间距
+                        // const y = this.mapHeight + row * (boxHeight + 20 + boxSpacing); // 调整了间距的计算
+                        const annotationX = startX + index * (boxWidth + boxSpacing);
+                        const annotationY = this.mapHeight + 50; // 地图下方50px
 
 
-                        // 先绘制注解框作为背景
+                        // 绘制注解框
                         this.svg.append('rect')
                             .attr('class', 'annotation-box')
                             .attr('x', annotationX)
                             .attr('y', annotationY)
                             .attr('width', boxWidth)
                             .attr('height', boxHeight)
-                            .attr('fill', 'url(#flagPattern' + index + ')') // 使用图案填充
+                            .attr('fill', 'none')
                             .attr('stroke', 'black');
 
+                        // 在注解框内添加文本
                         let textLines = [
                             `Country: ${feature.properties.NAME}`,
                             `City: ${annotation.city}`
@@ -1090,325 +1031,404 @@ export default {
                                 .style('font-size', '10px')
                                 .text(line);
                         });
+                    });
+                }
+                
+            }
 
-                        // 创建用于国旗背景的图案
-                        this.svg.append('pattern')
-                            .attr('id', 'flagPattern' + index)
-                            .attr('patternUnits', 'objectBoundingBox')
-                            .attr('width', '100%')
-                            .attr('height', '100%')
-                            .append('image')
-                            .attr('xlink:href', annotation.flag_base64)
-                            .attr('width', boxWidth)
-                            .attr('height', boxHeight)
-                            .attr('preserveAspectRatio', 'xMidYMid slice');
-                    }
-                });
+            else if (type === this.myType['Label Icon']) {
+                this.labelPositionType = type;
+
+                this.LabelPosition = () => {
+                        // 过滤掉不需要展示注解的数据
+                    const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
+
+
+                    // 用于注解的特征进行循环
+                    annotatedFeatures.forEach((feature, index) => {
+                        const annotation = feature.properties.annotation;
+                        // 计算每个注解的起始x坐标
+                        const totalAnnotationsWidth = annotatedFeatures.length * (boxWidth + boxSpacing) - boxSpacing; // 总宽度减去最后一个间距
+                        const startX = (this.mapWidth - totalAnnotationsWidth) / 2; // 为了居中对齐
+                        // // 调整y坐标，为每个注解框下方留出一定的间距
+                        // const y = this.mapHeight + row * (boxHeight + 20 + boxSpacing); // 调整了间距的计算
+                        const annotationX = startX + index * (boxWidth + boxSpacing);
+                        const annotationY = this.mapHeight + 50; // 地图下方50px
+                        if (annotation && annotation.flag_base64) {
+                            const center = this.geoPath.centroid(feature);
+                            // 在地图的国家中心点上添加国旗图像
+                            this.svg.append('image')
+                                .attr('xlink:href', annotation.flag_base64)
+                                .attr('x', center[0] - 15) // 调整这个值以适合国旗图像的大小和位置
+                                .attr('y', center[1] - 10)
+                                .attr('width', 30) // 根据需要调整国旗的尺寸
+                                .attr('height', 20)
+                                .attr('class', 'country-flag');
+
+
+                            // 先绘制注解框作为背景
+                            this.svg.append('rect')
+                                .attr('class', 'annotation-box')
+                                .attr('x', annotationX)
+                                .attr('y', annotationY)
+                                .attr('width', boxWidth)
+                                .attr('height', boxHeight)
+                                .attr('fill', 'url(#flagPattern' + index + ')') // 使用图案填充
+                                .attr('stroke', 'black');
+
+                            let textLines = [
+                                `Country: ${feature.properties.NAME}`,
+                                `City: ${annotation.city}`
+                            ];
+
+                            // 根据条件动态添加Summer和Winter的行
+                            if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
+                                textLines.push(`Summer: ${annotation.summer_olympics}`);
+                            }
+                            if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
+                                textLines.push(`Winter: ${annotation.winter_olympics}`);
+                            }
+
+                            textLines.forEach((line, lineIndex) => {
+                                this.svg.append('text')
+                                    .attr('class', 'annotation-text')
+                                    .attr('x', annotationX + 5) // 略微缩进
+                                    .attr('y', annotationY + 15 + (lineIndex * 12)) // 根据行数调整位置
+                                    .attr('fill', 'black')
+                                    .style('font-size', '10px')
+                                    .text(line);
+                            });
+
+                            // 创建用于国旗背景的图案
+                            this.svg.append('pattern')
+                                .attr('id', 'flagPattern' + index)
+                                .attr('patternUnits', 'objectBoundingBox')
+                                .attr('width', '100%')
+                                .attr('height', '100%')
+                                .append('image')
+                                .attr('xlink:href', annotation.flag_base64)
+                                .attr('width', boxWidth)
+                                .attr('height', boxHeight)
+                                .attr('preserveAspectRatio', 'xMidYMid slice');
+                        }
+                    });
+                }
+                
             }
             else if (type === this.myType['Label Color']) {
                 this.labelPositionType = type;
 
+                this.LabelPosition = () => {
+                    // 颜色数组
+                    const countryColors = ["#e6194B", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0", "#f032e6", "#bcf60c"];
+                    const getCountryColor = (index) => countryColors[index % countryColors.length];
 
-                // 颜色数组
-                const countryColors = ["#e6194B", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0", "#f032e6", "#bcf60c"];
-                const getCountryColor = (index) => countryColors[index % countryColors.length];
+                    // 过滤出需要注解的国家特征
+                    const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
 
-                // 过滤出需要注解的国家特征
-                const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
+                    // 为有注解的国家设置颜色
+                    annotatedFeatures.forEach((feature, index) => {
+                        // 计算每个注解的起始x坐标
+                        const totalAnnotationsWidth = annotatedFeatures.length * (boxWidth + boxSpacing) - boxSpacing; // 总宽度减去最后一个间距
+                        const startX = (this.mapWidth - totalAnnotationsWidth) / 2; // 为了居中对齐
+                        // // 调整y坐标，为每个注解框下方留出一定的间距
+                        // const y = this.mapHeight + row * (boxHeight + 20 + boxSpacing); // 调整了间距的计算
+                        const annotationX = startX + index * (boxWidth + boxSpacing);
+                        const annotationY = this.mapHeight + 50; // 地图下方50px
+                        const fillColor = getCountryColor(index); // 获取颜色
 
-                // 为有注解的国家设置颜色
-                annotatedFeatures.forEach((feature, index) => {
-                    // 计算每个注解的起始x坐标
-                    const totalAnnotationsWidth = annotatedFeatures.length * (boxWidth + boxSpacing) - boxSpacing; // 总宽度减去最后一个间距
-                    const startX = (this.mapWidth - totalAnnotationsWidth) / 2; // 为了居中对齐
-                    // // 调整y坐标，为每个注解框下方留出一定的间距
-                    // const y = this.mapHeight + row * (boxHeight + 20 + boxSpacing); // 调整了间距的计算
-                    const annotationX = startX + index * (boxWidth + boxSpacing);
-                    const annotationY = this.mapHeight + 50; // 地图下方50px
-                    const fillColor = getCountryColor(index); // 获取颜色
+                        // 设置国家颜色
+                        this.svg.selectAll('path')
+                            .filter(d => d === feature)
+                            .style('fill', fillColor)
+                            .classed("country-color", true);
 
-                    // 设置国家颜色
-                    this.svg.selectAll('path')
-                        .filter(d => d === feature)
-                        .style('fill', fillColor)
-                        .classed("country-color", true);
+                        // 创建注解框
+                        this.svg.append('rect')
+                            .attr('class', 'annotation-box')
+                            .attr('x', annotationX)
+                            .attr('y', annotationY)
+                            .attr('width', boxWidth)
+                            .attr('height', boxHeight)
+                            .attr('fill', fillColor) // 确保注解框颜色与国家颜色相同
+                            .attr('stroke', 'black');
 
-                    // 创建注解框
-                    this.svg.append('rect')
-                        .attr('class', 'annotation-box')
-                        .attr('x', annotationX)
-                        .attr('y', annotationY)
-                        .attr('width', boxWidth)
-                        .attr('height', boxHeight)
-                        .attr('fill', fillColor) // 确保注解框颜色与国家颜色相同
-                        .attr('stroke', 'black');
+                        // 添加注解文本
+                        const annotation = feature.properties.annotation;
+                        let textLines = [
+                            `Country: ${feature.properties.NAME}`,
+                            `City: ${annotation.city}`
+                        ];
 
-                    // 添加注解文本
-                    const annotation = feature.properties.annotation;
-                    let textLines = [
-                        `Country: ${feature.properties.NAME}`,
-                        `City: ${annotation.city}`
-                    ];
+                        // 根据条件动态添加Summer和Winter的行
+                        if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
+                            textLines.push(`Summer: ${annotation.summer_olympics}`);
+                        }
+                        if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
+                            textLines.push(`Winter: ${annotation.winter_olympics}`);
+                        }
 
-                    // 根据条件动态添加Summer和Winter的行
-                    if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
-                        textLines.push(`Summer: ${annotation.summer_olympics}`);
-                    }
-                    if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
-                        textLines.push(`Winter: ${annotation.winter_olympics}`);
-                    }
-
-                    textLines.forEach((line, lineIndex) => {
-                        this.svg.append('text')
-                            .attr('class', 'annotation-text')
-                            .attr('x', annotationX + 5) // 略微缩进
-                            .attr('y', annotationY + 15 + (lineIndex * 12)) // 根据行数调整位置
-                            .attr('fill', 'black')
-                            .style('font-size', '10px')
-                            .text(line);
+                        textLines.forEach((line, lineIndex) => {
+                            this.svg.append('text')
+                                .attr('class', 'annotation-text')
+                                .attr('x', annotationX + 5) // 略微缩进
+                                .attr('y', annotationY + 15 + (lineIndex * 12)) // 根据行数调整位置
+                                .attr('fill', 'black')
+                                .style('font-size', '10px')
+                                .text(line);
+                        });
                     });
-                });
+                }
+                
 
             }
 
             else if (type === this.myType['Label Convenient']) {
                 this.labelPositionType = type;
+                this.LabelPosition = () => {
+                    const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
+                    const totalAnnotations = annotatedFeatures.length;
 
-                const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
-                const totalAnnotations = annotatedFeatures.length;
+                    // 假设每边分配的注解数量大致相等
+                    const annotationsPerSide = Math.ceil(totalAnnotations / 3);
+                    // eslint-disable-next-line
+                    let leftAnnotationsCount = 0, bottomAnnotationsCount = 0, rightAnnotationsCount = 0;
 
-                // 假设每边分配的注解数量大致相等
-                const annotationsPerSide = Math.ceil(totalAnnotations / 3);
-                // eslint-disable-next-line
-                let leftAnnotationsCount = 0, bottomAnnotationsCount = 0, rightAnnotationsCount = 0;
+                    annotatedFeatures.forEach((feature) => {
+                        const countryCenter = this.geoPath.centroid(feature);
+                        const annotation = feature.properties.annotation;
 
-                annotatedFeatures.forEach((feature) => {
-                    const countryCenter = this.geoPath.centroid(feature);
-                    const annotation = feature.properties.annotation;
+                        // 特定国家（如"Austria"）的连线长度
+                        const lineLength = feature.properties.NAME === "Austria" ? 400 : 300;
 
-                    // 特定国家（如"Austria"）的连线长度
-                    const lineLength = feature.properties.NAME === "Austria" ? 400 : 300;
+                        // 计算到三边的距离
+                        const distanceToLeft = countryCenter[0];
+                        const distanceToBottom = this.mapHeight - countryCenter[1];
+                        const distanceToRight = this.mapWidth - countryCenter[0];
 
-                    // 计算到三边的距离
-                    const distanceToLeft = countryCenter[0];
-                    const distanceToBottom = this.mapHeight - countryCenter[1];
-                    const distanceToRight = this.mapWidth - countryCenter[0];
+                        // 确定注解应放置在哪个边缘
+                        let edge = 'left'; // 默认左边
+                        let minDistance = distanceToLeft;
 
-                    // 确定注解应放置在哪个边缘
-                    let edge = 'left'; // 默认左边
-                    let minDistance = distanceToLeft;
+                        if (distanceToBottom < minDistance && bottomAnnotationsCount < annotationsPerSide) {
+                            minDistance = distanceToBottom;
+                            edge = 'bottom';
+                        }
+                        if (distanceToRight < minDistance && rightAnnotationsCount < annotationsPerSide) {
+                            edge = 'right';
+                        }
 
-                    if (distanceToBottom < minDistance && bottomAnnotationsCount < annotationsPerSide) {
-                        minDistance = distanceToBottom;
-                        edge = 'bottom';
-                    }
-                    if (distanceToRight < minDistance && rightAnnotationsCount < annotationsPerSide) {
-                        edge = 'right';
-                    }
+                        // 更新对应边缘的注解计数
+                        if (edge === 'left') leftAnnotationsCount++;
+                        else if (edge === 'bottom') bottomAnnotationsCount++;
+                        else rightAnnotationsCount++;
 
-                    // 更新对应边缘的注解计数
-                    if (edge === 'left') leftAnnotationsCount++;
-                    else if (edge === 'bottom') bottomAnnotationsCount++;
-                    else rightAnnotationsCount++;
+                        // 计算线的终点位置
+                        let lineEndX = countryCenter[0], lineEndY = countryCenter[1];
+                        let textOffsetX = countryCenter[0], textOffsetY = countryCenter[1];
 
-                    // 计算线的终点位置
-                    let lineEndX = countryCenter[0], lineEndY = countryCenter[1];
-                    let textOffsetX = countryCenter[0], textOffsetY = countryCenter[1];
+                        switch (edge) {
+                            case 'left':
+                                lineEndX -= lineLength;
+                                textOffsetX = lineEndX - boxWidth - 5;
+                                textOffsetY = countryCenter[1] - boxHeight / 2;
+                                break;
+                            case 'bottom':
+                                lineEndY += lineLength;
+                                textOffsetX = countryCenter[0] - boxWidth / 2;
+                                textOffsetY = lineEndY + 5;
+                                break;
+                            case 'right':
+                                lineEndX += lineLength;
+                                textOffsetX = lineEndX + 5;
+                                textOffsetY = countryCenter[1] - boxHeight / 2;
+                                break;
+                        }
+                        // 绘制注解连线
+                        this.svg.append('line')
+                            .attr('x1', countryCenter[0])
+                            .attr('y1', countryCenter[1])
+                            .attr('x2', lineEndX)
+                            .attr('y2', lineEndY)
+                            .attr('stroke', 'black')
+                            .attr('stroke-width', 1)
+                            .attr('class', 'annotation-line');
 
-                    switch (edge) {
-                        case 'left':
-                            lineEndX -= lineLength;
-                            textOffsetX = lineEndX - boxWidth - 5;
-                            textOffsetY = countryCenter[1] - boxHeight / 2;
-                            break;
-                        case 'bottom':
-                            lineEndY += lineLength;
-                            textOffsetX = countryCenter[0] - boxWidth / 2;
-                            textOffsetY = lineEndY + 5;
-                            break;
-                        case 'right':
-                            lineEndX += lineLength;
-                            textOffsetX = lineEndX + 5;
-                            textOffsetY = countryCenter[1] - boxHeight / 2;
-                            break;
-                    }
-                    // 绘制注解连线
-                    this.svg.append('line')
-                        .attr('x1', countryCenter[0])
-                        .attr('y1', countryCenter[1])
-                        .attr('x2', lineEndX)
-                        .attr('y2', lineEndY)
-                        .attr('stroke', 'black')
-                        .attr('stroke-width', 1)
-                        .attr('class', 'annotation-line');
+                        // 绘制文本框背景
+                        this.svg.append('rect')
+                            .attr('x', textOffsetX)
+                            .attr('y', textOffsetY)
+                            .attr('width', boxWidth)
+                            .attr('height', boxHeight)
+                            .attr('fill', 'white')
+                            .attr('stroke', 'black')
+                            .attr('class', 'annotation-box');
 
-                    // 绘制文本框背景
-                    this.svg.append('rect')
-                        .attr('x', textOffsetX)
-                        .attr('y', textOffsetY)
-                        .attr('width', boxWidth)
-                        .attr('height', boxHeight)
-                        .attr('fill', 'white')
-                        .attr('stroke', 'black')
-                        .attr('class', 'annotation-box');
+                        let textLines = [
+                            `Country: ${feature.properties.NAME}`,
+                            `City: ${annotation.city}`
+                        ];
 
-                    let textLines = [
-                        `Country: ${feature.properties.NAME}`,
-                        `City: ${annotation.city}`
-                    ];
+                        // 根据条件动态添加Summer和Winter的行
+                        if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
+                            textLines.push(`Summer: ${annotation.summer_olympics}`);
+                        }
+                        if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
+                            textLines.push(`Winter: ${annotation.winter_olympics}`);
+                        }
 
-                    // 根据条件动态添加Summer和Winter的行
-                    if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
-                        textLines.push(`Summer: ${annotation.summer_olympics}`);
-                    }
-                    if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
-                        textLines.push(`Winter: ${annotation.winter_olympics}`);
-                    }
+                        // 添加多行注解文本
+                        textLines.forEach((line, i) => {
+                            this.svg.append('text')
+                                .attr('x', textOffsetX + 5)
+                                .attr('y', textOffsetY + 13 + i * 13)
+                                .attr('fill', 'black')
+                                .style('font-size', '10px')
+                                .text(line)
+                                .attr('class', 'annotation-text');
+                        });
+                    }); 
+                }
 
-                    // 添加多行注解文本
-                    textLines.forEach((line, i) => {
-                        this.svg.append('text')
-                            .attr('x', textOffsetX + 5)
-                            .attr('y', textOffsetY + 13 + i * 13)
-                            .attr('fill', 'black')
-                            .style('font-size', '10px')
-                            .text(line)
-                            .attr('class', 'annotation-text');
-                    });
-                });
+                
             }
 
             else if (type === this.myType['Label Aligned']) {
                 this.labelPositionType = type;
 
+                this.LabelPosition = () => {
+                    const sortedFeatures = this.geoData.features
+                        .filter(feature => feature.properties.annotation && feature.properties.annotation != -1)
+                        .sort((a, b) => {
+                            const centerA = this.geoPath.centroid(a);
+                            const centerB = this.geoPath.centroid(b);
+                            return centerA[0] - centerB[0];
+                        });
 
+                    // 计算每个注解的起始x坐标
+                    const totalAnnotationsWidth = sortedFeatures.length * (boxWidth + boxSpacing) - boxSpacing; // 总宽度减去最后一个间距
+                    const startX = (this.mapWidth - totalAnnotationsWidth) / 2; // 为了居中对齐
+
+                    sortedFeatures.forEach((feature, index) => {
+                        const annotation = feature.properties.annotation;
+                        const countryCenter = this.geoPath.centroid(feature);
+                        const annotationX = startX + index * (boxWidth + boxSpacing);
+                        const annotationY = this.mapHeight + 50; // 地图下方50px
+
+                        // 绘制注解框
+                        this.svg.append('rect')
+                            .attr('class', 'annotation-box')
+                            .attr('x', annotationX)
+                            .attr('y', annotationY)
+                            .attr('width', boxWidth)
+                            .attr('height', boxHeight)
+                            .attr('fill', 'none')
+                            .attr('stroke', 'black');
+
+                        // 准备注解文本
+                        let textLines = [
+                            `Country: ${feature.properties.NAME}`,
+                            `City: ${annotation.city}`
+                        ];
+
+                        // 根据条件动态添加Summer和Winter的行
+                        if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
+                            textLines.push(`Summer: ${annotation.summer_olympics}`);
+                        }
+                        if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
+                            textLines.push(`Winter: ${annotation.winter_olympics}`);
+                        }
+
+                        // 在注解框内添加文本
+                        textLines.forEach((line, lineIndex) => {
+                            this.svg.append('text')
+                                .attr('class', 'annotation-text')
+                                .attr('x', annotationX + 5) // 略微缩进
+                                .attr('y', annotationY + 15 + (lineIndex * 12)) // 调整文本的垂直位置
+                                .attr('fill', 'black')
+                                .style('font-size', '10px')
+                                .text(line);
+                        });
+
+                        // 绘制注解连线
+                        this.svg.append('path')
+                            .attr('d', `M${countryCenter[0]} ${countryCenter[1]} L${annotationX + boxWidth / 2} ${countryCenter[1]} L${annotationX + boxWidth / 2} ${annotationY}`)
+                            .attr('stroke', 'black')
+                            .attr('fill', 'none')
+                            .attr('class', 'annotation-line');
+                    });   
+                }
                 // 过滤并排序需要注解的国家特征，基于它们的中心x坐标
-                const sortedFeatures = this.geoData.features
-                    .filter(feature => feature.properties.annotation && feature.properties.annotation != -1)
-                    .sort((a, b) => {
-                        const centerA = this.geoPath.centroid(a);
-                        const centerB = this.geoPath.centroid(b);
-                        return centerA[0] - centerB[0];
-                    });
-
-                // 计算每个注解的起始x坐标
-                const totalAnnotationsWidth = sortedFeatures.length * (boxWidth + boxSpacing) - boxSpacing; // 总宽度减去最后一个间距
-                const startX = (this.mapWidth - totalAnnotationsWidth) / 2; // 为了居中对齐
-
-                sortedFeatures.forEach((feature, index) => {
-                    const annotation = feature.properties.annotation;
-                    const countryCenter = this.geoPath.centroid(feature);
-                    const annotationX = startX + index * (boxWidth + boxSpacing);
-                    const annotationY = this.mapHeight + 50; // 地图下方50px
-
-                    // 绘制注解框
-                    this.svg.append('rect')
-                        .attr('class', 'annotation-box')
-                        .attr('x', annotationX)
-                        .attr('y', annotationY)
-                        .attr('width', boxWidth)
-                        .attr('height', boxHeight)
-                        .attr('fill', 'none')
-                        .attr('stroke', 'black');
-
-                    // 准备注解文本
-                    let textLines = [
-                        `Country: ${feature.properties.NAME}`,
-                        `City: ${annotation.city}`
-                    ];
-
-                    // 根据条件动态添加Summer和Winter的行
-                    if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
-                        textLines.push(`Summer: ${annotation.summer_olympics}`);
-                    }
-                    if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
-                        textLines.push(`Winter: ${annotation.winter_olympics}`);
-                    }
-
-                    // 在注解框内添加文本
-                    textLines.forEach((line, lineIndex) => {
-                        this.svg.append('text')
-                            .attr('class', 'annotation-text')
-                            .attr('x', annotationX + 5) // 略微缩进
-                            .attr('y', annotationY + 15 + (lineIndex * 12)) // 调整文本的垂直位置
-                            .attr('fill', 'black')
-                            .style('font-size', '10px')
-                            .text(line);
-                    });
-
-                    // 绘制注解连线
-                    this.svg.append('path')
-                        .attr('d', `M${countryCenter[0]} ${countryCenter[1]} L${annotationX + boxWidth / 2} ${countryCenter[1]} L${annotationX + boxWidth / 2} ${annotationY}`)
-                        .attr('stroke', 'black')
-                        .attr('fill', 'none')
-                        .attr('class', 'annotation-line');
-                });
+                
             }
 
 
             else if (type === this.myType['Label Ordered']) {
                 this.labelPositionType = type;
 
-                const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
-                const circleCenterX = 500; // 圆心的x坐标
-                const circleCenterY = this.mapHeight - 100; // 圆心的y坐标
-                const radius = Math.min(this.mapWidth, this.mapHeight) / 4; // 半径
-                const angleIncrement = (2 * Math.PI) / annotatedFeatures.length; // 每个注解之间的角度增量
+                this.LabelPosition = () => {
+                    const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
+                    const circleCenterX = 500; // 圆心的x坐标
+                    const circleCenterY = this.mapHeight - 100; // 圆心的y坐标
+                    const radius = Math.min(this.mapWidth, this.mapHeight) / 4; // 半径
+                    const angleIncrement = (2 * Math.PI) / annotatedFeatures.length; // 每个注解之间的角度增量
 
-                annotatedFeatures.forEach((feature, index) => {
-                    const angle = angleIncrement * index;
-                    const annotationX = circleCenterX + radius * Math.cos(angle);
-                    const annotationY = circleCenterY + radius * Math.sin(angle);
-                    const countryCenter = this.geoPath.centroid(feature);
-                    // 更改连线到注解的最近的边缘中心点
-                    const lineEndX = annotationX;
-                    const lineEndY = countryCenter[1] < annotationY ? annotationY - boxHeight / 2 : annotationY + boxHeight / 2;
+                    annotatedFeatures.forEach((feature, index) => {
+                        const angle = angleIncrement * index;
+                        const annotationX = circleCenterX + radius * Math.cos(angle);
+                        const annotationY = circleCenterY + radius * Math.sin(angle);
+                        const countryCenter = this.geoPath.centroid(feature);
+                        // 更改连线到注解的最近的边缘中心点
+                        const lineEndX = annotationX;
+                        const lineEndY = countryCenter[1] < annotationY ? annotationY - boxHeight / 2 : annotationY + boxHeight / 2;
 
-                    this.svg.append('path')
-                        .attr('d', `M${countryCenter[0]} ${countryCenter[1]} L${lineEndX} ${countryCenter[1]} L${lineEndX} ${lineEndY}`)
-                        .attr('stroke', 'black')
-                        .attr('fill', 'none')
-                        .attr('class', 'annotation-line');
+                        this.svg.append('path')
+                            .attr('d', `M${countryCenter[0]} ${countryCenter[1]} L${lineEndX} ${countryCenter[1]} L${lineEndX} ${lineEndY}`)
+                            .attr('stroke', 'black')
+                            .attr('fill', 'none')
+                            .attr('class', 'annotation-line');
 
-                    // 准备注解文本
-                    let textLines = [
-                        `Country: ${feature.properties.NAME}`,
-                        `City: ${feature.properties.annotation.city}`
-                    ];
+                        // 准备注解文本
+                        let textLines = [
+                            `Country: ${feature.properties.NAME}`,
+                            `City: ${feature.properties.annotation.city}`
+                        ];
 
-                    if (feature.properties.annotation.summer_olympics && feature.properties.annotation.summer_olympics.length > 0) {
-                        textLines.push(`Summer: ${feature.properties.annotation.summer_olympics}`);
-                    }
-                    if (feature.properties.annotation.winter_olympics && feature.properties.annotation.winter_olympics.length > 0) {
-                        textLines.push(`Winter: ${feature.properties.annotation.winter_olympics}`);
-                    }
+                        if (feature.properties.annotation.summer_olympics && feature.properties.annotation.summer_olympics.length > 0) {
+                            textLines.push(`Summer: ${feature.properties.annotation.summer_olympics}`);
+                        }
+                        if (feature.properties.annotation.winter_olympics && feature.properties.annotation.winter_olympics.length > 0) {
+                            textLines.push(`Winter: ${feature.properties.annotation.winter_olympics}`);
+                        }
 
-                    // 绘制注解框
-                    this.svg.append('rect')
-                        .attr('class', 'annotation-box')
-                        .attr('x', annotationX - boxWidth / 2) // 中心对齐调整
-                        .attr('y', annotationY - boxHeight / 2) // 中心对齐调整
-                        .attr('width', boxWidth)
-                        .attr('height', boxHeight)
-                        .attr('fill', 'none')
-                        .attr('stroke', 'black');
+                        // 绘制注解框
+                        this.svg.append('rect')
+                            .attr('class', 'annotation-box')
+                            .attr('x', annotationX - boxWidth / 2) // 中心对齐调整
+                            .attr('y', annotationY - boxHeight / 2) // 中心对齐调整
+                            .attr('width', boxWidth)
+                            .attr('height', boxHeight)
+                            .attr('fill', 'none')
+                            .attr('stroke', 'black');
 
-                    // 在注解框内添加多行文本
-                    textLines.forEach((line, lineIndex) => {
-                        this.svg.append('text')
-                            .attr('class', 'annotation-text')
-                            .attr('x', annotationX)
-                            .attr('y', annotationY - boxHeight / 2 + 10 + lineIndex * 15) // 垂直位置调整
-                            .attr('text-anchor', 'middle')
-                            .attr('fill', 'black')
-                            .style('font-size', '10px')
-                            .text(line);
+                        // 在注解框内添加多行文本
+                        textLines.forEach((line, lineIndex) => {
+                            this.svg.append('text')
+                                .attr('class', 'annotation-text')
+                                .attr('x', annotationX)
+                                .attr('y', annotationY - boxHeight / 2 + 10 + lineIndex * 15) // 垂直位置调整
+                                .attr('text-anchor', 'middle')
+                                .attr('fill', 'black')
+                                .style('font-size', '10px')
+                                .text(line);
+                        });
+
+
                     });
-
-
-                });
+                }
+                
             }
-
+            this.drawSvg();
 
         },
 
@@ -1503,19 +1523,51 @@ export default {
                                     .attr('y', center[1] - height)
                                     .attr('width', cuboidWidth)
                                     .attr('height', height)
-                                    .attr('fill', 'rgba(255, 125, 125, 0.7)'); // 修改前面的颜色
+                                    .attr('fill', 'rgba(230, 158, 165, 0.7)'); // 修改前面的颜色
 
                                 // 绘制长方体的“顶面”
                                 this.svg.append('polygon')
                                     .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
-                                    .attr('fill', 'rgba(255, 150, 150, 0.7)');
+                                    .attr('fill', 'rgba(230, 158, 165, 0.7)');
 
                                 // 绘制长方体的“左侧面”
                                 this.svg.append('polygon')
                                     .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
-                                    .attr('fill', `rgba(255, 75, 75, ${sideOpacity})`); // 修改左侧面的颜色
+                                    .attr('fill', `rgba(200, 60, 60, ${sideOpacity})`); // 修改左侧面的颜色
                             }
                         });
+
+                        //draw legend
+                        for (let i = 0, delta = 20, py = 100; i < 4; i++) {
+                            let t = 1000000*Math.pow(5, i), x = 50;
+                            let v = t / 800000;
+                            this.svg.append('rect')
+                                .attr('x', x)
+                                .attr('y', py)
+                                .attr('width', v)
+                                .attr('height', 20)
+                                .attr('fill', 'rgba(230, 158, 165, 1)');
+
+                            this.svg.append('polygon')
+                                .attr('points', `${x},${py} ${x+14},${py-14} ${x+14+v},${py-14} ${x+v},${py}`)
+                                .attr('fill', 'rgba(230, 158, 165, 0.7)');
+                            
+                            this.svg.append('polygon')
+                                .attr('points', `${x+v},${py} ${x+v+14},${py-14} ${x+v+14},${py+6} ${x+v},${py+20}`)
+                                .attr('fill', 'rgba(230, 158, 165, 0.7)');
+
+                            const label = t < 1000 ? Math.floor(t) :
+                                t < 1000000 ? Math.floor(t / 1000) + "k" :
+                                Math.floor(t / 1000000) + "m";
+                            this.svg.append('text')
+                                .attr('x', 70+v)
+                                .attr('y', py + 20)
+                                .text(label);
+
+                            py += 2 * delta;
+
+
+                        }
                     }
                 }
 
@@ -1536,15 +1588,39 @@ export default {
                             if (population >= 1000000) { // 人口大于等于1000000时绘制长方体
                                 const height = baseHeight + (population / populationPerHeight); // 长方体的总高度
 
-                                // 绘制长方体的“前面”
+                                // 绘制rect
                                 this.svg.append('rect')
                                     .attr('x', center[0] - cuboidWidth / 2)
                                     .attr('y', center[1] - height)
                                     .attr('width', cuboidWidth)
                                     .attr('height', height)
-                                    .attr('fill', 'rgba(255, 125, 125, 0.7)'); // 修改前面的颜色
+                                    .attr('fill', 'rgba(230, 158, 165, 0.7)');
                             }
                         });
+
+                        //draw legend
+                        for (let i = 0, delta = 20, py = 100; i < 4; i++) {
+                            let t = 1000000*Math.pow(5, i)
+                            let v = t / 800000;
+                            this.svg.append('rect')
+                                .attr('x', 50)
+                                .attr('y', py)
+                                .attr('width', v)
+                                .attr('height', 20)
+                                .attr('fill', 'rgba(230, 158, 165, 1)');
+
+                            const label = t < 1000 ? Math.floor(t) :
+                                t < 1000000 ? Math.floor(t / 1000) + "k" :
+                                Math.floor(t / 1000000) + "m";
+                            this.svg.append('text')
+                                .attr('x', 65+v)
+                                .attr('y', py + 20)
+                                .text(label);
+
+                            py += 2 * delta;
+
+
+                        }
                     }
                 }
 
@@ -1573,7 +1649,7 @@ export default {
                                     .attr('y', y - sizeScale(population) / 2)
                                     .attr('width', sizeScale(population))
                                     .attr('height', sizeScale(population))
-                                    .attr('fill', 'rgba(255, 150, 150, 1)');
+                                    .attr('fill', 'rgba(230, 158, 165, 0.7)');
                             }
                         });
 
@@ -1582,17 +1658,17 @@ export default {
                             let t = 1000000*Math.pow(5, i)
                             let v = sizeScale(t);
                             this.svg.append('rect')
-                                .attr('x', 100)
+                                .attr('x', 50)
                                 .attr('y', py)
                                 .attr('width', v)
                                 .attr('height', v)
-                                .attr('fill', 'rgba(255, 150, 150, 1)');
+                                .attr('fill', 'rgba(230, 158, 165, 1)');
 
                             const label = t < 1000 ? Math.floor(t) :
                                 t < 1000000 ? Math.floor(t / 1000) + "k" :
                                 Math.floor(t / 1000000) + "m";
                             this.svg.append('text')
-                                .attr('x', 105+v)
+                                .attr('x', 65+v)
                                 .attr('y', py + v)
                                 .text(label);
 
@@ -1642,14 +1718,14 @@ export default {
                         //draw quantity legend
                         this.svg.append('image')
                             .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
-                            .attr('x', 100)
+                            .attr('x', 50)
                             .attr('y', 100)
                             .attr('width', iconWidth*2)
                             .attr('height', iconHeight*2);
                         this.svg.append('text')
-                            .attr('x', 120)
+                            .attr('x', 70)
                             .attr('y', 120)
-                            .text(':1000000');
+                            .text(':100k');
                     }
 
                     
