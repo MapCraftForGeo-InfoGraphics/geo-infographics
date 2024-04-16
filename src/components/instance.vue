@@ -263,7 +263,8 @@
             <v-row>
                 <v-col ref="legendCol">
                     <svg :class="value + '-legend'" style="height: 40px; width: 100%;"></svg>
-                </v-col><v-col></v-col>
+                </v-col>
+                <v-col></v-col>
                 <v-col>{{ propName }} : {{ isNumerical ? "Numerical" : "Nominal" }} </v-col>
                 
                 
@@ -817,6 +818,7 @@ export default {
                 this.svg.on('click', (event) => {
                     // 移除上一次点击留下的圆圈
                     this.svg.selectAll('circle.click-circle').remove();
+                    this.svg.selectAll('line.click-circle').remove();
 
                     const [x, y] = d3.pointer(event, this.svg.node());
 
@@ -828,7 +830,7 @@ export default {
                         .attr('r', 30) // 圆的半径
                         .style('fill', 'none')
                         .style('stroke', 'red')
-                        .style('stroke-width', 2);
+                        .style('stroke-width', 3);
 
                     // 清除#enlargedView中的内容
                     const enlargedView = d3.select('#' + this.value + '-enlargedView');
@@ -858,7 +860,35 @@ export default {
                     enlargedViewSvg.selectAll('g > svg')
                         .attr('x', null)
                         .attr('y', null)
-                        .style('transform', `translate(${-x + 100}px, ${-y + 100}px) scale(2)`);
+                        .style('transform', ` scale(2)`);
+
+                    // draw traction line
+                    const x1 = this.mapWidth-94, y1 = 147, r1 = 100, r = 30; // approximate centre of enlarged circle
+                    const d = Math.sqrt((x1-x)*(x1-x)+(y1-y)*(y1-y));
+                    const xa = x + r*Math.cos(Math.atan((y1-y)/(x1-x))+Math.acos((r-r1)/d));
+                    const ya = y + r*Math.sin(Math.atan((y1-y)/(x1-x))+Math.acos((r-r1)/d));
+                    const xb = x1 + r1*Math.cos(Math.atan((y1-y)/(x1-x))+Math.acos((r-r1)/d));
+                    const yb = y1 + r1*Math.sin(Math.atan((y1-y)/(x1-x))+Math.acos((r-r1)/d));
+                    const xc = x + r*Math.cos(Math.atan((y1-y)/(x1-x))-Math.acos((r-r1)/d));
+                    const yc = y + r*Math.sin(Math.atan((y1-y)/(x1-x))-Math.acos((r-r1)/d));
+                    const xd = x1 + r1*Math.cos(Math.atan((y1-y)/(x1-x))-Math.acos((r-r1)/d));
+                    const yd = y1 + r1*Math.sin(Math.atan((y1-y)/(x1-x))-Math.acos((r-r1)/d));
+                    this.svg.append('line')
+                        .classed('click-circle', true)
+                        .attr('x1', xa)
+                        .attr('y1', ya)
+                        .attr('x2', xb)
+                        .attr('y2', yb)
+                        .attr('stroke', 'grey')
+                        .attr('stroke-width', 1);
+                    this.svg.append('line')
+                        .classed('click-circle', true)
+                        .attr('x1', xc)
+                        .attr('y1', yc)
+                        .attr('x2', xd)
+                        .attr('y2', yd)
+                        .attr('stroke', 'grey')
+                        .attr('stroke-width', 1);
                 });
             }
             else if (type === this.myType['Edge Stroke']) {
