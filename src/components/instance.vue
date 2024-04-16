@@ -1569,35 +1569,31 @@ export default {
                         });
 
                         //draw legend
-                        for (let i = 0, delta = 20, py = 100; i < 4; i++) {
-                            let t = 1000000*Math.pow(5, i), x = 50;
+                        for (let i = 0, delta = 20, px = 50; i < 4; i++) {
+                            let t = 1000000*Math.pow(5, i), x = px;
                             let v = t / 800000;
+                            let y = 330-v;
                             this.svg.append('rect')
-                                .attr('x', x)
-                                .attr('y', py)
-                                .attr('width', v)
-                                .attr('height', 20)
-                                .attr('fill', 'rgba(230, 158, 165, 1)');
-
-                            this.svg.append('polygon')
-                                .attr('points', `${x},${py} ${x+14},${py-14} ${x+14+v},${py-14} ${x+v},${py}`)
+                                .attr('x', px)
+                                .attr('y', 330-v)
+                                .attr('width', 20)
+                                .attr('height', v)
                                 .attr('fill', 'rgba(230, 158, 165, 0.7)');
-                            
                             this.svg.append('polygon')
-                                .attr('points', `${x+v},${py} ${x+v+14},${py-14} ${x+v+14},${py+6} ${x+v},${py+20}`)
+                                .attr('points', `${x},${y} ${x-8},${y-8} ${x-8},${y+v-8} ${x},${y+v}`)
+                                .attr('fill', 'rgba(200, 60, 60, 0.5)');
+                            this.svg.append('polygon')
+                                .attr('points', `${x},${y} ${x-8},${y-8} ${x+12},${y-8} ${x+20},${y}`)
                                 .attr('fill', 'rgba(230, 158, 165, 0.7)');
 
                             const label = t < 1000 ? Math.floor(t) :
                                 t < 1000000 ? Math.floor(t / 1000) + "k" :
                                 Math.floor(t / 1000000) + "m";
                             this.svg.append('text')
-                                .attr('x', 70+v)
-                                .attr('y', py + 20)
+                                .attr('x', px-5)
+                                .attr('y', 315-v)
                                 .text(label);
-
-                            py += 2 * delta;
-
-
+                            px += 2 * delta;
                         }
                     }
                 }
@@ -1630,27 +1626,23 @@ export default {
                         });
 
                         //draw legend
-                        for (let i = 0, delta = 20, py = 100; i < 4; i++) {
-                            let t = 1000000*Math.pow(5, i)
+                        for (let i = 0, delta = 20, px = 50; i < 4; i++) {
+                            let t = 1000000*Math.pow(5, i);
                             let v = t / 800000;
                             this.svg.append('rect')
-                                .attr('x', 50)
-                                .attr('y', py)
-                                .attr('width', v)
-                                .attr('height', 20)
-                                .attr('fill', 'rgba(230, 158, 165, 1)');
-
-                            const label = t < 1000 ? Math.floor(t) :
+                                .attr('x', px)
+                                .attr('y', 330-v)
+                                .attr('width', 20)
+                                .attr('height', v)
+                                .attr('fill', 'rgba(230, 158, 165, 0.7)');
+                                const label = t < 1000 ? Math.floor(t) :
                                 t < 1000000 ? Math.floor(t / 1000) + "k" :
                                 Math.floor(t / 1000000) + "m";
-                            this.svg.append('text')
-                                .attr('x', 65+v)
-                                .attr('y', py + 20)
+                                this.svg.append('text')
+                                .attr('x', px)
+                                .attr('y', 320-v)
                                 .text(label);
-
-                            py += 2 * delta;
-
-
+                            px += 2 * delta;
                         }
                     }
                 }
@@ -1693,7 +1685,7 @@ export default {
                                 .attr('y', py)
                                 .attr('width', v)
                                 .attr('height', v)
-                                .attr('fill', 'rgba(230, 158, 165, 1)');
+                                .attr('fill', 'rgba(230, 158, 165, 0.7)');
 
                             const label = t < 1000 ? Math.floor(t) :
                                 t < 1000000 ? Math.floor(t / 1000) + "k" :
