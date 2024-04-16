@@ -1926,15 +1926,15 @@ export default {
         drawColorHueLegend() {
             const legendData = [
                 { color: 'blue', text: '< 5M', minPopulation: 0, maxPopulation: 5000000 },
-                { color: 'green', text: '5M - 10M', minPopulation: 5000000, maxPopulation: 10000000 },
-                { color: 'yellow', text: '10M - 50M', minPopulation: 10000000, maxPopulation: 50000000 },
-                { color: 'orange', text: '50M - 100M', minPopulation: 50000000, maxPopulation: 100000000 },
-                { color: 'red', text: '> 100M', minPopulation: 100000000, maxPopulation: Infinity }
+                { color: 'green', text: '5M-10M', minPopulation: 5000000, maxPopulation: 10000000 },
+                { color: 'yellow', text: '10M-50M', minPopulation: 10000000, maxPopulation: 50000000 },
+                { color: 'orange', text: '50M-100M', minPopulation: 50000000, maxPopulation: 100000000 },
+                { color: 'red', text: '>100M', minPopulation: 100000000, maxPopulation: Infinity }
             ];
 
             const legendWidth = 20;
             const legendHeight = 20;
-            const legendSpacing = 5;
+            const legendSpacing = 10;
             const legendX = 10; // Starting x position for the legend
             const legendY = 10; // Starting y position for the legend
 
@@ -1951,8 +1951,8 @@ export default {
             this.legend.selectAll('rect')
                 .data(legendData)
                 .enter().append('rect')
-                .attr('x', 0)
-                .attr('y', (d, i) => i * (legendHeight + legendSpacing))
+                .attr('x', (d, i) => i * (legendHeight + legendSpacing) * 2)
+                .attr('y', 0)
                 .attr('width', legendWidth)
                 .attr('height', legendHeight)
                 .style('fill', d => d.color);
@@ -1961,8 +1961,8 @@ export default {
             this.legend.selectAll('text')
                 .data(legendData)
                 .enter().append('text')
-                .attr('x', legendWidth + 5)
-                .attr('y', (d, i) => i * (legendHeight + legendSpacing) + (legendHeight / 2))
+                .attr('x', (d, i) => i * (legendHeight + legendSpacing) * 2)
+                .attr('y', legendWidth + 5)
                 .attr('dy', '.35em') // Vertically center
                 .style('font-size', '10px')
                 .text(d => d.text);
