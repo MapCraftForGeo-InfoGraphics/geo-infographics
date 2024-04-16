@@ -1151,7 +1151,7 @@ export default {
 
                 this.LabelPosition = () => {
                     // 颜色数组
-                    const countryColors = ["#e6194B", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0", "#f032e6", "#bcf60c"];
+                    const countryColors = ["#8ECFC9", "#FFBE7A", "#FA7F6F", "#82B0D2", "#BEB8DC", "#F6CAE5", "#F1D77E", "#2878b5", "#779043"];
                     const getCountryColor = (index) => countryColors[index % countryColors.length];
 
                     // 过滤出需要注解的国家特征
@@ -1506,15 +1506,15 @@ export default {
                                 return this.defaultColor;
                             }
                             else if (population >= 0 && population < 5000000) {
-                                return 'blue'; // 人口数量小于5000000
+                                return 'rgb(142, 207, 201)'; // 人口数量小于5000000
                             } else if (population >= 5000000 && population < 10000000) {
-                                return 'green'; // 人口数量在5000000-10000000之间
+                                return 'rgb(255, 190, 122)'; // 人口数量在5000000-10000000之间
                             } else if (population >= 10000000 && population < 50000000) {
-                                return 'yellow'; // 人口数量在10000000-50000000之间
+                                return 'rgb(250, 127, 111)'; // 人口数量在10000000-50000000之间
                             } else if (population >= 50000000 && population < 100000000) {
-                                return 'orange'; // 人口数量在50000000-100000000之间
+                                return 'rgb(130, 176, 210)'; // 人口数量在50000000-100000000之间
                             } else {
-                                return 'red'; // 人口数量大于100000000
+                                return 'rgb(190, 184, 220)'; // 人口数量大于100000000
                             }
                         };
 
@@ -1956,11 +1956,11 @@ export default {
         },
         drawColorHueLegend() {
             const legendData = [
-                { color: 'blue', text: '< 5M', minPopulation: 0, maxPopulation: 5000000 },
-                { color: 'green', text: '5M-10M', minPopulation: 5000000, maxPopulation: 10000000 },
-                { color: 'yellow', text: '10M-50M', minPopulation: 10000000, maxPopulation: 50000000 },
-                { color: 'orange', text: '50M-100M', minPopulation: 50000000, maxPopulation: 100000000 },
-                { color: 'red', text: '>100M', minPopulation: 100000000, maxPopulation: Infinity }
+                { color: 'rgb(142, 207, 201)', text: '< 5M', minPopulation: 0, maxPopulation: 5000000 },
+                { color: 'rgb(255, 190, 122)', text: '5M-10M', minPopulation: 5000000, maxPopulation: 10000000 },
+                { color: 'rgb(250, 127, 111)', text: '10M-50M', minPopulation: 10000000, maxPopulation: 50000000 },
+                { color: 'rgb(130, 176, 210)', text: '50M-100M', minPopulation: 50000000, maxPopulation: 100000000 },
+                { color: 'rgb(190, 184, 220)', text: '>100M', minPopulation: 100000000, maxPopulation: Infinity }
             ];
 
             const legendWidth = 20;
