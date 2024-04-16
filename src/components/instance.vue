@@ -689,7 +689,7 @@ export default {
                         console.log(svg);
                         d3.select(svg)
                             .classed('highlighted', true) // 使用类来标记高亮
-                            .attr('fill', 'red');
+                            .attr('fill', d3.rgb(33, 68, 158));
                     };
 
                     highLight(svg);
@@ -830,7 +830,7 @@ export default {
                         .attr('cy', y)
                         .attr('r', 30) // 圆的半径
                         .style('fill', 'none')
-                        .style('stroke', 'red')
+                        .style('stroke', d3.rgb(33, 68, 158))
                         .style('stroke-width', 3);
 
                     // 清除#enlargedView中的内容
