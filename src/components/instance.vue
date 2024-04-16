@@ -469,6 +469,7 @@ export default {
         drawSvg() {
             // 移除现有的 SVG
             this.svg.selectAll('*').remove();
+            d3.select('#' + this.value + '-enlargedView').selectAll('*').remove();
 
             this.representation();
             this.encodingChannel();
