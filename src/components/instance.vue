@@ -502,8 +502,6 @@ export default {
 
         getPopulation(d) {
             // console.log(name, this.infoData[name]);
-            console.log(d && d.properties && d.properties.NAME && this.infoData[d.properties.NAME]
-                ? this.infoData[d.properties.NAME] : -1);
             return d && d.properties && d.properties.NAME && this.infoData[d.properties.NAME]
                 ? this.infoData[d.properties.NAME] : -1
         },
@@ -1473,7 +1471,7 @@ export default {
 
         setEncodingChannel(type) {
             console.log("Encoding Channel:", type);
-            d3.select("." + this.value + "-legend").selectAll("*").remove();
+            // d3.select("." + this.value + "-legend").selectAll("*").remove();
             if (this.isNumerical) {
                 //Encoding Color (Luminance)'
                 if (type === this.myType['Color (Luminance)']) {
@@ -1486,9 +1484,10 @@ export default {
                         .domain([transformFunction(this.mostPopulation), 0]);
                         return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
                     }
-
+                    this.colorFunctionL = colorFunction;
                     // 重写encodingChannel函数
                     if (this.ifDoubleEncoding == false) {
+                        d3.select("." + this.value + "-legend").selectAll("*").remove();
                         this.encodingChannel = () => {
                             // 修改颜色映射的方法
                             this.svg.selectAll('path')
@@ -1497,19 +1496,19 @@ export default {
                             this.svg.selectAll('circle')
                                 .attr('fill', d => colorFunction(this.getPopulation(d)));
 
-                            this.colorFunctionL = colorFunction;
-                            this.drawColorLuminanceLegend();
+                            
                         } 
                     } else {
+                        d3.select("." + this.value + "-legend").selectAll("*").remove();
                         this.encodingChannel = () => {
                             this.preEncoding = type;
-                            this.colorFunctionL = colorFunction;
                             this.svg.selectAll('path')
                             .attr('fill', `${this.defaultColor}`);
                             this.svg.selectAll('circle')
                             .attr('fill', `${this.defaultColor}`);
                         }
                     }
+                    this.drawColorLuminanceLegend();
                 }
 
                 //Encoding Color (Hue)'
@@ -1533,6 +1532,7 @@ export default {
                     };
                     // 重写encodingChannel函数
                     if (this.ifDoubleEncoding == false) {
+                        d3.select("." + this.value + "-legend").selectAll("*").remove();
                         this.encodingChannel = () => {
                             // 修改颜色映射的方法
                             this.svg.selectAll('path')
@@ -1541,8 +1541,8 @@ export default {
                             this.svg.selectAll('circle')
                                 .attr('fill', d => colorFunction(this.getPopulation(d)));
                         };
-                        this.drawColorHueLegend();
                     } else {
+                        d3.select("." + this.value + "-legend").selectAll("*").remove();
                         this.preEncoding = type;
                         this.colorFunctionL = colorFunction;
                         this.svg.selectAll('path')
@@ -1550,6 +1550,7 @@ export default {
                         this.svg.selectAll('circle')
                         .attr('fill', this.defaultColor);
                     }
+                    this.drawColorHueLegend();
                 }
 
 
@@ -1574,6 +1575,7 @@ export default {
                                 const height = baseHeight + (population / populationPerHeight); // 长方体的总高度
 
                                 if (this.ifDoubleEncoding == false) {
+                                    d3.select("." + this.value + "-legend").selectAll("*").remove();
                                     // 绘制长方体的“前面”
                                     this.svg.append('rect')
                                         .attr('x', center[0] - cuboidWidth / 2)
@@ -1661,6 +1663,7 @@ export default {
                                 const height = baseHeight + (population / populationPerHeight); // 长方体的总高度
 
                                 if (this.ifDoubleEncoding == false) {
+                                    d3.select("." + this.value + "-legend").selectAll("*").remove();
                                     this.svg.append('rect')
                                     .attr('x', center[0] - cuboidWidth / 2)
                                     .attr('y', center[1] - height)
@@ -1722,6 +1725,7 @@ export default {
                             const population = this.getPopulation(feature);
                             if (population >= 1000000) { // 人口大于等于1000000时绘制方块
                                 if (this.ifDoubleEncoding == false) {
+                                    d3.select("." + this.value + "-legend").selectAll("*").remove();
                                     this.svg.append('rect')
                                     .attr('x', x - sizeScale(population) / 2)
                                     .attr('y', y - sizeScale(population) / 2)
@@ -1794,6 +1798,7 @@ export default {
                                     const y = center[1] + (Math.floor(i / 5) * (iconHeight + iconGap));
                                     // 添加图标
                                     if (this.ifDoubleEncoding == false) {
+                                        d3.select("." + this.value + "-legend").selectAll("*").remove();
                                         this.svg.append('image')
                                         .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
                                         .attr('x', x)
@@ -1801,14 +1806,27 @@ export default {
                                         .attr('width', iconWidth)
                                         .attr('height', iconHeight);
                                     } else {
+                                        // var customColor = 'rgb(190, 184, 220)'; // 你的自定义颜色，例如红色
+                                        var customColor = `${this.colorFunctionL(population)}`;
+                                        var rgbaColor = d3.color(customColor); // 转换为RGBA格式
+                                        console.log(population);
+                                        var colorMatrixValues = `${rgbaColor.r/255} 0 0 0 0   0 ${rgbaColor.g/255} 0 0 0   0 0 ${rgbaColor.b/255} 0 0   0 0 0 1 0`;
+                                        // 添加滤镜
+                                        var filter = this.svg.append('filter')
+                                            .attr('id', 'colorizeFilter');
+
+                                        filter.append('feColorMatrix')
+                                            .attr('type', 'matrix')
+                                            .attr('values', `${colorMatrixValues}`);
+
+                                        // 将滤镜应用到图像上
                                         this.svg.append('image')
-                                        .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
-                                        .attr('x', x)
-                                        .attr('y', y)
-                                        .attr('width', iconWidth)
-                                        .attr('height', iconHeight)
-                                        .attr('fill', this.colorFunctionL(population));
-                                        
+                                            .attr('xlink:href', require('../assets/PersonIconWhite.svg')) // 图标的路径
+                                            .attr('x', x)
+                                            .attr('y', y)
+                                            .attr('width', iconWidth)
+                                            .attr('height', iconHeight)
+                                            .attr('filter', 'url(#colorizeFilter)'); // 应用滤镜
                                     }
                                 }
                             }
@@ -1849,11 +1867,12 @@ export default {
                     //         .style('font-size', '14px') // 文本大小
                     //         .text('This encoding method is not applicable to the current data provided.');
                     // };
-
+                    d3.select("." + this.value + "-legend").selectAll("*").remove();
                     this.showErrorDialog("Encoding Channel Not Support", "The selected encoding channel only support the data your uploaded!")
                 }
             }
             else {
+                d3.select("." + this.value + "-legend").selectAll("*").remove();
                 if (type === this.myType['Glyph']) {
                     this.encodingChannelType = type;
                     this.encodingChannel = () => {
