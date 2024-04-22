@@ -102,7 +102,7 @@
                                     </v-col>
 
                                     <v-col class="element" @click="setEncodingChannel(myType['2D Length'])">
-                                        Bar
+                                        2D Length
                                         <v-img :src="require('../assets/BarChart.svg')" contain />
                                     </v-col>
                                 </v-row>
@@ -392,7 +392,7 @@ export default {
             "Link (Arrow)": 5,
             "Size": 6,
             "Quantity": 7,
-            "Bar": 8,
+            "2D Length": 8,
 
         },
     }),
@@ -1688,7 +1688,7 @@ export default {
                     }
                 }
 
-                else if (type === this.myType['Bar']) {
+                else if (type === this.myType['2D Length']) {
                     this.encodingChannelType = type;
 
                     this.encodingChannel = () => {
