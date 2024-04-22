@@ -76,9 +76,13 @@
                         <v-expansion-panel-title>
                             Encoding Channels
                         </v-expansion-panel-title>
-
                         <v-expansion-panel-text>
                             <v-container class="container">
+                                <v-row>
+                                    Double Encoding: 
+                                    <input type="checkbox" v-model="ifDoubleEncoding" @click="doubleEncoding()" />
+                                    <label>{{ ifDoubleEncodingText }}</label>
+                                </v-row>
                                 <v-row>
                                     <v-col class="element" @click="setEncodingChannel(myType['Color (Luminance)'])">
                                         Color (Luminance)
@@ -97,9 +101,9 @@
                                         <v-img :src="require('../assets/3DLength.svg')" contain />
                                     </v-col>
 
-                                    <v-col class="element" @click="setEncodingChannel(myType['Glyph'])">
-                                        Glyph
-                                        <v-img :src="require('../assets/Glyph.svg')" contain />
+                                    <v-col class="element" @click="setEncodingChannel(myType['2D Length'])">
+                                        Bar
+                                        <v-img :src="require('../assets/BarChart.svg')" contain />
                                     </v-col>
                                 </v-row>
 
@@ -128,9 +132,9 @@
                                 </v-row>
 
                                 <v-row>
-                                    <v-col class="element" @click="setEncodingChannel(myType['Bar'])">
-                                        Bar
-                                        <v-img :src="require('../assets/BarChart.svg')" width="50%" contain />
+                                    <v-col class="element" @click="setEncodingChannel(myType['Glyph'])">
+                                        Glyph
+                                        <v-img :src="require('../assets/Glyph.svg')" width="50%" contain />
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -341,6 +345,10 @@ export default {
         errorTitle: '',
         errorMessage: '',
         errorDialog: false,
+
+        ifDoubleEncoding: false,
+        ifDoubleEncodingText: 'OFF',
+        preEncoding: -1,
 
         encodingChannel: () => { },
         representation: () => { },
@@ -1470,61 +1478,78 @@ export default {
                 //Encoding Color (Luminance)'
                 if (type === this.myType['Color (Luminance)']) {
                     this.encodingChannelType = type;
+                    const colorFunction = (scale) => {
+                        const transformFunction = (input) => Math.pow(input, 0.25);
+                        // const transformFunction = (input) => input
+
+                        const colorScale = d3.scaleSequential(d3.interpolateRgb(d3.rgb(220, 120, 130), d3.rgb(255, 255, 255)))
+                        .domain([transformFunction(this.mostPopulation), 0]);
+                        return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
+                    }
 
                     // 重写encodingChannel函数
-                    this.encodingChannel = () => {
-                        // 修改颜色映射的方法
-                        const colorFunction = (scale) => {
-                            const transformFunction = (input) => Math.pow(input, 0.25);
-                            // const transformFunction = (input) => input
+                    if (this.ifDoubleEncoding == false) {
+                        this.encodingChannel = () => {
+                            // 修改颜色映射的方法
+                            this.svg.selectAll('path')
+                                .attr('fill', d => colorFunction(this.getPopulation(d)));
 
-                            const colorScale = d3.scaleSequential(d3.interpolateRgb(d3.rgb(220, 120, 130), d3.rgb(255, 255, 255)))
-                            .domain([transformFunction(this.mostPopulation), 0]);
-                            return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
+                            this.svg.selectAll('circle')
+                                .attr('fill', d => colorFunction(this.getPopulation(d)));
+
+                            this.colorFunctionL = colorFunction;
+                            this.drawColorLuminanceLegend();
+                        } 
+                    } else {
+                        this.encodingChannel = () => {
+                            this.preEncoding = type;
+                            this.colorFunctionL = colorFunction;
+                            this.svg.selectAll('path')
+                            .attr('fill', `${this.defaultColor}`);
+                            this.svg.selectAll('circle')
+                            .attr('fill', `${this.defaultColor}`);
                         }
-
-                        this.svg.selectAll('path')
-                            .attr('fill', d => colorFunction(this.getPopulation(d)));
-
-                        this.svg.selectAll('circle')
-                            .attr('fill', d => colorFunction(this.getPopulation(d)));
-
-                        this.colorFunctionL = colorFunction;
-                        this.drawColorLuminanceLegend();
                     }
                 }
 
                 //Encoding Color (Hue)'
                 else if (type === this.myType['Color (Hue)']) {
                     this.encodingChannelType = type;
-
-                    // 重写encodingChannel函数
-                    this.encodingChannel = () => {
-                        // 修改颜色映射的方法
-                        const colorFunction = (population) => {
-                            if (population < 0) {
-                                return this.defaultColor;
-                            }
-                            else if (population >= 0 && population < 5000000) {
-                                return 'rgb(142, 207, 201)'; // 人口数量小于5000000
-                            } else if (population >= 5000000 && population < 10000000) {
-                                return 'rgb(255, 190, 122)'; // 人口数量在5000000-10000000之间
-                            } else if (population >= 10000000 && population < 50000000) {
-                                return 'rgb(250, 127, 111)'; // 人口数量在10000000-50000000之间
-                            } else if (population >= 50000000 && population < 100000000) {
-                                return 'rgb(130, 176, 210)'; // 人口数量在50000000-100000000之间
-                            } else {
-                                return 'rgb(190, 184, 220)'; // 人口数量大于100000000
-                            }
-                        };
-
-                        this.svg.selectAll('path')
-                            .attr('fill', d => colorFunction(this.getPopulation(d)));
-
-                        this.svg.selectAll('circle')
-                            .attr('fill', d => colorFunction(this.getPopulation(d)));
+                    const colorFunction = (population) => {
+                        if (population < 0) {
+                            return this.defaultColor;
+                        }
+                        else if (population >= 0 && population < 5000000) {
+                            return 'rgb(142, 207, 201)'; // 人口数量小于5000000
+                        } else if (population >= 5000000 && population < 10000000) {
+                            return 'rgb(255, 190, 122)'; // 人口数量在5000000-10000000之间
+                        } else if (population >= 10000000 && population < 50000000) {
+                            return 'rgb(250, 127, 111)'; // 人口数量在10000000-50000000之间
+                        } else if (population >= 50000000 && population < 100000000) {
+                            return 'rgb(130, 176, 210)'; // 人口数量在50000000-100000000之间
+                        } else {
+                            return 'rgb(190, 184, 220)'; // 人口数量大于100000000
+                        }
                     };
-                    this.drawColorHueLegend();
+                    // 重写encodingChannel函数
+                    if (this.ifDoubleEncoding == false) {
+                        this.encodingChannel = () => {
+                            // 修改颜色映射的方法
+                            this.svg.selectAll('path')
+                                .attr('fill', d => colorFunction(this.getPopulation(d)));
+
+                            this.svg.selectAll('circle')
+                                .attr('fill', d => colorFunction(this.getPopulation(d)));
+                        };
+                        this.drawColorHueLegend();
+                    } else {
+                        this.preEncoding = type;
+                        this.colorFunctionL = colorFunction;
+                        this.svg.selectAll('path')
+                        .attr('fill', this.defaultColor);
+                        this.svg.selectAll('circle')
+                        .attr('fill', this.defaultColor);
+                    }
                 }
 
 
@@ -1548,23 +1573,88 @@ export default {
                             if (population >= 1000000) { // 人口大于等于1000000时绘制长方体
                                 const height = baseHeight + (population / populationPerHeight); // 长方体的总高度
 
-                                // 绘制长方体的“前面”
-                                this.svg.append('rect')
-                                    .attr('x', center[0] - cuboidWidth / 2)
-                                    .attr('y', center[1] - height)
-                                    .attr('width', cuboidWidth)
-                                    .attr('height', height)
-                                    .attr('fill', 'rgba(230, 158, 165, 0.7)'); // 修改前面的颜色
+                                if (this.ifDoubleEncoding == false) {
+                                    // 绘制长方体的“前面”
+                                    this.svg.append('rect')
+                                        .attr('x', center[0] - cuboidWidth / 2)
+                                        .attr('y', center[1] - height)
+                                        .attr('width', cuboidWidth)
+                                        .attr('height', height)
+                                        .attr('fill', 'rgba(230, 158, 165, 0.7)'); // 修改前面的颜色
 
-                                // 绘制长方体的“顶面”
-                                this.svg.append('polygon')
-                                    .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
-                                    .attr('fill', 'rgba(230, 158, 165, 0.7)');
+                                    // 绘制长方体的“顶面”
+                                    this.svg.append('polygon')
+                                        .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
+                                        .attr('fill', 'rgba(230, 158, 165, 0.7)');
 
-                                // 绘制长方体的“左侧面”
-                                this.svg.append('polygon')
-                                    .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
-                                    .attr('fill', `rgba(200, 60, 60, ${sideOpacity})`); // 修改左侧面的颜色
+                                    // 绘制长方体的“左侧面”
+                                    this.svg.append('polygon')
+                                        .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
+                                        .attr('fill', `rgba(200, 60, 60, ${sideOpacity})`); // 修改左侧面的颜色
+                                } else {
+                                    if (this.preEncoding == 0) {
+                                        // 修改颜色映射的方法
+                                        const colorFunction = (scale) => {
+                                            const transformFunction = (input) => Math.pow(input, 0.25);
+                                            // const transformFunction = (input) => input
+
+                                            const colorScale = d3.scaleSequential(d3.interpolateRgb(d3.rgb(220, 120, 130), d3.rgb(255, 255, 255)))
+                                            .domain([transformFunction(this.mostPopulation), 0]);
+                                            return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
+                                        }
+                                        // 绘制长方体的“前面”s                             
+                                        this.svg.append('rect')
+                                            .attr('x', center[0] - cuboidWidth / 2)
+                                            .attr('y', center[1] - height)
+                                            .attr('width', cuboidWidth)
+                                            .attr('height', height)
+                                            .attr('fill', d => this.colorFunctionL(this.getPopulation(d))); // 修改前面的颜色
+
+                                        // 绘制长方体的“顶面”
+                                        this.svg.append('polygon')
+                                            .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
+                                            .attr('fill', d => this.colorFunctionL(this.getPopulation(d)));
+
+                                        // 绘制长方体的“左侧面”
+                                        this.svg.append('polygon')
+                                            .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
+                                            .attr('fill', d => this.colorFunctionL(this.getPopulation(d))); // 修改左侧面的颜色
+                                    } else if (this.preEncoding == 1) {
+                                        const colorFunction = (population) => {
+                                            if (population < 0) {
+                                                return this.defaultColor;
+                                            }
+                                            else if (population >= 0 && population < 5000000) {
+                                                return 'rgb(142, 207, 201)'; // 人口数量小于5000000
+                                            } else if (population >= 5000000 && population < 10000000) {
+                                                return 'rgb(255, 190, 122)'; // 人口数量在5000000-10000000之间
+                                            } else if (population >= 10000000 && population < 50000000) {
+                                                return 'rgb(250, 127, 111)'; // 人口数量在10000000-50000000之间
+                                            } else if (population >= 50000000 && population < 100000000) {
+                                                return 'rgb(130, 176, 210)'; // 人口数量在50000000-100000000之间
+                                            } else {
+                                                return 'rgb(190, 184, 220)'; // 人口数量大于100000000
+                                            }
+                                        };
+                                        this.svg.append('rect')
+                                        .attr('x', center[0] - cuboidWidth / 2)
+                                        .attr('y', center[1] - height)
+                                        .attr('width', cuboidWidth)
+                                        .attr('height', height)
+                                        .attr('fill', d => colorFunction(this.getPopulation(d))); // 修改前面的颜色
+
+                                        // 绘制长方体的“顶面”
+                                        this.svg.append('polygon')
+                                            .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
+                                            .attr('fill', d => colorFunction(this.getPopulation(d)));
+
+                                        // 绘制长方体的“左侧面”
+                                        this.svg.append('polygon')
+                                            .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
+                                            .attr('fill', d => colorFunction(this.getPopulation(d))); // 修改左侧面的颜色
+                                        }
+                                    
+                                }
                             }
                         });
 
@@ -1615,13 +1705,54 @@ export default {
                             if (population >= 1000000) { // 人口大于等于1000000时绘制长方体
                                 const height = baseHeight + (population / populationPerHeight); // 长方体的总高度
 
-                                // 绘制rect
-                                this.svg.append('rect')
+                                if (this.ifDoubleEncoding == false) {
+                                    this.svg.append('rect')
                                     .attr('x', center[0] - cuboidWidth / 2)
                                     .attr('y', center[1] - height)
                                     .attr('width', cuboidWidth)
                                     .attr('height', height)
                                     .attr('fill', 'rgba(230, 158, 165, 0.7)');
+                                } else {
+                                    if (this.preEncoding == 0) { // luminance
+                                        const colorFunction = (scale) => {
+                                            const transformFunction = (input) => Math.pow(input, 0.25);
+                                            // const transformFunction = (input) => input
+
+                                            const colorScale = d3.scaleSequential(d3.interpolateRgb(d3.rgb(220, 120, 130), d3.rgb(255, 255, 255)))
+                                            .domain([transformFunction(this.mostPopulation), 0]);
+                                            return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
+                                        }
+                                        this.svg.append('rect')
+                                        .attr('x', center[0] - cuboidWidth / 2)
+                                        .attr('y', center[1] - height)
+                                        .attr('width', cuboidWidth)
+                                        .attr('height', height)
+                                        .attr('fill', d => colorFunction(this.getPopulation(d)));
+                                    } else if (this.preEncoding == 1) { // hue
+                                        const colorFunction = (population) => {
+                                            if (population < 0) {
+                                                return this.defaultColor;
+                                            }
+                                            else if (population >= 0 && population < 5000000) {
+                                                return 'rgb(142, 207, 201)'; // 人口数量小于5000000
+                                            } else if (population >= 5000000 && population < 10000000) {
+                                                return 'rgb(255, 190, 122)'; // 人口数量在5000000-10000000之间
+                                            } else if (population >= 10000000 && population < 50000000) {
+                                                return 'rgb(250, 127, 111)'; // 人口数量在10000000-50000000之间
+                                            } else if (population >= 50000000 && population < 100000000) {
+                                                return 'rgb(130, 176, 210)'; // 人口数量在50000000-100000000之间
+                                            } else {
+                                                return 'rgb(190, 184, 220)'; // 人口数量大于100000000
+                                            }
+                                        };
+                                        this.svg.append('rect')
+                                        .attr('x', center[0] - cuboidWidth / 2)
+                                        .attr('y', center[1] - height)
+                                        .attr('width', cuboidWidth)
+                                        .attr('height', height)
+                                        .attr('fill', d => colorFunction(this.getPopulation(d)));
+                                    }
+                                }
                             }
                         });
 
@@ -1667,12 +1798,55 @@ export default {
                             const [x, y] = this.geoPath.centroid(feature);
                             const population = this.getPopulation(feature);
                             if (population >= 1000000) { // 人口大于等于1000000时绘制方块
-                                this.svg.append('rect')
+                                if (this.ifDoubleEncoding == false) {
+                                    this.svg.append('rect')
                                     .attr('x', x - sizeScale(population) / 2)
                                     .attr('y', y - sizeScale(population) / 2)
                                     .attr('width', sizeScale(population))
                                     .attr('height', sizeScale(population))
                                     .attr('fill', 'rgba(230, 158, 165, 0.7)');
+                                } else {
+                                    if (this.preEncoding == 0) { // luminance
+                                        const colorFunction = (scale) => {
+                                            const transformFunction = (input) => Math.pow(input, 0.25);
+                                            // const transformFunction = (input) => input
+
+                                            const colorScale = d3.scaleSequential(d3.interpolateRgb(d3.rgb(220, 120, 130), d3.rgb(255, 255, 255)))
+                                            .domain([transformFunction(this.mostPopulation), 0]);
+                                            return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
+                                        }
+                                        this.svg.append('rect')
+                                        .attr('x', x - sizeScale(population) / 2)
+                                        .attr('y', y - sizeScale(population) / 2)
+                                        .attr('width', sizeScale(population))
+                                        .attr('height', sizeScale(population))
+                                        .attr('fill', d => colorFunction(this.getPopulation(d)));
+                                    } else if (this.preEncoding == 1) { // hue
+                                        const colorFunction = (population) => {
+                                            if (population < 0) {
+                                                return this.defaultColor;
+                                            }
+                                            else if (population >= 0 && population < 5000000) {
+                                                return 'rgb(142, 207, 201)'; // 人口数量小于5000000
+                                            } else if (population >= 5000000 && population < 10000000) {
+                                                return 'rgb(255, 190, 122)'; // 人口数量在5000000-10000000之间
+                                            } else if (population >= 10000000 && population < 50000000) {
+                                                return 'rgb(250, 127, 111)'; // 人口数量在10000000-50000000之间
+                                            } else if (population >= 50000000 && population < 100000000) {
+                                                return 'rgb(130, 176, 210)'; // 人口数量在50000000-100000000之间
+                                            } else {
+                                                return 'rgb(190, 184, 220)'; // 人口数量大于100000000
+                                            }
+                                        };
+                                        this.svg.append('rect')
+                                        .attr('x', x - sizeScale(population) / 2)
+                                        .attr('y', y - sizeScale(population) / 2)
+                                        .attr('width', sizeScale(population))
+                                        .attr('height', sizeScale(population))
+                                        .attr('fill', d => colorFunction(this.getPopulation(d)));
+                                    }
+                                }
+                                
                             }
                         });
 
@@ -1729,12 +1903,56 @@ export default {
                                     const x = center[0] - ((iconWidth + iconGap) * 5 / 2) + ((i % 5) * (iconWidth + iconGap));
                                     const y = center[1] + (Math.floor(i / 5) * (iconHeight + iconGap));
                                     // 添加图标
-                                    this.svg.append('image')
+                                    if (this.ifDoubleEncoding == false) {
+                                        this.svg.append('image')
                                         .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
                                         .attr('x', x)
                                         .attr('y', y)
                                         .attr('width', iconWidth)
                                         .attr('height', iconHeight);
+                                    } else {
+                                        if (this.preEncoding == 0) {
+                                            const colorFunction = (scale) => { // luminance
+                                                const transformFunction = (input) => Math.pow(input, 0.25);
+                                                // const transformFunction = (input) => input
+
+                                                const colorScale = d3.scaleSequential(d3.interpolateRgb(d3.rgb(220, 120, 130), d3.rgb(255, 255, 255)))
+                                                .domain([transformFunction(this.mostPopulation), 0]);
+                                                return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
+                                            }
+                                            this.svg.append('image')
+                                            .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
+                                            .attr('x', x)
+                                            .attr('y', y)
+                                            .attr('width', iconWidth)
+                                            .attr('height', iconHeight)
+                                            .attr('fill', d => colorFunction(this.getPopulation(d)));
+                                        } else if (this.preEncoding == 1) { // hue
+                                            const colorFunction = (population) => {
+                                                if (population < 0) {
+                                                    return this.defaultColor;
+                                                }
+                                                else if (population >= 0 && population < 5000000) {
+                                                    return 'rgb(142, 207, 201)'; // 人口数量小于5000000
+                                                } else if (population >= 5000000 && population < 10000000) {
+                                                    return 'rgb(255, 190, 122)'; // 人口数量在5000000-10000000之间
+                                                } else if (population >= 10000000 && population < 50000000) {
+                                                    return 'rgb(250, 127, 111)'; // 人口数量在10000000-50000000之间
+                                                } else if (population >= 50000000 && population < 100000000) {
+                                                    return 'rgb(130, 176, 210)'; // 人口数量在50000000-100000000之间
+                                                } else {
+                                                    return 'rgb(190, 184, 220)'; // 人口数量大于100000000
+                                                }
+                                            };
+                                            this.svg.append('image')
+                                            .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
+                                            .attr('x', x)
+                                            .attr('y', y)
+                                            .attr('width', iconWidth)
+                                            .attr('height', iconHeight)
+                                            .attr('fill', d => colorFunction(this.getPopulation(d)));
+                                        }
+                                    }
                                 }
                             }
                         });
@@ -1991,6 +2209,10 @@ export default {
                 .text(d => d.text);
         },
 
+        doubleEncoding() {
+            this.ifDoubleEncoding = !this.ifDoubleEncoding;
+            this.ifDoubleEncodingText = this.ifDoubleEncoding ? 'ON' : 'OFF';
+        },
     },
 
 }
