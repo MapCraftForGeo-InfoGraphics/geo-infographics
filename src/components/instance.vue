@@ -502,6 +502,8 @@ export default {
 
         getPopulation(d) {
             // console.log(name, this.infoData[name]);
+            console.log(d && d.properties && d.properties.NAME && this.infoData[d.properties.NAME]
+                ? this.infoData[d.properties.NAME] : -1);
             return d && d.properties && d.properties.NAME && this.infoData[d.properties.NAME]
                 ? this.infoData[d.properties.NAME] : -1
         },
@@ -903,9 +905,7 @@ export default {
             else if (type === this.myType['Edge Stroke']) {
                 this.highLightType = type;
 
-                const addHighLight = (event, svg) => {
-
-                    const [x, y] = d3.pointer(event, svg);
+                const addHighLight = (event) => {
                     const feature = d3.select(event.target).datum(); // 获取被点击的地图区域的数据
 
                     // 高亮函数
@@ -1592,68 +1592,23 @@ export default {
                                         .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
                                         .attr('fill', `rgba(200, 60, 60, ${sideOpacity})`); // 修改左侧面的颜色
                                 } else {
-                                    if (this.preEncoding == 0) {
-                                        // 修改颜色映射的方法
-                                        const colorFunction = (scale) => {
-                                            const transformFunction = (input) => Math.pow(input, 0.25);
-                                            // const transformFunction = (input) => input
-
-                                            const colorScale = d3.scaleSequential(d3.interpolateRgb(d3.rgb(220, 120, 130), d3.rgb(255, 255, 255)))
-                                            .domain([transformFunction(this.mostPopulation), 0]);
-                                            return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
-                                        }
-                                        // 绘制长方体的“前面”s                             
-                                        this.svg.append('rect')
-                                            .attr('x', center[0] - cuboidWidth / 2)
-                                            .attr('y', center[1] - height)
-                                            .attr('width', cuboidWidth)
-                                            .attr('height', height)
-                                            .attr('fill', d => this.colorFunctionL(this.getPopulation(d))); // 修改前面的颜色
-
-                                        // 绘制长方体的“顶面”
-                                        this.svg.append('polygon')
-                                            .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
-                                            .attr('fill', d => this.colorFunctionL(this.getPopulation(d)));
-
-                                        // 绘制长方体的“左侧面”
-                                        this.svg.append('polygon')
-                                            .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
-                                            .attr('fill', d => this.colorFunctionL(this.getPopulation(d))); // 修改左侧面的颜色
-                                    } else if (this.preEncoding == 1) {
-                                        const colorFunction = (population) => {
-                                            if (population < 0) {
-                                                return this.defaultColor;
-                                            }
-                                            else if (population >= 0 && population < 5000000) {
-                                                return 'rgb(142, 207, 201)'; // 人口数量小于5000000
-                                            } else if (population >= 5000000 && population < 10000000) {
-                                                return 'rgb(255, 190, 122)'; // 人口数量在5000000-10000000之间
-                                            } else if (population >= 10000000 && population < 50000000) {
-                                                return 'rgb(250, 127, 111)'; // 人口数量在10000000-50000000之间
-                                            } else if (population >= 50000000 && population < 100000000) {
-                                                return 'rgb(130, 176, 210)'; // 人口数量在50000000-100000000之间
-                                            } else {
-                                                return 'rgb(190, 184, 220)'; // 人口数量大于100000000
-                                            }
-                                        };
-                                        this.svg.append('rect')
+                                    // 绘制长方体的“前面”s                             
+                                    this.svg.append('rect')
                                         .attr('x', center[0] - cuboidWidth / 2)
                                         .attr('y', center[1] - height)
                                         .attr('width', cuboidWidth)
                                         .attr('height', height)
-                                        .attr('fill', d => colorFunction(this.getPopulation(d))); // 修改前面的颜色
+                                        .attr('fill', this.colorFunctionL(population)); // 修改前面的颜色
 
-                                        // 绘制长方体的“顶面”
-                                        this.svg.append('polygon')
-                                            .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
-                                            .attr('fill', d => colorFunction(this.getPopulation(d)));
+                                    // 绘制长方体的“顶面”
+                                    this.svg.append('polygon')
+                                        .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
+                                        .attr('fill', this.colorFunctionL(population));
 
-                                        // 绘制长方体的“左侧面”
-                                        this.svg.append('polygon')
-                                            .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
-                                            .attr('fill', d => colorFunction(this.getPopulation(d))); // 修改左侧面的颜色
-                                        }
-                                    
+                                    // 绘制长方体的“左侧面”
+                                    this.svg.append('polygon')
+                                        .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
+                                        .attr('fill', this.colorFunctionL(population)); // 修改左侧面的颜色
                                 }
                             }
                         });
@@ -1713,45 +1668,13 @@ export default {
                                     .attr('height', height)
                                     .attr('fill', 'rgba(230, 158, 165, 0.7)');
                                 } else {
-                                    if (this.preEncoding == 0) { // luminance
-                                        const colorFunction = (scale) => {
-                                            const transformFunction = (input) => Math.pow(input, 0.25);
-                                            // const transformFunction = (input) => input
-
-                                            const colorScale = d3.scaleSequential(d3.interpolateRgb(d3.rgb(220, 120, 130), d3.rgb(255, 255, 255)))
-                                            .domain([transformFunction(this.mostPopulation), 0]);
-                                            return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
-                                        }
-                                        this.svg.append('rect')
-                                        .attr('x', center[0] - cuboidWidth / 2)
-                                        .attr('y', center[1] - height)
-                                        .attr('width', cuboidWidth)
-                                        .attr('height', height)
-                                        .attr('fill', d => colorFunction(this.getPopulation(d)));
-                                    } else if (this.preEncoding == 1) { // hue
-                                        const colorFunction = (population) => {
-                                            if (population < 0) {
-                                                return this.defaultColor;
-                                            }
-                                            else if (population >= 0 && population < 5000000) {
-                                                return 'rgb(142, 207, 201)'; // 人口数量小于5000000
-                                            } else if (population >= 5000000 && population < 10000000) {
-                                                return 'rgb(255, 190, 122)'; // 人口数量在5000000-10000000之间
-                                            } else if (population >= 10000000 && population < 50000000) {
-                                                return 'rgb(250, 127, 111)'; // 人口数量在10000000-50000000之间
-                                            } else if (population >= 50000000 && population < 100000000) {
-                                                return 'rgb(130, 176, 210)'; // 人口数量在50000000-100000000之间
-                                            } else {
-                                                return 'rgb(190, 184, 220)'; // 人口数量大于100000000
-                                            }
-                                        };
-                                        this.svg.append('rect')
-                                        .attr('x', center[0] - cuboidWidth / 2)
-                                        .attr('y', center[1] - height)
-                                        .attr('width', cuboidWidth)
-                                        .attr('height', height)
-                                        .attr('fill', d => colorFunction(this.getPopulation(d)));
-                                    }
+                                    this.svg.append('rect')
+                                    .attr('x', center[0] - cuboidWidth / 2)
+                                    .attr('y', center[1] - height)
+                                    .attr('width', cuboidWidth)
+                                    .attr('height', height)
+                                    .attr('fill', this.colorFunctionL(population));
+                                    
                                 }
                             }
                         });
@@ -1806,45 +1729,12 @@ export default {
                                     .attr('height', sizeScale(population))
                                     .attr('fill', 'rgba(230, 158, 165, 0.7)');
                                 } else {
-                                    if (this.preEncoding == 0) { // luminance
-                                        const colorFunction = (scale) => {
-                                            const transformFunction = (input) => Math.pow(input, 0.25);
-                                            // const transformFunction = (input) => input
-
-                                            const colorScale = d3.scaleSequential(d3.interpolateRgb(d3.rgb(220, 120, 130), d3.rgb(255, 255, 255)))
-                                            .domain([transformFunction(this.mostPopulation), 0]);
-                                            return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
-                                        }
-                                        this.svg.append('rect')
-                                        .attr('x', x - sizeScale(population) / 2)
-                                        .attr('y', y - sizeScale(population) / 2)
-                                        .attr('width', sizeScale(population))
-                                        .attr('height', sizeScale(population))
-                                        .attr('fill', d => colorFunction(this.getPopulation(d)));
-                                    } else if (this.preEncoding == 1) { // hue
-                                        const colorFunction = (population) => {
-                                            if (population < 0) {
-                                                return this.defaultColor;
-                                            }
-                                            else if (population >= 0 && population < 5000000) {
-                                                return 'rgb(142, 207, 201)'; // 人口数量小于5000000
-                                            } else if (population >= 5000000 && population < 10000000) {
-                                                return 'rgb(255, 190, 122)'; // 人口数量在5000000-10000000之间
-                                            } else if (population >= 10000000 && population < 50000000) {
-                                                return 'rgb(250, 127, 111)'; // 人口数量在10000000-50000000之间
-                                            } else if (population >= 50000000 && population < 100000000) {
-                                                return 'rgb(130, 176, 210)'; // 人口数量在50000000-100000000之间
-                                            } else {
-                                                return 'rgb(190, 184, 220)'; // 人口数量大于100000000
-                                            }
-                                        };
-                                        this.svg.append('rect')
-                                        .attr('x', x - sizeScale(population) / 2)
-                                        .attr('y', y - sizeScale(population) / 2)
-                                        .attr('width', sizeScale(population))
-                                        .attr('height', sizeScale(population))
-                                        .attr('fill', d => colorFunction(this.getPopulation(d)));
-                                    }
+                                    this.svg.append('rect')
+                                    .attr('x', x - sizeScale(population) / 2)
+                                    .attr('y', y - sizeScale(population) / 2)
+                                    .attr('width', sizeScale(population))
+                                    .attr('height', sizeScale(population))
+                                    .attr('fill', this.colorFunctionL(population));
                                 }
                                 
                             }
@@ -1911,47 +1801,14 @@ export default {
                                         .attr('width', iconWidth)
                                         .attr('height', iconHeight);
                                     } else {
-                                        if (this.preEncoding == 0) {
-                                            const colorFunction = (scale) => { // luminance
-                                                const transformFunction = (input) => Math.pow(input, 0.25);
-                                                // const transformFunction = (input) => input
-
-                                                const colorScale = d3.scaleSequential(d3.interpolateRgb(d3.rgb(220, 120, 130), d3.rgb(255, 255, 255)))
-                                                .domain([transformFunction(this.mostPopulation), 0]);
-                                                return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
-                                            }
-                                            this.svg.append('image')
-                                            .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
-                                            .attr('x', x)
-                                            .attr('y', y)
-                                            .attr('width', iconWidth)
-                                            .attr('height', iconHeight)
-                                            .attr('fill', d => colorFunction(this.getPopulation(d)));
-                                        } else if (this.preEncoding == 1) { // hue
-                                            const colorFunction = (population) => {
-                                                if (population < 0) {
-                                                    return this.defaultColor;
-                                                }
-                                                else if (population >= 0 && population < 5000000) {
-                                                    return 'rgb(142, 207, 201)'; // 人口数量小于5000000
-                                                } else if (population >= 5000000 && population < 10000000) {
-                                                    return 'rgb(255, 190, 122)'; // 人口数量在5000000-10000000之间
-                                                } else if (population >= 10000000 && population < 50000000) {
-                                                    return 'rgb(250, 127, 111)'; // 人口数量在10000000-50000000之间
-                                                } else if (population >= 50000000 && population < 100000000) {
-                                                    return 'rgb(130, 176, 210)'; // 人口数量在50000000-100000000之间
-                                                } else {
-                                                    return 'rgb(190, 184, 220)'; // 人口数量大于100000000
-                                                }
-                                            };
-                                            this.svg.append('image')
-                                            .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
-                                            .attr('x', x)
-                                            .attr('y', y)
-                                            .attr('width', iconWidth)
-                                            .attr('height', iconHeight)
-                                            .attr('fill', d => colorFunction(this.getPopulation(d)));
-                                        }
+                                        this.svg.append('image')
+                                        .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
+                                        .attr('x', x)
+                                        .attr('y', y)
+                                        .attr('width', iconWidth)
+                                        .attr('height', iconHeight)
+                                        .attr('fill', this.colorFunctionL(population));
+                                        
                                     }
                                 }
                             }
