@@ -1781,6 +1781,8 @@ export default {
                         const iconWidth = 6; // 图标的宽度
                         const iconHeight = 15; // 图标的高度
                         const iconGap = 1; // 调整图标间的间隔
+                        const scaleX = 0.07;
+                        const scaleY = 0.07;
 
                         // 直接在现有的SVG上绘制图标，不清除之前的内容
                         this.geoData.features.forEach(feature => {
@@ -1820,13 +1822,21 @@ export default {
                                             .attr('values', `${colorMatrixValues}`);
 
                                         // 将滤镜应用到图像上
-                                        this.svg.append('image')
-                                            .attr('xlink:href', require('../assets/PersonIconWhite.svg')) // 图标的路径
-                                            .attr('x', x)
-                                            .attr('y', y)
-                                            .attr('width', iconWidth)
-                                            .attr('height', iconHeight)
-                                            .attr('filter', 'url(#colorizeFilter)'); // 应用滤镜
+                                        // this.svg.append('image')
+                                        //     .attr('xlink:href', require('../assets/PersonIconWhite.svg')) // 图标的路径
+                                        //     .attr('x', x)
+                                        //     .attr('y', y)
+                                        //     .attr('width', iconWidth)
+                                        //     .attr('height', iconHeight)
+                                        //     .attr('filter', 'url(#colorizeFilter)'); // 应用滤镜
+                                        var g = this.svg.append('g');
+                                        g.append('path')
+                                            .attr('d', 'M14.8025 62.0243H13.3025V63.5243V109.33C13.3025 112.457 10.7652 114.995 7.62974 114.995C4.52341 114.995 2.05603 112.482 2.05603 109.33V58.5276C2.05603 47.7847 10.8631 39.0498 21.6399 39.0498H57.8253C68.5917 39.0498 77.4056 47.7849 77.4056 58.5276V109.33C77.4056 112.483 74.9364 114.995 71.8267 114.995C68.6982 114.995 66.1557 112.454 66.1557 109.33V63.5243V62.0243H64.6557H60.9589H59.4589V63.5243V190.975C59.4589 195.441 55.8001 199.086 51.3147 199.086C46.8293 199.086 43.2017 195.448 43.2017 190.975V116.968V115.468H41.7017H37.7564H36.2564V116.968V190.975C36.2564 195.449 32.6278 199.086 28.1539 199.086C23.6745 199.086 20.0392 195.447 20.0392 190.975C20.0392 187.046 20.0184 155.183 19.9975 124.302C19.9871 108.862 19.9767 93.6674 19.9689 82.3327L19.9594 68.6775L19.9568 64.8683L19.9561 63.8666L19.9559 63.61L19.9558 63.5451V63.5288V63.5247C19.9558 63.5238 19.9558 63.5233 18.4558 63.5243L19.9558 63.5233L19.9548 62.0243H18.4558H14.8025ZM39.7326 31.8474C31.5119 31.8474 24.8553 25.1836 24.8535 16.9684C24.8537 8.74658 31.5101 2.08571 39.7326 2.08571C47.945 2.08571 54.6081 8.74501 54.6081 16.9684C54.6081 25.1831 47.945 31.8474 39.7326 31.8474Z')
+                                            .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
+                                            .attr('fill', this.colorFunctionL(population))
+                                            .attr('stroke', 'black')
+                                            .attr('stroke-width', 3);
+                                        g.attr('transform', 'translate(' + x + ',' + y + ')');
                                     }
                                 }
                             }
