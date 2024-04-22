@@ -1516,13 +1516,11 @@ export default {
                         } 
                     } else {
                         d3.select("." + this.value + "-legend").selectAll("*").remove();
-                        this.encodingChannel = () => {
-                            this.preEncoding = type;
-                            this.svg.selectAll('path')
-                            .attr('fill', `${this.defaultColor}`);
-                            this.svg.selectAll('circle')
-                            .attr('fill', `${this.defaultColor}`);
-                        }
+                        this.preEncoding = type;
+                        this.svg.selectAll('path')
+                        .attr('fill', `${this.defaultColor}`);
+                        this.svg.selectAll('circle')
+                        .attr('fill', `${this.defaultColor}`);
                     }
                     this.drawColorLuminanceLegend();
                 }
