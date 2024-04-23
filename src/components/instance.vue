@@ -80,14 +80,13 @@
                             <v-container class="container">
                                 <v-row>
                                     Double Encoding: 
-                                    <input type="checkbox" v-model="ifDoubleEncoding" @click="doubleEncoding()" />
-                                    <label>{{ ifDoubleEncodingText }}</label>
+                                    <input type="buttom" v-model=ifDoubleEncodingText @click="doubleEncoding()" />
                                 </v-row>
                                 <div class="sub-title">Color</div>
                                 <v-container class = "sub-container">
                                     <v-row>
                                         <v-col class="element" @click="setEncodingChannel(myType['Color (Luminance)'])">
-                                            Color (Luminance)
+                                            Color (Intensity)
                                             <v-img :src="require('../assets/Color(Luminance).svg')" contain />
                                         </v-col>
 
@@ -112,33 +111,32 @@
                                         </v-col>
                                     </v-row>
                                 </v-container>
-                                
-                                <div class="sub-title">Link</div>
-                                <v-container class = "sub-container">
-                                    <v-row>
-                                        <v-col class="element" @click="setEncodingChannel(myType['Link (Line)'])">
-                                            Link (Line)
-                                            <v-img :src="require('../assets/Link(Line).svg')" contain />
-                                        </v-col>
 
-                                        <v-col class="element" @click="setEncodingChannel(myType['Link (Arrow)'])">
-                                            Link (Arrow)
-                                            <v-img :src="require('../assets/Link(Arrow).svg')" contain />
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
-                                
                                 <div class="sub-title">Area</div>
                                 <v-container class = "sub-container">
                                     <v-row>
+                                        <v-col class="element" @click="setEncodingChannel(myType['Quantity'])">
+                                            Quantity
+                                            <v-img :src="require('../assets/Quantity.svg')" contain />
+                                        </v-col>
                                         <v-col class="element" @click="setEncodingChannel(myType['Size'])">
                                             Size
                                             <v-img :src="require('../assets/Size.svg')" contain />
                                         </v-col>
+                                    </v-row>
+                                </v-container>
 
-                                        <v-col class="element" @click="setEncodingChannel(myType['Quantity'])">
-                                            Quantity
-                                            <v-img :src="require('../assets/Quantity.svg')" contain />
+                                <div class="sub-title">Link</div>
+                                <v-container class = "sub-container">
+                                    <v-row>
+                                        <v-col class="element" @click="setEncodingChannel(myType['Link (Line)'])">
+                                            Tilt/Angle (Undirected)
+                                            <v-img :src="require('../assets/Link(Line).svg')" contain />
+                                        </v-col>
+
+                                        <v-col class="element" @click="setEncodingChannel(myType['Link (Arrow)'])">
+                                            Tilt/Angle (Directed)
+                                            <v-img :src="require('../assets/Link(Arrow).svg')" contain />
                                         </v-col>
                                     </v-row>
                                 </v-container>
@@ -1608,23 +1606,26 @@ export default {
                                         .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
                                         .attr('fill', `rgba(200, 60, 60, ${sideOpacity})`); // 修改左侧面的颜色
                                 } else {
-                                    // 绘制长方体的“前面”s                             
+                                    // 绘制长方体的“前面”                     
                                     this.svg.append('rect')
                                         .attr('x', center[0] - cuboidWidth / 2)
                                         .attr('y', center[1] - height)
                                         .attr('width', cuboidWidth)
                                         .attr('height', height)
-                                        .attr('fill', this.colorFunctionL(population)); // 修改前面的颜色
+                                        .attr('fill', this.colorFunctionL(population))
+                                        .attr('opacity', '0.7'); // 修改前面的颜色
 
                                     // 绘制长方体的“顶面”
                                     this.svg.append('polygon')
                                         .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
-                                        .attr('fill', this.colorFunctionL(population));
+                                        .attr('fill', this.colorFunctionL(population))
+                                        .attr('opacity', '0.7');
 
                                     // 绘制长方体的“左侧面”
                                     this.svg.append('polygon')
                                         .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
-                                        .attr('fill', this.colorFunctionL(population)); // 修改左侧面的颜色
+                                        .attr('fill', this.colorFunctionL(population))
+                                        .attr('opacity', '0.9'); // 修改左侧面的颜色
                                 }
                             }
                         });
@@ -1690,7 +1691,8 @@ export default {
                                     .attr('y', center[1] - height)
                                     .attr('width', cuboidWidth)
                                     .attr('height', height)
-                                    .attr('fill', this.colorFunctionL(population));
+                                    .attr('fill', this.colorFunctionL(population))
+                                    .attr('opacity', '0.7');
                                     
                                 }
                             }
@@ -1752,7 +1754,8 @@ export default {
                                     .attr('y', y - sizeScale(population) / 2)
                                     .attr('width', sizeScale(population))
                                     .attr('height', sizeScale(population))
-                                    .attr('fill', this.colorFunctionL(population));
+                                    .attr('fill', this.colorFunctionL(population))
+                                    .attr('opacity', '0.7');
                                 }
                                 
                             }
@@ -1792,11 +1795,11 @@ export default {
                         this.svg.selectAll('path').attr("fill", this.defaultColor);
 
                         // 在地图上叠加人口图标
-                        const iconWidth = 6; // 图标的宽度
-                        const iconHeight = 15; // 图标的高度
-                        const iconGap = 1; // 调整图标间的间隔
-                        const scaleX = 0.07;
-                        const scaleY = 0.07;
+                        const iconWidth = 10; // 图标的宽度
+                        const iconHeight = 25; // 图标的高度
+                        const iconGap = 2; // 调整图标间的间隔
+                        const scaleX = 0.12;
+                        const scaleY = 0.12;
 
                         // 直接在现有的SVG上绘制图标，不清除之前的内容
                         this.geoData.features.forEach(feature => {
