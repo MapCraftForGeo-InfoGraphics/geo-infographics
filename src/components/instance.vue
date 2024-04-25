@@ -761,7 +761,7 @@ export default {
                         // 添加一个SVG图标作为光圈效果
                         d3.select(svg).append('image')
                             .classed('highlight-marker', true) // 使用类来标记这是一个高亮标记
-                            .attr('xlink:href', require('../assets/locationIcon.png'))// 设置图像的路径
+                            .attr('xlink:href', require('../assets/locationIcon.svg'))// 设置图像的路径
                             .attr('x', x - 20) // 调整图像位置，使其中心对准点击位置
                             .attr('y', y - 48) // 同上，根据实际大小调整
                             .attr('width', 40) // 设置图像的宽度
