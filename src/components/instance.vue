@@ -82,74 +82,65 @@
                                     Double Encoding: 
                                     <input type="buttom" v-model=ifDoubleEncodingText @click="doubleEncoding()" />
                                 </v-row>
-                                <div class="sub-title">Color</div>
-                                <v-container class = "sub-container">
-                                    <v-row>
-                                        <v-col class="element" @click="setEncodingChannel(myType['Color (Luminance)'])">
-                                            Color (Intensity)
-                                            <v-img :src="require('../assets/Color(Luminance).svg')" contain />
-                                        </v-col>
 
-                                        <v-col class="element" @click="setEncodingChannel(myType['Color (Hue)'])">
-                                            Color (Hue)
-                                            <v-img :src="require('../assets/Color(Hue).svg')" contain />
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
+                                <v-row>
+                                    <div class="row-with-line"></div>
+                                    <v-col class="element" @click="setEncodingChannel(myType['Color (Luminance)'])">
+                                        Color (Intensity)
+                                        <v-img :src="require('../assets/Color(Luminance).svg')" contain />
+                                    </v-col>
+
+                                    <v-col class="element" @click="setEncodingChannel(myType['Color (Hue)'])">
+                                        Color (Hue)
+                                        <v-img :src="require('../assets/Color(Hue).svg')" contain />
+                                    </v-col>
+                                </v-row>
                                 
-                                <div class="sub-title">Length</div>
-                                <v-container class = "sub-container">
-                                    <v-row>
-                                        <v-col class="element" @click="setEncodingChannel(myType['3D Length'])">
-                                            3D Length
-                                            <v-img :src="require('../assets/3DLength.svg')" contain />
-                                        </v-col>
+                                <v-row>
+                                    <div class="row-with-line"></div>
+                                    <v-col class="element" @click="setEncodingChannel(myType['3D Length'])">
+                                        3D Length
+                                        <v-img :src="require('../assets/3DLength.svg')" contain />
+                                    </v-col>
 
-                                        <v-col class="element" @click="setEncodingChannel(myType['2D Length'])">
-                                            2D Length
-                                            <v-img :src="require('../assets/BarChart.svg')" contain />
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
+                                    <v-col class="element" @click="setEncodingChannel(myType['2D Length'])">
+                                        2D Length
+                                        <v-img :src="require('../assets/BarChart.svg')" contain />
+                                    </v-col>
+                                </v-row>
 
-                                <div class="sub-title">Area</div>
-                                <v-container class = "sub-container">
-                                    <v-row>
-                                        <v-col class="element" @click="setEncodingChannel(myType['Quantity'])">
-                                            Quantity
-                                            <v-img :src="require('../assets/Quantity.svg')" contain />
-                                        </v-col>
-                                        <v-col class="element" @click="setEncodingChannel(myType['Size'])">
-                                            Size
-                                            <v-img :src="require('../assets/Size.svg')" contain />
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
+                                <v-row>
+                                    <div class="row-with-line"></div>
+                                    <v-col class="element" @click="setEncodingChannel(myType['Quantity'])">
+                                        Quantity
+                                        <v-img :src="require('../assets/Quantity.svg')" contain />
+                                    </v-col>
+                                    <v-col class="element" @click="setEncodingChannel(myType['Size'])">
+                                        Size
+                                        <v-img :src="require('../assets/Size.svg')" contain />
+                                    </v-col>
+                                </v-row>
 
-                                <div class="sub-title">Link</div>
-                                <v-container class = "sub-container">
-                                    <v-row>
-                                        <v-col class="element" @click="setEncodingChannel(myType['Link (Line)'])">
-                                            Tilt/Angle (Undirected)
-                                            <v-img :src="require('../assets/Link(Line).svg')" contain />
-                                        </v-col>
+                                <v-row>
+                                    <div class="row-with-line"></div>
+                                    <v-col class="element" @click="setEncodingChannel(myType['Link (Line)'])">
+                                        Tilt/Angle (Undirected)
+                                        <v-img :src="require('../assets/Link(Line).svg')" contain />
+                                    </v-col>
 
-                                        <v-col class="element" @click="setEncodingChannel(myType['Link (Arrow)'])">
-                                            Tilt/Angle (Directed)
-                                            <v-img :src="require('../assets/Link(Arrow).svg')" contain />
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
+                                    <v-col class="element" @click="setEncodingChannel(myType['Link (Arrow)'])">
+                                        Tilt/Angle (Directed)
+                                        <v-img :src="require('../assets/Link(Arrow).svg')" contain />
+                                    </v-col>
+                                </v-row>
                                 
-                                <div class="sub-title">Glyph</div>
-                                <v-container class = "sub-container">
-                                    <v-row>
-                                        <v-col class="element" @click="setEncodingChannel(myType['Glyph'])">
-                                            Glyph
-                                            <v-img :src="require('../assets/Glyph.svg')" width="50%" contain />
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
+                                <v-row>
+                                    <div class="row-with-line"></div>
+                                    <v-col class="element" @click="setEncodingChannel(myType['Glyph'])">
+                                        Glyph
+                                        <v-img :src="require('../assets/Glyph.svg')" width="50%" contain />
+                                    </v-col>
+                                </v-row>
                                 
                             </v-container>
                         </v-expansion-panel-text>
@@ -161,64 +152,59 @@
 
                         <v-expansion-panel-text>
                             <v-container class="container">
-                                <div class="sub-title" id="sub-title-0">Situated</div>
-                                <v-container class="sub-container">
-                                    <v-row>
-                                        <v-col class="element" @click="setLabelPosition(myType['Label Situated'])">
-                                            Situated
-                                            <v-img :src="require('../assets/Situated.svg')" contain />
+                                <v-row>
+                                    <div class="row-with-line"></div>
+                                    <v-col class="element" @click="setLabelPosition(myType['Label Situated'])">
+                                        Situated
+                                        <v-img :src="require('../assets/Situated.svg')" contain />
+                                    </v-col>
+
+                                    <v-col></v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <div class="row-with-line"></div>
+                                    <v-col class="element" @click="setLabelPosition(myType['Label Text'])">
+                                        Text
+                                        <v-img :src="require('../assets/MatchedText.svg')" contain />
+                                    </v-col>
+
+                                    <v-col class="element" @click="setLabelPosition(myType['Label Icon'])">
+                                        Icon
+                                        <v-img :src="require('../assets/MatchedIcon.svg')" contain />
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <div class="row-with-line"></div>
+                                    <v-col class="element" @click="setLabelPosition(myType['Label Color'])">
+                                        Color
+                                        <v-img :src="require('../assets/MathchedColor.svg')" contain />
+                                    </v-col>
+                                    <v-col></v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <div class="row-with-line"></div>
+                                    <v-col style="padding: 0;">
+                                        <v-col class="element"
+                                            @click="setLabelPosition(myType['Label Convenient'])">
+                                            Convenient
+                                            <v-img :src="require('../assets/LinkedConvenient.svg')" contain />
                                         </v-col>
 
-                                        <v-col></v-col>
-                                    </v-row>
-                                </v-container>
-
-                                <div class="sub-title">Matched</div>
-                                <v-container class="sub-container">
-                                    <v-row>
-                                        <v-col class="element" @click="setLabelPosition(myType['Label Text'])">
-                                            Text
-                                            <v-img :src="require('../assets/MatchedText.svg')" contain />
+                                        <v-col class="element" @click="setLabelPosition(myType['Label Aligned'])">
+                                            Aligned
+                                            <v-img :src="require('../assets/LinkedAligned.svg')" contain />
                                         </v-col>
 
-                                        <v-col class="element" @click="setLabelPosition(myType['Label Icon'])">
-                                            Icon
-                                            <v-img :src="require('../assets/MatchedIcon.svg')" contain />
-                                        </v-col>
-                                    </v-row>
+                                    </v-col>
 
-                                    <v-row>
-                                        <v-col class="element" @click="setLabelPosition(myType['Label Color'])">
-                                            Color
-                                            <v-img :src="require('../assets/MathchedColor.svg')" contain />
-                                        </v-col>
-                                        <v-col></v-col>
-                                    </v-row>
-                                </v-container>
-
-                                <div class="sub-title">Linked</div>
-                                <v-container class="sub-container">
-                                    <v-row>
-                                        <v-col style="padding: 0;">
-                                            <v-col class="element"
-                                                @click="setLabelPosition(myType['Label Convenient'])">
-                                                Convenient
-                                                <v-img :src="require('../assets/LinkedConvenient.svg')" contain />
-                                            </v-col>
-
-                                            <v-col class="element" @click="setLabelPosition(myType['Label Aligned'])">
-                                                Aligned
-                                                <v-img :src="require('../assets/LinkedAligned.svg')" contain />
-                                            </v-col>
-
-                                        </v-col>
-
-                                        <v-col class="element" @click="setLabelPosition(myType['Label Ordered'])">
-                                            Ordered
-                                            <v-img :src="require('../assets/LinkedOrdered.svg')" contain />
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
+                                    <v-col class="element" @click="setLabelPosition(myType['Label Ordered'])">
+                                        Ordered
+                                        <v-img :src="require('../assets/LinkedOrdered.svg')" contain />
+                                    </v-col>
+                                </v-row>
                             </v-container>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -302,6 +288,22 @@
         </v-card>
     </v-dialog>
 </template>
+
+<style scoped>
+.row-with-line {
+    position: relative; /* 设置相对定位，以便将竖线定位相对于该行 */
+}
+
+.row-with-line::before {
+    content: '';
+    width: 3px; /* 竖线的宽度 */
+    height: 90%; /* 竖线的高度*/
+    background-color: pink; /* 竖线的颜色 */
+    position: absolute; /* 使竖线定位在行的左侧 */
+    left: 0; /* 将竖线定位在行的左侧 */
+    top: 0; /* 将竖线定位在行的顶部 */
+}
+</style>
 
 <script>
 import * as d3 from 'd3';
@@ -711,7 +713,7 @@ export default {
                         console.log(svg);
                         d3.select(svg)
                             .classed('highlighted', true) // 使用类来标记高亮
-                            .attr('fill', d3.rgb(33, 68, 158));
+                            .attr('fill', '#5959E9');
                     };
 
                     highLight(svg);
@@ -793,7 +795,7 @@ export default {
                             .datum(feature) // 使用同一区域的数据
                             .attr('class', 'highlight-3d-effect') // 为了方便之后可能的移除
                             .attr('d', this.geoPath) // 使用geoPath来保持地理形状的一致性
-                            .attr('fill', 'rgba(33, 68, 158, 0.5)') // 为了简化，这里使用纯色填充表示阴影
+                            .attr('fill', d3.rgb(89, 89, 233, 0.5)) // 为了简化，这里使用纯色填充表示阴影
                             .attr('filter', 'url(#drop-shadow)')
                             .attr('stroke-width', 2); // 应用下面定义的SVG滤镜实现阴影效果
 
@@ -852,7 +854,7 @@ export default {
                         .attr('cy', y)
                         .attr('r', 30) // 圆的半径
                         .style('fill', 'none')
-                        .style('stroke', d3.rgb(33, 68, 158))
+                        .style('stroke', '#5959E9')
                         .style('stroke-width', 3);
 
                     // 清除#enlargedView中的内容
@@ -927,7 +929,7 @@ export default {
                             .attr('class', 'highlight-edge-stroke') // 为了方便之后可能的移除
                             .attr('d', this.geoPath) // 使用geoPath来保持地理形状的一致性
                             .attr('stroke-width', 2)
-                            .attr('stroke', d3.rgb(33, 68, 158))
+                            .attr('stroke', '#5959E9')
                             .style('fill', 'none');
                     };
 
@@ -2105,6 +2107,8 @@ export default {
         doubleEncoding() {
             this.ifDoubleEncoding = !this.ifDoubleEncoding;
             this.ifDoubleEncodingText = this.ifDoubleEncoding ? 'ON' : 'OFF';
+            if (this.ifDoubleEncoding)
+                alert('Attention! Only supporting for one color method with one length, size or quantity method.');
         },
     },
 
