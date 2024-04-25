@@ -1875,7 +1875,7 @@ export default {
                     //         .style('font-size', '14px') // 文本大小
                     //         .text('This encoding method is not applicable to the current data provided.');
                     // };
-                    d3.select("." + this.value + "-legend").selectAll("*").remove();
+                    // d3.select("." + this.value + "-legend").selectAll("*").remove();
                     this.showErrorDialog("Encoding Channel Not Support", "The selected encoding channel only support the data your uploaded!")
                 }
             }
