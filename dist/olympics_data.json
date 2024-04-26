@@ -1,0 +1,99 @@
+[
+    {
+      "country": "United Kingdom",
+      "annotation": {
+        "city": "London",
+        "summer_olympics": ["1908", "1948", "2012"],
+        "winter_olympics": [],
+        "total": 3,
+        "flag_base64": "data:image\/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNjAgMzAiIGhlaWdodD0iNjAwIj4NCjxkZWZzPg0KPGNsaXBQYXRoIGlkPSJ0Ij4NCjxwYXRoIGQ9Im0zMCwxNWgzMHYxNXp2MTVoLTMwemgtMzB2LTE1enYtMTVoMzB6Ii8+DQo8L2NsaXBQYXRoPg0KPC9kZWZzPg0KPHBhdGggZmlsbD0iIzAwMjQ3ZCIgZD0ibTAsMHYzMGg2MHYtMzB6Ii8+DQo8cGF0aCBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iNiIgZD0ibTAsMGw2MCwzMG0wLTMwbC02MCwzMCIvPg0KPHBhdGggc3Ryb2tlPSIjY2YxNDJiIiBzdHJva2Utd2lkdGg9IjQiIGQ9Im0wLDBsNjAsMzBtMC0zMGwtNjAsMzAiIGNsaXAtcGF0aD0idXJsKCN0KSIvPg0KPHBhdGggc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEwIiBkPSJtMzAsMHYzMG0tMzAtMTVoNjAiLz4NCjxwYXRoIHN0cm9rZT0iI2NmMTQyYiIgc3Ryb2tlLXdpZHRoPSI2IiBkPSJtMzAsMHYzMG0tMzAtMTVoNjAiLz4NCjwvc3ZnPg0K"
+  
+      }
+    },
+    {
+      "country": "France",
+      "annotation": {
+        "city": "Paris, Chamonix, Grenoble, Albertville",
+        "summer_olympics": ["1900", "1924", "2024"],
+        "winter_olympics": ["1924", "1968", "1992"],
+        "total": 6,
+        "flag_base64": "data:image\/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgNjAwIj4NCjxwYXRoIGZpbGw9IiNlZDI5MzkiIGQ9Im0wLDBoOTAwdjYwMGgtOTAweiIvPg0KPHBhdGggZmlsbD0iI2ZmZiIgZD0ibTAsMGg2MDB2NjAwaC02MDB6Ii8+DQo8cGF0aCBmaWxsPSIjMDAyMzk1IiBkPSJtMCwwaDMwMHY2MDBoLTMwMHoiLz4NCjwvc3ZnPg0K"
+      }
+    },
+
+    {
+      "country": "Greece",
+      "annotation": {
+        "city": "Athens",
+        "summer_olympics": ["1896", "2004"],
+        "winter_olympics": [],
+        "total": 2,
+        "flag_base64": "data:image\/svg+xml;base64,PHN2ZyB3aWR0aD0iODEwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNyAxOCIgaGVpZ2h0PSI1NDAiPg0KPHBhdGggZmlsbD0iIzAwMDA4MCIgZD0ibTAsMGgyN3YxOGgtMjd6Ii8+DQo8cGF0aCBmaWxsPSIjZmZmIiBkPSJtNCwwIDIsMCAwLDQgNCwwIDAsMi00LDAgMCw0IDIxLDAgMCwyLTI3LDAgMC0yIDQsMCAwLTQtNCwwIDAtMiA0LDAgMC00em02LDIgMTcsMCAwLDItMTcsMCAwLTJ6bTAsNCAxNywwIDAsMi0xNywwIDAtMnptLTEwLDQgMCwyIDAtMnptMCw0IDI3LDAgMCwyLTI3LDAgMC0yeiIvPg0KPC9zdmc+DQo="
+      }
+    },
+
+
+    {
+      "country": "Switzerland",
+      "annotation": {
+        "city": "St. Moritz",
+        "summer_olympics": [],
+        "winter_olympics": ["1928", "1948"],
+        "total": 2,
+        "flag_base64": "data:image\/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMzIwIj4NCjxwYXRoIGZpbGw9IiNkNTJiMWUiIGQ9Im0wLDBoMzIwdjMyMGgtMzIweiIvPg0KPGcgZmlsbD0iI2ZmZiI+DQo8cGF0aCBkPSJtNjAsMTMwaDIwMHY2MGgtMjAweiIvPg0KPHBhdGggZD0ibTEzMCw2MGg2MHYyMDBoLTYweiIvPg0KPC9nPg0KPC9zdmc+DQo="
+      }
+    },
+    {
+      "country": "Austria",
+      "annotation": {
+        "city": "Innsbruck",
+        "summer_olympics": [],
+        "winter_olympics": ["1964", "1976"],
+        "total": 2,
+        "flag_base64": "data:image\/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgNjAwIj4NCjxwYXRoIGZpbGw9IiNkODFlMDUiIGQ9Im0wLDBoOTAwdjYwMGgtOTAweiIvPg0KPHBhdGggZmlsbD0iI2ZmZiIgZD0ibTAsMjAwaDkwMHYyMDBoLTkwMHoiLz4NCjwvc3ZnPg0K"
+      }
+    },
+    {
+      "country": "Italy",
+      "annotation": {
+        "city": "Rome, Cortina d'Ampezzo, Torino",
+        "summer_olympics": ["1960"],
+        "winter_olympics": ["1956", "2006"],
+        "total": 3,
+        "flag_base64": "data:image\/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBoZWlnaHQ9IjEwMDAiIHZpZXdCb3g9IjAgMCAzIDIiPg0KPHBhdGggZmlsbD0iIzAwOTI0NiIgZD0ibTAsMGgxdjJoLTF6Ii8+DQo8cGF0aCBmaWxsPSIjZmZmIiBkPSJtMSwwaDF2MmgtMXoiLz4NCjxwYXRoIGZpbGw9IiNjZTJiMzciIGQ9Im0yLDBoMXYyaC0xeiIvPg0KPC9zdmc+DQo="
+      }
+    },
+
+    {
+      "country": "Germany",
+      "annotation": {
+        "city": "Berlin, Munich, Garmisch-Partenkirchen",
+        "summer_olympics": ["1936", "1972"],
+        "winter_olympics": ["1936"],
+        "total": 3,
+        "flag_base64": "data:image\/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDUgMyI+DQo8cGF0aCBkPSJtMCwwaDV2M2gtNXoiLz4NCjxwYXRoIGZpbGw9IiNkMDAiIGQ9Im0wLDFoNXYyaC01eiIvPg0KPHBhdGggZmlsbD0iI2ZmY2UwMCIgZD0ibTAsMmg1djFoLTV6Ii8+DQo8L3N2Zz4NCg=="
+      }
+    },
+
+    {
+      "country": "Russia",
+      "annotation": {
+        "city": "Moscow, Sochi",
+        "summer_olympics": ["1980"],
+        "winter_olympics": ["2014"],
+        "total": 2,
+        "flag_base64": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5IDYiIHdpZHRoPSI5MDAiIGhlaWdodD0iNjAwIj48cmVjdCBmaWxsPSIjZmZmIiB3aWR0aD0iOSIgaGVpZ2h0PSIzIi8+PHJlY3QgZmlsbD0iI2Q1MmIxZSIgeT0iMyIgd2lkdGg9IjkiIGhlaWdodD0iMyIvPjxyZWN0IGZpbGw9IiMwMDM5YTYiIHk9IjIiIHdpZHRoPSI5IiBoZWlnaHQ9IjIiLz48L3N2Zz4="
+      }
+    },
+    {
+      "country": "Norway",
+      "annotation": {
+        "city": "Oslo, Lillehammer",
+        "summer_olympics": [],
+        "winter_olympics": ["1952", "1994"],
+        "total": 2,
+        "flag_base64": "data:image\/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMTAwIDgwMCI+DQo8cGF0aCBmaWxsPSIjZWYyYjJkIiBkPSJtMCwwaDExMDB2ODAwaC0xMTAweiIvPg0KPGcgZmlsbD0iI2ZmZiI+DQo8cGF0aCBkPSJtMzAwLDBoMjAwdjgwMGgtMjAweiIvPg0KPHBhdGggZD0ibTAsMzAwaDExMDB2MjAwaC0xMTAweiIvPg0KPC9nPg0KPGcgZmlsbD0iIzAwMjg2OCI+DQo8cGF0aCBkPSJtMzUwLDBoMTAwdjgwMGgtMTAweiIvPg0KPHBhdGggZD0ibTAsMzUwaDExMDB2MTAwaC0xMTAweiIvPg0KPC9nPg0KPC9zdmc+DQo="
+      }
+    }
+  ]
+  
