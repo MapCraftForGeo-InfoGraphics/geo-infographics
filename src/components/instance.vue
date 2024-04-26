@@ -79,8 +79,7 @@
                         <v-expansion-panel-text>
                             <v-container class="container">
                                 <v-row>
-                                    Double Encoding: 
-                                    <input type="buttom" v-model=ifDoubleEncodingText @click="doubleEncoding()" />
+                                    <input type="button" id="myButton" v-model=ifDoubleEncodingText @click="doubleEncoding()"/>
                                 </v-row>
 
                                 <v-row>
@@ -245,7 +244,7 @@
                                         <v-img :src="require('../assets/HighlightEnlarge.svg')" contain />
                                     </v-col>
                                     <v-col class="element" @click="setHighlight(myType['Edge Stroke'])">
-                                        Edge Stroke
+                                        Contour
                                         <v-img :src="require('../assets/HighlightEdgeStroking.svg')" contain />
                                     </v-col>
                                 </v-row>
@@ -288,22 +287,6 @@
         </v-card>
     </v-dialog>
 </template>
-
-<style scoped>
-.row-with-line {
-    position: relative; /* 设置相对定位，以便将竖线定位相对于该行 */
-}
-
-.row-with-line::before {
-    content: '';
-    width: 3px; /* 竖线的宽度 */
-    height: 90%; /* 竖线的高度*/
-    background-color: pink; /* 竖线的颜色 */
-    position: absolute; /* 使竖线定位在行的左侧 */
-    left: 0; /* 将竖线定位在行的左侧 */
-    top: 0; /* 将竖线定位在行的顶部 */
-}
-</style>
 
 <script>
 import * as d3 from 'd3';
@@ -363,7 +346,7 @@ export default {
         errorDialog: false,
 
         ifDoubleEncoding: false,
-        ifDoubleEncodingText: 'OFF',
+        ifDoubleEncodingText: 'Double Encoding: OFF',
         preEncoding: -1,
 
         encodingChannel: () => { },
@@ -2106,7 +2089,7 @@ export default {
 
         doubleEncoding() {
             this.ifDoubleEncoding = !this.ifDoubleEncoding;
-            this.ifDoubleEncodingText = this.ifDoubleEncoding ? 'ON' : 'OFF';
+            this.ifDoubleEncodingText = this.ifDoubleEncoding ? 'Double Encoding: ON' : 'Double Encoding: OFF';
             if (this.ifDoubleEncoding)
                 alert('Attention! Only supporting for one color method with one length, size or quantity method.');
         },
@@ -2147,5 +2130,30 @@ export default {
     transform: scale(1.12);
     border: 0.67px solid;
     border-color: #E1CBD8;
+}
+
+.row-with-line {
+    position: relative; /* 设置相对定位，以便将竖线定位相对于该行 */
+}
+
+.row-with-line::before {
+    content: '';
+    width: 3px; /* 竖线的宽度 */
+    height: 90%; /* 竖线的高度*/
+    background-color: pink; /* 竖线的颜色 */
+    position: absolute; /* 使竖线定位在行的左侧 */
+    left: 0; /* 将竖线定位在行的左侧 */
+    top: 0; /* 将竖线定位在行的顶部 */
+}
+
+#myButton {
+    border: 2px solid transparent; /* 设置默认的边框，透明色 */
+    outline: none;                 /* 取消浏览器默认的焦点轮廓 */
+    /* border-color: pink; */
+}
+
+#myButton:hover {
+    border-color: pink;  /* 设置选中时的边框颜色为粉色 */
+    /*outline: none;      /* 取消浏览器默认的焦点轮廓 */
 }
 </style>
