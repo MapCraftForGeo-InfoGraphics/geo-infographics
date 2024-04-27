@@ -18,5 +18,7 @@ module.exports = defineConfig({
     vuetify: {
       // Vuetify options here
     }
-  }
+  },
+
+  publicPath: process.env.NODE_ENV === 'production' ? '/GEO-INFO-GRAPHICS/' : '/',
 })
