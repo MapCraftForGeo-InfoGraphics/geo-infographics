@@ -152,6 +152,11 @@
                         <v-expansion-panel-text>
                             <v-container class="container">
                                 <v-row>
+                                    <v-col style="padding: 0;">
+                                        <div class="matched-heading">Situated</div>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
                                     <div class="row-with-line"></div>
                                     <v-col class="element" @click="setLabelPosition(myType['Label Situated'])">
                                         Situated
