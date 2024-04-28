@@ -162,12 +162,22 @@
                                 </v-row>
 
                                 <v-row>
-                                    <div class="row-with-line"></div>
-                                    <v-col class="element" @click="setLabelPosition(myType['Label Text'])">
-                                        Text
-                                        <v-img :src="require('../assets/MatchedText.svg')" contain />
+                                    <v-col style="padding: 0;">
+                                        <div class="matched-heading">Matched</div>
                                     </v-col>
-
+                                </v-row>
+                                <v-row>
+                                    <div class="row-with-line"></div>
+                                    <v-col style="padding: 0;">
+                                        <v-col class="element" @click="setLabelPosition(myType['Label Text'])">
+                                            Text
+                                            <v-img :src="require('../assets/MatchedText.svg')" contain />
+                                        </v-col>
+                                        <v-col class="element" @click="setLabelPosition(myType['Label Color'])">
+                                            Color
+                                            <v-img :src="require('../assets/MathchedColor.svg')" contain />
+                                        </v-col>
+                                    </v-col>
                                     <v-col class="element" @click="setLabelPosition(myType['Label Icon'])">
                                         Icon
                                         <v-img :src="require('../assets/MatchedIcon.svg')" contain />
@@ -175,14 +185,10 @@
                                 </v-row>
 
                                 <v-row>
-                                    <div class="row-with-line"></div>
-                                    <v-col class="element" @click="setLabelPosition(myType['Label Color'])">
-                                        Color
-                                        <v-img :src="require('../assets/MathchedColor.svg')" contain />
+                                    <v-col style="padding: 0;">
+                                        <div class="matched-heading">Linked</div>
                                     </v-col>
-                                    <v-col></v-col>
                                 </v-row>
-
                                 <v-row>
                                     <div class="row-with-line"></div>
                                     <v-col style="padding: 0;">
@@ -2198,4 +2204,11 @@ export default {
     border-color: pink;  /* 设置选中时的边框颜色为粉色 */
     /*outline: none;      /* 取消浏览器默认的焦点轮廓 */
 }
+
+.matched-heading {
+    background-color: pink;
+    padding: 10px;
+    text-align: center;
+}
+
 </style>
