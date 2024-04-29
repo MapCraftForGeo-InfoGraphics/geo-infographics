@@ -79,7 +79,13 @@
                         <v-expansion-panel-text>
                             <v-container class="container">
                                 <v-row>
-                                    <input type="button" id="myButton" v-model=ifDoubleEncodingText @click="doubleEncoding()"/>
+                                    <v-col>
+                                        <input type="button" id="myButton" v-model=ifDoubleEncodingText @click="doubleEncoding()"/>
+                                    </v-col>
+                                    <v-col>
+                                        <input type="button" id="myButtonRemove" v-model=removeText @click="setEncodingChannel(myType['Remove'])"/>
+                                    </v-col>
+                                    
                                 </v-row>
 
                                 <v-row>
@@ -139,6 +145,11 @@
                                         Glyph
                                         <v-img :src="require('../assets/Glyph.svg')" width="50%" contain />
                                     </v-col>
+
+                                    <!-- <v-col class="element" @click="setEncodingChannel(myType['Remove'])">
+                                        Remove
+                                        <v-img :src="require('../assets/Glyph.svg')" width="50%" contain />
+                                    </v-col> -->
                                 </v-row>
                                 
                             </v-container>
@@ -351,6 +362,7 @@ export default {
 
         ifDoubleEncoding: false,
         ifDoubleEncodingText: 'Dual Encoding: OFF',
+        removeText: 'No Encoding',
         preEncoding: -1,
         preColortype: -1,
 
@@ -397,6 +409,7 @@ export default {
             "Size": 6,
             "Quantity": 7,
             "2D Length": 8,
+            "Remove": 9,
 
         },
     }),
@@ -1965,6 +1978,14 @@ export default {
                     }
 
                     
+                }
+                else if (type === this.myType['Remove']) {
+                    this.encodingChannelType = type;
+
+                    this.encodingChannel = () => {
+                        this.svg.selectAll('path').attr("fill", this.defaultColor);
+                        d3.select("." + this.value + "-legend").selectAll("*").remove();
+                    }
                 }
 
                 else {
