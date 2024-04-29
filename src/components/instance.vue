@@ -381,6 +381,7 @@ export default {
         colorFunctionL: () => { },
 
         highLights: [],
+        pointer2highlight: 0,
 
         myType: {
             "Political Map": 0,
@@ -460,6 +461,7 @@ export default {
             // 获得html中的地图（svg）标签
             this.svg = d3.select("." + this.value + "-svg");
             this.legend = d3.select("." + this.value + "-legend");
+            this.highLights.push([]);
 
             //根据窗口大小设置地图的大小
             this.mapWidth = this.svg.node().getBoundingClientRect().width;
@@ -510,7 +512,7 @@ export default {
             this.encodingChannel();
             this.LabelPosition();
 
-            this.highLights.forEach(highLight => {
+            this.highLights[this.pointer2highlight].forEach(highLight => {
                 highLight();
             });
         },
@@ -629,7 +631,7 @@ export default {
                         };
 
                         highLight(svg);
-                        this.highLights.push(highLight);
+                        this.highLights[this.pointer2highlight].push(highLight);
                     };
 
                     this.svg.selectAll('path')
@@ -694,7 +696,7 @@ export default {
                     };
 
                     highLight(svg);
-                    this.highLights.push(highLight);
+                    this.highLights[this.pointer2highlight].push(highLight);
                 };
 
                 this.svg.selectAll('path')
@@ -719,7 +721,7 @@ export default {
                     };
 
                     highLight();
-                    this.highLights.push(highLight);
+                    this.highLights[this.pointer2highlight].push(highLight);
                 };
 
                 // 绑定一个新的点击事件监听器到SVG本身
@@ -746,7 +748,7 @@ export default {
                     };
 
                     highLight();
-                    this.highLights.push(highLight);
+                    this.highLights[this.pointer2highlight].push(highLight);
                 };
 
                 // 绑定一个新的点击事件监听器到SVG本身
@@ -802,7 +804,7 @@ export default {
                     };
 
                     highLight();
-                    this.highLights.push(highLight);
+                    this.highLights[this.pointer2highlight].push(highLight);
                 };
 
                 // 绑定点击事件到所有的path上
@@ -911,7 +913,7 @@ export default {
                     };
 
                     highLight();
-                    this.highLights.push(highLight);
+                    this.highLights[this.pointer2highlight].push(highLight);
                 };
 
                 // 绑定点击事件到所有的path上
@@ -921,11 +923,9 @@ export default {
             }
             else if (type === this.myType['Highlight Remove']) {
                 this.highLightType = type;
-                console.log(this.highLights.length);
-                while (this.highLights.length > 0) {
-                    this.highLights.pop();
-                }
-                console.log(this.highLights.length);
+                this.highLights.push([]);
+                this.pointer2highlight++;
+                this.drawSvg();
             }
 
 
