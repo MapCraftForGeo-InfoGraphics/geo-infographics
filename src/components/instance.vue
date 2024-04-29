@@ -1546,44 +1546,17 @@ export default {
                                         .attr('y', center[1] - height)
                                         .attr('width', cuboidWidth)
                                         .attr('height', height)
-                                        .attr('fill', 'rgba(230, 158, 165, 0.7)'); // 修改前面的颜色
+                                        .attr('fill', 'rgba(230, 158, 165, 0.8)'); // 修改前面的颜色
 
                                     // 绘制长方体的“顶面”
                                     this.svg.append('polygon')
                                         .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
-                                        .attr('fill', 'rgba(230, 158, 165, 0.7)');
+                                        .attr('fill', 'rgba(230, 158, 165, 0.6)');
 
                                     // 绘制长方体的“左侧面”
                                     this.svg.append('polygon')
                                         .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
                                         .attr('fill', `rgba(200, 60, 60, ${sideOpacity})`); // 修改左侧面的颜色
-                                    //draw legend
-                                    for (let i = 0, delta = 20, px = 50; i < 4; i++) {
-                                        let t = 1000000*Math.pow(5, i), x = px;
-                                        let v = t / 800000;
-                                        let y = 330-v;
-                                        this.svg.append('rect')
-                                            .attr('x', px)
-                                            .attr('y', 330-v)
-                                            .attr('width', 20)
-                                            .attr('height', v)
-                                            .attr('fill', 'rgba(230, 158, 165, 0.7)');
-                                        this.svg.append('polygon')
-                                            .attr('points', `${x},${y} ${x-8},${y-8} ${x-8},${y+v-8} ${x},${y+v}`)
-                                            .attr('fill', 'rgba(200, 60, 60, 0.5)');
-                                        this.svg.append('polygon')
-                                            .attr('points', `${x},${y} ${x-8},${y-8} ${x+12},${y-8} ${x+20},${y}`)
-                                            .attr('fill', 'rgba(230, 158, 165, 0.7)');
-
-                                        const label = t < 1000 ? Math.floor(t) :
-                                            t < 1000000 ? Math.floor(t / 1000) + "k" :
-                                            Math.floor(t / 1000000) + "m";
-                                        this.svg.append('text')
-                                            .attr('x', px-5)
-                                            .attr('y', 315-v)
-                                            .text(label);
-                                        px += 2 * delta;
-                                    }
                                 } else {
                                     // 绘制长方体的“前面”                     
                                     this.svg.append('rect')
@@ -1592,54 +1565,82 @@ export default {
                                         .attr('width', cuboidWidth)
                                         .attr('height', height)
                                         .attr('fill', this.colorFunctionL(population))
-                                        .attr('opacity', '0.7'); // 修改前面的颜色
+                                        .attr('opacity', '0.8'); // 修改前面的颜色
 
                                     // 绘制长方体的“顶面”
                                     this.svg.append('polygon')
                                         .attr('points', `${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2},${center[1] - height} ${center[0] + cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4}`)
                                         .attr('fill', this.colorFunctionL(population))
-                                        .attr('opacity', '0.7');
+                                        .attr('opacity', '0.6');
 
                                     // 绘制长方体的“左侧面”
                                     this.svg.append('polygon')
                                         .attr('points', `${center[0] - cuboidWidth / 2},${center[1]} ${center[0] - cuboidWidth / 2},${center[1] - height} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - height - cuboidLength / 4} ${center[0] - cuboidWidth / 2 - cuboidLength / 4},${center[1] - cuboidLength / 4}`)
                                         .attr('fill', this.colorFunctionL(population))
                                         .attr('opacity', '0.9'); // 修改左侧面的颜色
-                                    //draw legend
-                                    for (let i = 0, delta = 20, px = 50; i < 4; i++) {
-                                        let t = 1000000*Math.pow(5, i), x = px;
-                                        let v = t / 800000;
-                                        let y = 330-v;
-                                        this.svg.append('rect')
-                                            .attr('x', px)
-                                            .attr('y', 330-v)
-                                            .attr('width', 20)
-                                            .attr('height', v)
-                                            .attr('fill', this.colorFunctionL(t))
-                                            .attr('opacity', '0.7');
-                                        this.svg.append('polygon')
-                                            .attr('points', `${x},${y} ${x-8},${y-8} ${x-8},${y+v-8} ${x},${y+v}`)
-                                            .attr('fill', this.colorFunctionL(t))
-                                            .attr('opacity', '0.7');
-                                        this.svg.append('polygon')
-                                            .attr('points', `${x},${y} ${x-8},${y-8} ${x+12},${y-8} ${x+20},${y}`)
-                                            .attr('fill', this.colorFunctionL(t))
-                                            .attr('opacity', '0.9');
-
-                                        const label = t < 1000 ? Math.floor(t) :
-                                            t < 1000000 ? Math.floor(t / 1000) + "k" :
-                                            Math.floor(t / 1000000) + "m";
-                                        this.svg.append('text')
-                                            .attr('x', px-5)
-                                            .attr('y', 315-v)
-                                            .text(label);
-                                        px += 2 * delta;
-                                    }
                                 }
                             }
-                        });
+                        }); 
+                        if (this.ifDoubleEncoding == false) {
+                            //draw legend
+                            for (let i = 0, delta = 20, px = 50; i < 4; i++) {
+                                let t = 1000000*Math.pow(5, i), x = px;
+                                let v = t / 800000;
+                                let y = 330-v;
+                                this.svg.append('rect')
+                                    .attr('x', px)
+                                    .attr('y', 330-v)
+                                    .attr('width', 20)
+                                    .attr('height', v)
+                                    .attr('fill', 'rgba(230, 158, 165, 0.8)');
+                                this.svg.append('polygon')
+                                    .attr('points', `${x},${y} ${x-8},${y-8} ${x-8},${y+v-8} ${x},${y+v}`)
+                                    .attr('fill', 'rgba(200, 60, 60, 0.5)');
+                                this.svg.append('polygon')
+                                    .attr('points', `${x},${y} ${x-8},${y-8} ${x+12},${y-8} ${x+20},${y}`)
+                                    .attr('fill', 'rgba(230, 158, 165, 0.6)');
 
-                        
+                                const label = t < 1000 ? Math.floor(t) :
+                                    t < 1000000 ? Math.floor(t / 1000) + "k" :
+                                    Math.floor(t / 1000000) + "m";
+                                this.svg.append('text')
+                                    .attr('x', px-5)
+                                    .attr('y', 315-v)
+                                    .text(label);
+                                px += 2 * delta;
+                            }
+                        } else {
+                            //draw legend
+                            for (let i = 0, delta = 20, px = 50; i < 4; i++) {
+                                let t = 1000000*Math.pow(5, i), x = px;
+                                let v = t / 800000;
+                                let y = 330-v;
+                                this.svg.append('rect')
+                                    .attr('x', px)
+                                    .attr('y', 330-v)
+                                    .attr('width', 20)
+                                    .attr('height', v)
+                                    .attr('fill', this.colorFunctionL(t))
+                                    .attr('opacity', '0.8');
+                                this.svg.append('polygon')
+                                    .attr('points', `${x},${y} ${x-8},${y-8} ${x-8},${y+v-8} ${x},${y+v}`)
+                                    .attr('fill', this.colorFunctionL(t))
+                                    .attr('opacity', '0.9');
+                                this.svg.append('polygon')
+                                    .attr('points', `${x},${y} ${x-8},${y-8} ${x+12},${y-8} ${x+20},${y}`)
+                                    .attr('fill', this.colorFunctionL(t))
+                                    .attr('opacity', '0.6');
+
+                                const label = t < 1000 ? Math.floor(t) :
+                                    t < 1000000 ? Math.floor(t / 1000) + "k" :
+                                    Math.floor(t / 1000000) + "m";
+                                this.svg.append('text')
+                                    .attr('x', px-5)
+                                    .attr('y', 315-v)
+                                    .text(label);
+                                px += 2 * delta;
+                            }
+                        }                      
                     }
                 }
 
@@ -1668,25 +1669,6 @@ export default {
                                     .attr('width', cuboidWidth)
                                     .attr('height', height)
                                     .attr('fill', 'rgba(230, 158, 165, 0.7)');
-                                    //draw legend
-                                    for (let i = 0, delta = 20, px = 50; i < 4; i++) {
-                                        let t = 1000000*Math.pow(5, i);
-                                        let v = t / 800000;
-                                        this.svg.append('rect')
-                                            .attr('x', px)
-                                            .attr('y', 330-v)
-                                            .attr('width', 20)
-                                            .attr('height', v)
-                                            .attr('fill', 'rgba(230, 158, 165, 0.7)');
-                                            const label = t < 1000 ? Math.floor(t) :
-                                            t < 1000000 ? Math.floor(t / 1000) + "k" :
-                                            Math.floor(t / 1000000) + "m";
-                                            this.svg.append('text')
-                                            .attr('x', px)
-                                            .attr('y', 320-v)
-                                            .text(label);
-                                        px += 2 * delta;
-                                    }
                                 } else {
                                     this.svg.append('rect')
                                     .attr('x', center[0] - cuboidWidth / 2)
@@ -1695,28 +1677,50 @@ export default {
                                     .attr('height', height)
                                     .attr('fill', this.colorFunctionL(population))
                                     .attr('opacity', '0.7');
-                                    for (let i = 0, delta = 20, px = 50; i < 4; i++) {
-                                        let t = 1000000*Math.pow(5, i);
-                                        let v = t / 800000;
-                                        this.svg.append('rect')
-                                            .attr('x', px)
-                                            .attr('y', 330-v)
-                                            .attr('width', 20)
-                                            .attr('height', v)
-                                            .attr('fill', this.colorFunctionL(t))
-                                            .attr('opacity', '0.7');
-                                            const label = t < 1000 ? Math.floor(t) :
-                                            t < 1000000 ? Math.floor(t / 1000) + "k" :
-                                            Math.floor(t / 1000000) + "m";
-                                            this.svg.append('text')
-                                            .attr('x', px)
-                                            .attr('y', 320-v)
-                                            .text(label);
-                                        px += 2 * delta;
-                                    }
                                 }
                             }
                         });
+                        if (this.ifDoubleEncoding == false) {
+                            //draw legend
+                            for (let i = 0, delta = 20, px = 50; i < 4; i++) {
+                                let t = 1000000*Math.pow(5, i);
+                                let v = t / 800000;
+                                this.svg.append('rect')
+                                    .attr('x', px)
+                                    .attr('y', 330-v)
+                                    .attr('width', 20)
+                                    .attr('height', v)
+                                    .attr('fill', 'rgba(230, 158, 165, 0.7)');
+                                    const label = t < 1000 ? Math.floor(t) :
+                                    t < 1000000 ? Math.floor(t / 1000) + "k" :
+                                    Math.floor(t / 1000000) + "m";
+                                    this.svg.append('text')
+                                    .attr('x', px)
+                                    .attr('y', 320-v)
+                                    .text(label);
+                                px += 2 * delta;
+                            }
+                        } else {
+                            for (let i = 0, delta = 20, px = 50; i < 4; i++) {
+                                let t = 1000000*Math.pow(5, i);
+                                let v = t / 800000;
+                                this.svg.append('rect')
+                                    .attr('x', px)
+                                    .attr('y', 330-v)
+                                    .attr('width', 20)
+                                    .attr('height', v)
+                                    .attr('fill', this.colorFunctionL(t))
+                                    .attr('opacity', '0.7');
+                                    const label = t < 1000 ? Math.floor(t) :
+                                    t < 1000000 ? Math.floor(t / 1000) + "k" :
+                                    Math.floor(t / 1000000) + "m";
+                                    this.svg.append('text')
+                                    .attr('x', px)
+                                    .attr('y', 320-v)
+                                    .text(label);
+                                px += 2 * delta;
+                            }
+                        }
                     }
                 }
 
@@ -1748,27 +1752,6 @@ export default {
                                     .attr('width', sizeScale(population))
                                     .attr('height', sizeScale(population))
                                     .attr('fill', 'rgba(230, 158, 165, 0.7)');
-                                    //draw size legend
-                                    for (let i = 0, delta = 20, py = 100; i < 4; i++) {
-                                        let t = 1000000*Math.pow(5, i)
-                                        let v = sizeScale(t);
-                                        this.svg.append('rect')
-                                            .attr('x', 50)
-                                            .attr('y', py)
-                                            .attr('width', v)
-                                            .attr('height', v)
-                                            .attr('fill', 'rgba(230, 158, 165, 0.7)');
-
-                                        const label = t < 1000 ? Math.floor(t) :
-                                            t < 1000000 ? Math.floor(t / 1000) + "k" :
-                                            Math.floor(t / 1000000) + "m";
-                                        this.svg.append('text')
-                                            .attr('x', 65+v)
-                                            .attr('y', py + v)
-                                            .text(label);
-
-                                        py += v + delta;
-                                    }
                                 } else {
                                     this.svg.append('rect')
                                     .attr('x', x - sizeScale(population) / 2)
@@ -1777,32 +1760,55 @@ export default {
                                     .attr('height', sizeScale(population))
                                     .attr('fill', this.colorFunctionL(population))
                                     .attr('opacity', '0.7');
-
-                                    for (let i = 0, delta = 20, py = 100; i < 4; i++) {
-                                        let t = 1000000*Math.pow(5, i)
-                                        let v = sizeScale(t);
-                                        this.svg.append('rect')
-                                            .attr('x', 50)
-                                            .attr('y', py)
-                                            .attr('width', v)
-                                            .attr('height', v)
-                                            .attr('fill', this.colorFunctionL(t))
-                                            .attr('opacity', '0.7');
-
-                                        const label = t < 1000 ? Math.floor(t) :
-                                            t < 1000000 ? Math.floor(t / 1000) + "k" :
-                                            Math.floor(t / 1000000) + "m";
-                                        this.svg.append('text')
-                                            .attr('x', 65+v)
-                                            .attr('y', py + v)
-                                            .text(label);
-
-                                        py += v + delta;
-                                    }
                                 }
                                 
                             }
                         });
+                        if (this.ifDoubleEncoding == false) {
+                            //draw size legend
+                            for (let i = 0, delta = 20, py = 100; i < 4; i++) {
+                                let t = 1000000*Math.pow(5, i)
+                                let v = sizeScale(t);
+                                this.svg.append('rect')
+                                    .attr('x', 50)
+                                    .attr('y', py)
+                                    .attr('width', v)
+                                    .attr('height', v)
+                                    .attr('fill', 'rgba(230, 158, 165, 0.7)');
+
+                                const label = t < 1000 ? Math.floor(t) :
+                                    t < 1000000 ? Math.floor(t / 1000) + "k" :
+                                    Math.floor(t / 1000000) + "m";
+                                this.svg.append('text')
+                                    .attr('x', 65+v)
+                                    .attr('y', py + v)
+                                    .text(label);
+
+                                py += v + delta;
+                            }
+                        } else {
+                            for (let i = 0, delta = 20, py = 100; i < 4; i++) {
+                                let t = 1000000*Math.pow(5, i)
+                                let v = sizeScale(t);
+                                this.svg.append('rect')
+                                    .attr('x', 50)
+                                    .attr('y', py)
+                                    .attr('width', v)
+                                    .attr('height', v)
+                                    .attr('fill', this.colorFunctionL(t))
+                                    .attr('opacity', '0.7');
+
+                                const label = t < 1000 ? Math.floor(t) :
+                                    t < 1000000 ? Math.floor(t / 1000) + "k" :
+                                    Math.floor(t / 1000000) + "m";
+                                this.svg.append('text')
+                                    .attr('x', 65+v)
+                                    .attr('y', py + v)
+                                    .text(label);
+
+                                py += v + delta;
+                            }
+                        }
                     }
                 }
 
