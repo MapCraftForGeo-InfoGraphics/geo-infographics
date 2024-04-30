@@ -763,6 +763,7 @@ export default {
                     // eslint-disable-next-line no-unused-vars
                     const [x, y] = d3.pointer(event, svg);
                     const feature = d3.select(event.target).datum(); // 获取被点击的地图区域的数据
+                    const originalColor = d3.select(event.target).attr("fill");
 
                     // 高亮函数
                     const highLight = () => {
@@ -774,7 +775,7 @@ export default {
                             .datum(feature) // 使用同一区域的数据
                             .attr('class', 'highlight-3d-effect') // 为了方便之后可能的移除
                             .attr('d', this.geoPath) // 使用geoPath来保持地理形状的一致性
-                            .attr('fill', d3.rgb(89, 89, 233, 0.5)) // 为了简化，这里使用纯色填充表示阴影
+                            .attr('fill', originalColor) // 为了简化，这里使用纯色填充表示阴影
                             .attr('filter', 'url(#drop-shadow)')
                             .attr('stroke-width', 2); // 应用下面定义的SVG滤镜实现阴影效果
 
@@ -1502,6 +1503,9 @@ export default {
 
                             this.svg.selectAll('circle')
                                 .attr('fill', d => colorFunction(this.getPopulation(d)));
+                            this.highLights[this.pointer2highlight].forEach(highLight => {
+                                highLight();
+                            });
                         } 
                         this.drawColorLuminanceLegend();
                     } else {
@@ -1543,6 +1547,9 @@ export default {
 
                             this.svg.selectAll('circle')
                                 .attr('fill', d => colorFunction(this.getPopulation(d)));
+                            this.highLights[this.pointer2highlight].forEach(highLight => {
+                                highLight();
+                            });
                         };
                         this.drawColorHueLegend();
                     } else {
@@ -2065,6 +2072,9 @@ export default {
                         this.svg.selectAll('circle')
                             .attr('fill', d => colorScale(d))
                             .attr('stroke', '#ffffff');
+                        this.highLights[this.pointer2highlight].forEach(highLight => {
+                                highLight();
+                            });
                     };
                 }
                 else {
