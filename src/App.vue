@@ -29,6 +29,10 @@
                 </v-list-item>
               </v-list>
             </v-menu>
+
+            <v-tab :value="'about'">
+              <v-text>About</v-text>
+            </v-tab>
           </v-tabs>
         </template>
       </v-app-bar>
@@ -42,8 +46,7 @@
           style="display: flex; height: 100%; width: 100%;">
           <instanceTab :value="item" :geoData="geoData" :infoData="infoData[item]" :isNumerical="infoDataType[item] == 'numerical'" :propName="infoDataName[item]"></instanceTab>
         </v-window-item>
-
-        <v-window-item :value="about" style="display: flex; height: 100%; width: 100%;">
+        <v-window-item :value="'about'" style="display: flex; height: 100%; width: 100%;">
           <aboutTab></aboutTab>
         </v-window-item>
       </v-window>
@@ -76,7 +79,7 @@ export default {
   setup() {
     const items = ref([]);
     const more = ref([]);
-    more.value.push("about");
+    // more.value.push("about");
 
     const geoData = ref({});
     const infoData = ref({});
@@ -84,6 +87,7 @@ export default {
     const infoDataName = ref({})
 
     const currentItem = ref('home');
+    const currentItemAbout = ref('about');
 
     const loadJson = (na) => {
       return new Promise((resolve, reject) => {
@@ -133,10 +137,11 @@ export default {
       items.value.unshift(value);
 
       currentItem.value = 'tab-' + value;
+      currentItemAbout.value = 'tab-' + value;
     };
 
     provide('loadInfoData', loadInfoData);
-    return { items, more, geoData, infoData, infoDataType, infoDataName, currentItem, loadJson, uniqueName };
+    return { items, more, geoData, infoData, infoDataType, infoDataName, currentItem, currentItemAbout, loadJson, uniqueName };
   },
 
   methods: {
@@ -147,6 +152,7 @@ export default {
       )
       this.more.unshift(...removed)
       this.$nextTick(() => { this.currentItem = 'tab-' + item })
+      this.$nextTick(() => { this.currentItemAbout = 'tab-' + item })
     },
   },
 }
