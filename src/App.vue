@@ -42,6 +42,10 @@
           style="display: flex; height: 100%; width: 100%;">
           <instanceTab :value="item" :geoData="geoData" :infoData="infoData[item]" :isNumerical="infoDataType[item] == 'numerical'" :propName="infoDataName[item]"></instanceTab>
         </v-window-item>
+
+        <v-window-item :value="about" style="display: flex; height: 100%; width: 100%;">
+          <aboutTab></aboutTab>
+        </v-window-item>
       </v-window>
 
     </v-main>
@@ -54,13 +58,15 @@ import { ref, provide } from 'vue';
 
 import homeTab from './components/home.vue'
 import instanceTab from './components/instance.vue'
+import aboutTab from './components/about.vue'
 
 export default {
   name: 'App',
 
   components: {
     homeTab,
-    instanceTab
+    instanceTab,
+    aboutTab,
   },
 
   data: () => ({
@@ -70,6 +76,7 @@ export default {
   setup() {
     const items = ref([]);
     const more = ref([]);
+    more.value.push("about");
 
     const geoData = ref({});
     const infoData = ref({});
