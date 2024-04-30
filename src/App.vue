@@ -30,6 +30,10 @@
               </v-list>
             </v-menu>
 
+            <v-tab :value="'gallery'">
+              <v-text>Gallery</v-text>
+            </v-tab>
+
             <v-tab :value="'about'">
               <v-text>About</v-text>
             </v-tab>
@@ -49,6 +53,9 @@
         <v-window-item :value="'about'" style="display: flex; height: 100%; width: 100%;">
           <aboutTab></aboutTab>
         </v-window-item>
+        <v-window-item :value="'gallery'" style="display: flex; height: 100%; width: 100%;">
+          <galleryTab></galleryTab>
+        </v-window-item>
       </v-window>
 
     </v-main>
@@ -62,6 +69,7 @@ import { ref, provide } from 'vue';
 import homeTab from './components/home.vue'
 import instanceTab from './components/instance.vue'
 import aboutTab from './components/about.vue'
+import galleryTab from './components/gallery.vue'
 
 export default {
   name: 'App',
@@ -70,6 +78,7 @@ export default {
     homeTab,
     instanceTab,
     aboutTab,
+    galleryTab,
   },
 
   data: () => ({
@@ -88,6 +97,7 @@ export default {
 
     const currentItem = ref('home');
     const currentItemAbout = ref('about');
+    const currentItemGallery = ref('gallery');
 
     const loadJson = (na) => {
       return new Promise((resolve, reject) => {
@@ -138,10 +148,11 @@ export default {
 
       currentItem.value = 'tab-' + value;
       currentItemAbout.value = 'tab-' + value;
+      currentItemGallery.value = 'tab-' + value;
     };
 
     provide('loadInfoData', loadInfoData);
-    return { items, more, geoData, infoData, infoDataType, infoDataName, currentItem, currentItemAbout, loadJson, uniqueName };
+    return { items, more, geoData, infoData, infoDataType, infoDataName, currentItem, currentItemAbout, currentItemGallery, loadJson, uniqueName };
   },
 
   methods: {
@@ -153,6 +164,7 @@ export default {
       this.more.unshift(...removed)
       this.$nextTick(() => { this.currentItem = 'tab-' + item })
       this.$nextTick(() => { this.currentItemAbout = 'tab-' + item })
+      this.$nextTick(() => { this.currentItemGallery = 'tab-' + item})
     },
   },
 }
