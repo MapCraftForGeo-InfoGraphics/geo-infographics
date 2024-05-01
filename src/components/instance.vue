@@ -279,6 +279,19 @@
                             </v-container>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
+                    <v-expansion-panel>
+                        <v-expansion-panel-title>
+                            Print
+                        </v-expansion-panel-title>
+                        <v-expansion-panel-text>
+                            <v-container class="container">
+                                <v-row>
+                                    <input type="button" id="myButtonPrint" v-model=printText @click="printSVG()"/>
+                                </v-row>
+                            </v-container>
+                        </v-expansion-panel-text>
+
+                    </v-expansion-panel>
                 </v-expansion-panels>
             </v-container>
         </v-card>
@@ -382,6 +395,8 @@ export default {
 
         highLights: [],
         pointer2highlight: 0,
+
+        printText: 'Print',
 
         myType: {
             "Political Map": 0,
@@ -2233,6 +2248,44 @@ export default {
             this.ifDoubleEncodingText = this.ifDoubleEncoding ? 'Dual Encoding: ON' : 'Dual Encoding: OFF';
             if (this.ifDoubleEncoding)
                 alert('Attention! Only supporting for one color method with one length, size or quantity method.');
+        },
+
+        printSVG() {
+            var tempsvg = this.svg;
+            tempsvg.selectAll('*')
+                .attr('transform', 'translate(0, 10)');
+            var legendItems = this.legend.selectAll('*');
+
+            // 将图形移植到 tempsvg 上
+            legendItems.each(function() {
+                tempsvg.node().appendChild(this);
+            });
+            // 选择包含图形的SVG元素
+            tempsvg.selectAll('*')
+                .attr('transform', 'translate(10, 10)');
+            var svgElement = tempsvg.node();
+
+            // 将SVG内容转换为字符串
+            var svgString = new XMLSerializer().serializeToString(svgElement);
+
+            // 创建Blob对象
+            var blob = new Blob([svgString], { type: 'image/svg+xml' });
+
+            // 创建URL
+            var url = window.URL.createObjectURL(blob);
+
+            // 创建一个a标签用于下载
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'd3_chart.svg'; // 下载文件的名称
+
+            // 模拟点击链接以触发下载
+            document.body.appendChild(a);
+            a.click();
+
+            // 清除之前创建的URL对象
+            window.URL.revokeObjectURL(url);
+
         },
     },
 
