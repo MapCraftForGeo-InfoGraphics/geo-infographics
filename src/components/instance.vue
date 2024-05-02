@@ -80,10 +80,10 @@
                             <v-container class="container">
                                 <v-row>
                                     <v-col>
-                                        <input type="button" id="myButton" v-model=ifDoubleEncodingText @click="doubleEncoding()"/>
+                                        <input type="button" id="myButton" class="colorfulButton" v-model=ifDoubleEncodingText @click="doubleEncoding()"/>
                                     </v-col>
                                     <v-col>
-                                        <input type="button" id="myButtonRemove" v-model=removeText @click="setEncodingChannel(myType['Remove'])"/>
+                                        <input type="button" id="myButtonRemove" class="colorfulButton" v-model=removeText @click="setEncodingChannel(myType['Remove'])"/>
                                     </v-col>
                                     
                                 </v-row>
@@ -162,8 +162,8 @@
 
                         <v-expansion-panel-text>
                             <v-container class="container">
-                                <v-row>
-                                    <input type="button" id="myButtonRemoveLabel" v-model=removeTextLabel @click="setLabelPosition(myType['Label Remove'])"/>
+                                <v-row class="button-row">
+                                    <input type="button" id="myButtonRemoveLabel" class="colorfulButton" v-model=removeTextLabel @click="setLabelPosition(myType['Label Remove'])"/>
                                 </v-row>
                                 <v-row>
                                     <v-col style="padding: 0;">
@@ -240,7 +240,7 @@
                         <v-expansion-panel-text>
                             <v-container class="container">
                                 <v-row>
-                                    <input type="button" id="myButtonRemoveHighlight" v-model=removeTextHighlight @click="setHighlight(myType['Highlight Remove'])"/>
+                                    <input type="button" id="myButtonRemoveHighlight" class="colorfulButton" v-model=removeTextHighlight @click="setHighlight(myType['Highlight Remove'])"/>
                                 </v-row>
                                 <v-row>
                                     <v-col class="element" @click="setHighlight(myType['Light'])">
@@ -286,7 +286,7 @@
                         <v-expansion-panel-text>
                             <v-container class="container">
                                 <v-row>
-                                    <input type="button" id="myButtonPrint" v-model=printText @click="printSVG()"/>
+                                    <input type="button" id="myButtonPrint" class="colorfulButton" v-model=printText @click="printSVG()"/>
                                 </v-row>
                             </v-container>
                         </v-expansion-panel-text>
@@ -2355,6 +2355,16 @@ export default {
     background-color: pink;
     padding: 10px;
     text-align: center;
+}
+
+.colorfulButton {
+    background-color: pink; /* 设置按钮的背景颜色为红色 */
+    color: #000000; /* 设置按钮文字颜色为白色 */
+    border-radius: 5px;
+}
+
+.button-row {
+    margin-bottom: 2px; /* 添加20像素的底部间距 */
 }
 
 </style>
