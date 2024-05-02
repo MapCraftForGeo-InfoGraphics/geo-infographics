@@ -20,5 +20,6 @@ module.exports = defineConfig({
     }
   },
 
-  publicPath: process.env.NODE_ENV === 'production' ? '/GEO-INFO-GRAPHICS/' : '/',
+  // publicPath: process.env.NODE_ENV === 'production' ? '/GEO-INFO-GRAPHICS/' : '/',
+  publicPath: './',
 })
