@@ -499,6 +499,7 @@ export default {
             this.setProjection(1);
             this.drawSvg();
         },
+
         splitTextToLines(text, maxLineWidth) {
             let words = text.split(' ');
             let lines = [];
@@ -532,7 +533,6 @@ export default {
             });
         },
 
-
         loadJson(na) {
             return new Promise((resolve, reject) => {
                 d3.json(na).then(data => {
@@ -546,8 +546,12 @@ export default {
 
         getPopulation(d) {
             // console.log(name, this.infoData[name]);
-            return d && d.properties && d.properties.NAME && this.infoData[d.properties.NAME]
-                ? this.infoData[d.properties.NAME] : -1
+            return d && d.properties && d.properties.NAME && this.getDataByCountry(d.properties.NAME)
+                ? this.getDataByCountry(d.properties.NAME) : -1
+        },
+
+        getDataByCountry(cty){
+            return this.infoData[cty] ? Object.values(this.infoData[cty])[0] : undefined;
         },
 
         showErrorDialog(title, msg) {
@@ -680,7 +684,6 @@ export default {
             this.geoPath = d3.geoPath().projection(this.geoProjection);
             this.drawSvg();
         },
-
 
         setHighlight(type) {
             console.log("Highlight Techniques:", type);
@@ -2198,6 +2201,7 @@ export default {
                     .style('font-size', '10px');
             }
         },
+
         drawColorHueLegend() {
             const legendData = [
                 { color: 'rgb(142, 207, 201)', text: '< 5M', minPopulation: 0, maxPopulation: 5000000 },

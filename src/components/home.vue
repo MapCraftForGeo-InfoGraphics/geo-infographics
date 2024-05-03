@@ -38,7 +38,7 @@
             <v-col>Prop: '{{ infoData.prop }}'</v-col>
             <v-col>
                 <v-select label="prop data type" v-model="infoData.datatype"
-                    :items="['numerical', 'nominal']"></v-select>
+                          :items="['categorical', 'quantitative']"></v-select>
             </v-col>
 
 
@@ -75,7 +75,7 @@
 
 <script>
 import * as d3 from 'd3';
-import { inject } from 'vue';
+import {inject} from 'vue';
 
 export default {
     name: 'homeTab',
@@ -96,6 +96,38 @@ export default {
             this.uploaded = false;
         },
 
+//        readFile(file) {
+//            return new Promise((resolve, reject) => {
+//                const reader = new FileReader();
+//                reader.onload = function (e) {
+//                    const fileContents = e.target.result;
+//                    d3.json(fileContents)
+//                        .then(data => {
+//                            const keys = Object.keys(data[0]);
+//                            const targetKey = keys.find(key => key !== 'country');
+//
+//                            const infoData = data.reduce((acc, cur) => {
+//                                acc[cur['country']] = cur[targetKey];
+//                                return acc;
+//                            }, {});
+//                            const result = {
+//                                "name": file.name,
+//                                "prop": targetKey,
+//                                "datatype": isNaN(Object.values(data[0])[1]) ? 'categorical' : 'quantitative',
+//                                "data": infoData
+//                            };
+//
+//                            resolve(result);
+//                        })
+//                        .catch(error => {
+//                            console.error(error);
+//                            reject(error);
+//                        });
+//                };
+//                reader.readAsDataURL(file);
+//            });
+//        },
+
         readFile(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -103,17 +135,17 @@ export default {
                     const fileContents = e.target.result;
                     d3.json(fileContents)
                         .then(data => {
-                            const keys = Object.keys(data[0]);
-                            const targetKey = keys.find(key => key !== 'country');
-
                             const infoData = data.reduce((acc, cur) => {
-                                acc[cur['country']] = cur[targetKey];
+                                // 复制当前对象，但排除 'country' 键
+                                const {country, ...rest} = cur;
+                                // 使用 'country' 作为键，其余键值对作为值
+                                acc[cur['country']] = rest;
                                 return acc;
                             }, {});
                             const result = {
                                 "name": file.name,
-                                "prop": targetKey,
-                                "datatype": isNaN(Object.values(data[0])[1]) ? 'nominal' : 'numerical',
+                                "prop": Object.keys(data[0])[1],
+                                "datatype": isNaN(Object.values(data[0])[1]) ? 'categorical' : 'quantitative',
                                 "data": infoData
                             };
 
@@ -140,6 +172,7 @@ export default {
                 .then(result => {
                     this.infoData = result;
                     this.uploaded = true;
+                    console.log(this.infoData);
                 })
                 .catch(error => {
                     this.uploaded = false;
@@ -155,7 +188,7 @@ export default {
     setup() {
         const loadInfoData = inject('loadInfoData');
 
-        return { loadInfoData };
+        return {loadInfoData};
     }
 }
 </script>

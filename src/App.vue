@@ -48,7 +48,7 @@
 
         <v-window-item v-for="item in items.concat(more)" :key="item" :value="'tab-' + item"
           style="display: flex; height: 100%; width: 100%;">
-          <instanceTab :value="item" :geoData="geoData" :infoData="infoData[item]" :isNumerical="infoDataType[item] == 'numerical'" :propName="infoDataName[item]"></instanceTab>
+          <instanceTab :value="item" :geoData="geoData" :infoData="infoData[item]" :isNumerical="infoDataType[item] == 'quantitative'" :propName="infoDataName[item]"></instanceTab>
         </v-window-item>
         <v-window-item :value="'about'" style="display: flex; height: 100%; width: 100%;">
           <aboutTab></aboutTab>
