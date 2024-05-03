@@ -13,7 +13,7 @@
                                 <v-row>
                                     <v-col class="element" @click="setRepresentation(myType['Political Map'])">
                                         Political Map
-                                        <v-img :src="require('../assets/PoliticalMap.svg')" contain />
+                                        <v-img :src="require('../assets/PoliticalMap.svg')" contain/>
                                     </v-col>
 
                                     <!-- <v-col class="element" @click="setRepresentation(myType['Topographic Map'])">
@@ -22,7 +22,7 @@
                                     </v-col> -->
                                     <v-col class="element" @click="setRepresentation(myType['Shape-based Map'])">
                                         Shape-based Map
-                                        <v-img :src="require('../assets/Shape-basedMap.svg')" contain />
+                                        <v-img :src="require('../assets/Shape-basedMap.svg')" contain/>
                                     </v-col>
                                 </v-row>
 
@@ -41,7 +41,7 @@
                                 <v-row>
                                     <v-col class="element" @click="setRepresentation(myType['Plain'])">
                                         Plain
-                                        <v-img :src="require('../assets/GridCartogram.svg')" contain />
+                                        <v-img :src="require('../assets/GridCartogram.svg')" contain/>
                                     </v-col>
 
                                     <v-col></v-col>
@@ -60,12 +60,12 @@
                                 <v-row>
                                     <v-col class="element" @click="setProjection(myType['Mercator'])">
                                         Mercator
-                                        <v-img :src="require('../assets/mercator.svg')" contain />
+                                        <v-img :src="require('../assets/mercator.svg')" contain/>
                                     </v-col>
 
                                     <v-col class="element" @click="setProjection(myType['Equirectangular'])">
                                         Equirectangular
-                                        <v-img :src="require('../assets/equirectangular.svg')" contain />
+                                        <v-img :src="require('../assets/equirectangular.svg')" contain/>
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -80,37 +80,39 @@
                             <v-container class="container">
                                 <v-row>
                                     <v-col>
-                                        <input type="button" id="myButton" class="colorfulButton" v-model=ifDoubleEncodingText @click="doubleEncoding()"/>
+                                        <input type="button" id="myButton" class="colorfulButton"
+                                               v-model=ifDoubleEncodingText @click="doubleEncoding()"/>
                                     </v-col>
                                     <v-col>
-                                        <input type="button" id="myButtonRemove" class="colorfulButton" v-model=removeText @click="setEncodingChannel(myType['Remove'])"/>
+                                        <input type="button" id="myButtonRemove" class="colorfulButton"
+                                               v-model=removeText @click="setEncodingChannel(myType['Remove'])"/>
                                     </v-col>
-                                    
+
                                 </v-row>
 
                                 <v-row>
                                     <div class="row-with-line"></div>
                                     <v-col class="element" @click="setEncodingChannel(myType['Color (Luminance)'])">
                                         Color (Intensity)
-                                        <v-img :src="require('../assets/Color(Luminance).svg')" contain />
+                                        <v-img :src="require('../assets/Color(Luminance).svg')" contain/>
                                     </v-col>
 
                                     <v-col class="element" @click="setEncodingChannel(myType['Color (Hue)'])">
                                         Color (Hue)
-                                        <v-img :src="require('../assets/Color(Hue).svg')" contain />
+                                        <v-img :src="require('../assets/Color(Hue).svg')" contain/>
                                     </v-col>
                                 </v-row>
-                                
+
                                 <v-row>
                                     <div class="row-with-line"></div>
                                     <v-col class="element" @click="setEncodingChannel(myType['3D Length'])">
                                         3D Length
-                                        <v-img :src="require('../assets/3DLength.svg')" contain />
+                                        <v-img :src="require('../assets/3DLength.svg')" contain/>
                                     </v-col>
 
                                     <v-col class="element" @click="setEncodingChannel(myType['2D Length'])">
                                         2D Length
-                                        <v-img :src="require('../assets/BarChart.svg')" contain />
+                                        <v-img :src="require('../assets/BarChart.svg')" contain/>
                                     </v-col>
                                 </v-row>
 
@@ -118,11 +120,11 @@
                                     <div class="row-with-line"></div>
                                     <v-col class="element" @click="setEncodingChannel(myType['Quantity'])">
                                         Quantity
-                                        <v-img :src="require('../assets/Quantity.svg')" contain />
+                                        <v-img :src="require('../assets/Quantity.svg')" contain/>
                                     </v-col>
                                     <v-col class="element" @click="setEncodingChannel(myType['Size'])">
                                         Size
-                                        <v-img :src="require('../assets/Size.svg')" contain />
+                                        <v-img :src="require('../assets/Size.svg')" contain/>
                                     </v-col>
                                 </v-row>
 
@@ -130,20 +132,20 @@
                                     <div class="row-with-line"></div>
                                     <v-col class="element" @click="setEncodingChannel(myType['Link (Line)'])">
                                         Tilt/Angle (Undirected)
-                                        <v-img :src="require('../assets/Link(Line).svg')" contain />
+                                        <v-img :src="require('../assets/Link(Line).svg')" contain/>
                                     </v-col>
 
                                     <v-col class="element" @click="setEncodingChannel(myType['Link (Arrow)'])">
                                         Tilt/Angle (Directed)
-                                        <v-img :src="require('../assets/Link(Arrow).svg')" contain />
+                                        <v-img :src="require('../assets/Link(Arrow).svg')" contain/>
                                     </v-col>
                                 </v-row>
-                                
+
                                 <v-row>
                                     <div class="row-with-line"></div>
                                     <v-col class="element" @click="setEncodingChannel(myType['Glyph'])">
                                         Glyph
-                                        <v-img :src="require('../assets/Glyph.svg')" width="50%" contain />
+                                        <v-img :src="require('../assets/Glyph.svg')" width="50%" contain/>
                                     </v-col>
 
                                     <!-- <v-col class="element" @click="setEncodingChannel(myType['Remove'])">
@@ -151,7 +153,7 @@
                                         <v-img :src="require('../assets/Glyph.svg')" width="50%" contain />
                                     </v-col> -->
                                 </v-row>
-                                
+
                             </v-container>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -163,7 +165,8 @@
                         <v-expansion-panel-text>
                             <v-container class="container">
                                 <v-row class="button-row">
-                                    <input type="button" id="myButtonRemoveLabel" class="colorfulButton" v-model=removeTextLabel @click="setLabelPosition(myType['Label Remove'])"/>
+                                    <input type="button" id="myButtonRemoveLabel" class="colorfulButton"
+                                           v-model=removeTextLabel @click="setLabelPosition(myType['Label Remove'])"/>
                                 </v-row>
                                 <v-row>
                                     <v-col style="padding: 0;">
@@ -174,7 +177,7 @@
                                     <div class="row-with-line"></div>
                                     <v-col class="element" @click="setLabelPosition(myType['Label Situated'])">
                                         Situated
-                                        <v-img :src="require('../assets/Situated.svg')" contain />
+                                        <v-img :src="require('../assets/Situated.svg')" contain/>
                                     </v-col>
 
                                     <v-col></v-col>
@@ -190,16 +193,16 @@
                                     <v-col style="padding: 0;">
                                         <v-col class="element" @click="setLabelPosition(myType['Label Text'])">
                                             Text
-                                            <v-img :src="require('../assets/MatchedText.svg')" contain />
+                                            <v-img :src="require('../assets/MatchedText.svg')" contain/>
                                         </v-col>
                                         <v-col class="element" @click="setLabelPosition(myType['Label Color'])">
                                             Color
-                                            <v-img :src="require('../assets/MathchedColor.svg')" contain />
+                                            <v-img :src="require('../assets/MathchedColor.svg')" contain/>
                                         </v-col>
                                     </v-col>
                                     <v-col class="element" @click="setLabelPosition(myType['Label Icon'])">
                                         Icon
-                                        <v-img :src="require('../assets/MatchedIcon.svg')" contain />
+                                        <v-img :src="require('../assets/MatchedIcon.svg')" contain/>
                                     </v-col>
                                 </v-row>
 
@@ -212,21 +215,21 @@
                                     <div class="row-with-line"></div>
                                     <v-col style="padding: 0;">
                                         <v-col class="element"
-                                            @click="setLabelPosition(myType['Label Convenient'])">
+                                               @click="setLabelPosition(myType['Label Convenient'])">
                                             Convenient
-                                            <v-img :src="require('../assets/LinkedConvenient.svg')" contain />
+                                            <v-img :src="require('../assets/LinkedConvenient.svg')" contain/>
                                         </v-col>
 
                                         <v-col class="element" @click="setLabelPosition(myType['Label Aligned'])">
                                             Aligned
-                                            <v-img :src="require('../assets/LinkedAligned.svg')" contain />
+                                            <v-img :src="require('../assets/LinkedAligned.svg')" contain/>
                                         </v-col>
 
                                     </v-col>
 
                                     <v-col class="element" @click="setLabelPosition(myType['Label Ordered'])">
                                         Ordered
-                                        <v-img :src="require('../assets/LinkedOrdered.svg')" contain />
+                                        <v-img :src="require('../assets/LinkedOrdered.svg')" contain/>
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -240,40 +243,42 @@
                         <v-expansion-panel-text>
                             <v-container class="container">
                                 <v-row>
-                                    <input type="button" id="myButtonRemoveHighlight" class="colorfulButton" v-model=removeTextHighlight @click="setHighlight(myType['Highlight Remove'])"/>
+                                    <input type="button" id="myButtonRemoveHighlight" class="colorfulButton"
+                                           v-model=removeTextHighlight
+                                           @click="setHighlight(myType['Highlight Remove'])"/>
                                 </v-row>
                                 <v-row>
                                     <v-col class="element" @click="setHighlight(myType['Light'])">
                                         Light
-                                        <v-img :src="require('../assets/HighlightLight.svg')" contain />
+                                        <v-img :src="require('../assets/HighlightLight.svg')" contain/>
                                     </v-col>
 
                                     <v-col class="element" @click="setHighlight(myType['Color'])">
                                         Color
-                                        <v-img :src="require('../assets/HighlightColor.svg')" contain />
+                                        <v-img :src="require('../assets/HighlightColor.svg')" contain/>
                                     </v-col>
                                 </v-row>
 
                                 <v-row>
                                     <v-col class="element" @click="setHighlight(myType['Map Pin'])">
                                         Map Pin
-                                        <v-img :src="require('../assets/HighlightMappin.svg')" contain />
+                                        <v-img :src="require('../assets/HighlightMappin.svg')" contain/>
                                     </v-col>
 
                                     <v-col class="element" @click="setHighlight(myType['3D Transformation'])">
                                         3D Transformation
-                                        <v-img :src="require('../assets/Highlight3d.svg')" contain />
+                                        <v-img :src="require('../assets/Highlight3d.svg')" contain/>
                                     </v-col>
                                 </v-row>
 
                                 <v-row>
                                     <v-col class="element" @click="setHighlight(myType['Enlarged Portions'])">
                                         Enlarged Portions
-                                        <v-img :src="require('../assets/HighlightEnlarge.svg')" contain />
+                                        <v-img :src="require('../assets/HighlightEnlarge.svg')" contain/>
                                     </v-col>
                                     <v-col class="element" @click="setHighlight(myType['Edge Stroke'])">
                                         Contour
-                                        <v-img :src="require('../assets/HighlightEdgeStroking.svg')" contain />
+                                        <v-img :src="require('../assets/HighlightEdgeStroking.svg')" contain/>
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -286,7 +291,8 @@
                         <v-expansion-panel-text>
                             <v-container class="container">
                                 <v-row>
-                                    <input type="button" id="myButtonPrint" class="colorfulButton" v-model=printText @click="printSVG()"/>
+                                    <input type="button" id="myButtonPrint" class="colorfulButton" v-model=printText
+                                           @click="printSVG()"/>
                                 </v-row>
                             </v-container>
                         </v-expansion-panel-text>
@@ -303,13 +309,13 @@
                 </v-col>
                 <v-col></v-col>
                 <v-col></v-col>
-                
-                
+
+
             </v-row>
             <svg :class="value + '-svg'" style="width: 100%; height: 100%;"></svg>
             <!-- <svg :class="value + '-legend'" style="position: absolute; top: 30px; right: 20px; width: 200px; height: 40px; z-index: 2;"></svg> -->
             <svg :id="value + '-enlargedView'"
-                style="width: 200px; height: 400px; position: absolute; top: 10px; right: 10px;"></svg>
+                 style="width: 200px; height: 400px; position: absolute; top: 10px; right: 10px;"></svg>
         </v-container>
     </div>
 
@@ -387,11 +393,15 @@ export default {
         preEncoding: -1,
         preColortype: -1,
 
-        encodingChannel: () => { },
-        representation: () => { },
-        LabelPosition: () => { },
+        encodingChannel: () => {
+        },
+        representation: () => {
+        },
+        LabelPosition: () => {
+        },
 
-        colorFunctionL: () => { },
+        colorFunctionL: () => {
+        },
 
         highLights: [],
         pointer2highlight: 0,
@@ -550,9 +560,14 @@ export default {
                 ? this.getDataByCountry(d.properties.NAME) : -1
         },
 
-        getDataByCountry(cty){
+        getDataByCountry(cty) {
             return this.infoData[cty] ? Object.values(this.infoData[cty])[0] : undefined;
         },
+
+        getDescriptionByCountry(cty) {
+            return this.infoData[cty] && this.infoData[cty]['description'] ? this.infoData[cty]['description'] : undefined;
+        },
+
 
         showErrorDialog(title, msg) {
             this.errorTitle = title;
@@ -574,13 +589,9 @@ export default {
                         .attr('d', this.geoPath)
                         .attr('stroke', '#ffffff');
                 };
-            }
-
-            else if (type === this.myType['Topographic Map']) {
+            } else if (type === this.myType['Topographic Map']) {
                 this.representationType = type;
-            }
-
-            else if (type === this.myType['Shape-based Map']) {
+            } else if (type === this.myType['Shape-based Map']) {
                 this.representationType = type;
 
                 this.representation = () => {
@@ -612,7 +623,7 @@ export default {
                                 const y = top + i * (h / rows);
                                 const point = this.geoProjection.invert([x, y]);
                                 if (d3.geoContains(feature, point)) {
-                                    points.push({ x: x, y: y, properties: feature.properties });
+                                    points.push({x: x, y: y, properties: feature.properties});
                                 }
                             }
                         }
@@ -630,12 +641,9 @@ export default {
                             .attr("r", pointRadius);
                     })
                 };
-            }
-
-            else if (type === this.myType['Street Map']) {
+            } else if (type === this.myType['Street Map']) {
                 this.representationType = type;
-            }
-            else if (type === this.myType['Plain']) {
+            } else if (type === this.myType['Plain']) {
                 this.representationType = type;
                 // this.svg.select('.grid-layer').remove();
                 // this.svg.select('defs').selectAll('clipPath').remove(); // 假设没有其他clipPath在使用
@@ -654,7 +662,9 @@ export default {
                     };
 
                     this.svg.selectAll('path')
-                        .on('click', function () { addHighLight(this) });
+                        .on('click', function () {
+                            addHighLight(this)
+                        });
                 }
 
 
@@ -672,9 +682,7 @@ export default {
 
                 this.geoProjection = d3.geoMercator()
                     .fitSize([this.mapWidth, this.mapHeight], this.geoData);
-            }
-
-            else if (type === this.myType['Equirectangular']) {
+            } else if (type === this.myType['Equirectangular']) {
                 this.projectionType = type;
 
                 this.geoProjection = d3.geoEquirectangular()
@@ -718,10 +726,10 @@ export default {
                 };
 
                 this.svg.selectAll('path')
-                    .on('click', function () { addHighLight(this) });
-            }
-
-            else if (type === this.myType['Light']) {
+                    .on('click', function () {
+                        addHighLight(this)
+                    });
+            } else if (type === this.myType['Light']) {
                 this.highLightType = type;
 
                 const addHighLight = (event, svg) => {
@@ -746,9 +754,7 @@ export default {
                 this.svg.on('click', function (event) {
                     addHighLight(event, this)
                 });
-            }
-
-            else if (type === this.myType['Map Pin']) {
+            } else if (type === this.myType['Map Pin']) {
                 this.highLightType = type;
 
                 const addHighLight = (event, svg) => {
@@ -773,8 +779,7 @@ export default {
                 this.svg.on('click', function (event) {
                     addHighLight(event, this);
                 });
-            }
-            else if (type === this.myType['3D Transformation']) {
+            } else if (type === this.myType['3D Transformation']) {
                 this.highLightType = type;
 
                 const addHighLight = (event, svg) => {
@@ -830,8 +835,7 @@ export default {
                 this.svg.selectAll('path').on('click', function (event) {
                     addHighLight(event, this);
                 });
-            }
-            else if (type === this.myType['Enlarged Portions']) {
+            } else if (type === this.myType['Enlarged Portions']) {
                 this.highLightType = type;
 
                 // 移除之前可能绑定的点击事件以避免重复
@@ -886,16 +890,16 @@ export default {
                         .style('transform', ` scale(2)`);
 
                     // draw traction line
-                    const x1 = this.mapWidth-94, y1 = 147, r1 = 100, r = 30; // approximate centre of enlarged circle
-                    const d = Math.sqrt((x1-x)*(x1-x)+(y1-y)*(y1-y));
-                    const xa = x + r*Math.cos(Math.atan((y1-y)/(x1-x))+Math.acos((r-r1)/d));
-                    const ya = y + r*Math.sin(Math.atan((y1-y)/(x1-x))+Math.acos((r-r1)/d));
-                    const xb = x1 + r1*Math.cos(Math.atan((y1-y)/(x1-x))+Math.acos((r-r1)/d));
-                    const yb = y1 + r1*Math.sin(Math.atan((y1-y)/(x1-x))+Math.acos((r-r1)/d));
-                    const xc = x + r*Math.cos(Math.atan((y1-y)/(x1-x))-Math.acos((r-r1)/d));
-                    const yc = y + r*Math.sin(Math.atan((y1-y)/(x1-x))-Math.acos((r-r1)/d));
-                    const xd = x1 + r1*Math.cos(Math.atan((y1-y)/(x1-x))-Math.acos((r-r1)/d));
-                    const yd = y1 + r1*Math.sin(Math.atan((y1-y)/(x1-x))-Math.acos((r-r1)/d));
+                    const x1 = this.mapWidth - 94, y1 = 147, r1 = 100, r = 30; // approximate centre of enlarged circle
+                    const d = Math.sqrt((x1 - x) * (x1 - x) + (y1 - y) * (y1 - y));
+                    const xa = x + r * Math.cos(Math.atan((y1 - y) / (x1 - x)) + Math.acos((r - r1) / d));
+                    const ya = y + r * Math.sin(Math.atan((y1 - y) / (x1 - x)) + Math.acos((r - r1) / d));
+                    const xb = x1 + r1 * Math.cos(Math.atan((y1 - y) / (x1 - x)) + Math.acos((r - r1) / d));
+                    const yb = y1 + r1 * Math.sin(Math.atan((y1 - y) / (x1 - x)) + Math.acos((r - r1) / d));
+                    const xc = x + r * Math.cos(Math.atan((y1 - y) / (x1 - x)) - Math.acos((r - r1) / d));
+                    const yc = y + r * Math.sin(Math.atan((y1 - y) / (x1 - x)) - Math.acos((r - r1) / d));
+                    const xd = x1 + r1 * Math.cos(Math.atan((y1 - y) / (x1 - x)) - Math.acos((r - r1) / d));
+                    const yd = y1 + r1 * Math.sin(Math.atan((y1 - y) / (x1 - x)) - Math.acos((r - r1) / d));
                     this.svg.append('line')
                         .classed('click-circle', true)
                         .attr('x1', xa)
@@ -913,8 +917,7 @@ export default {
                         .attr('stroke', 'grey')
                         .attr('stroke-width', 1);
                 });
-            }
-            else if (type === this.myType['Edge Stroke']) {
+            } else if (type === this.myType['Edge Stroke']) {
                 this.highLightType = type;
 
                 const addHighLight = (event) => {
@@ -939,8 +942,7 @@ export default {
                 this.svg.selectAll('path').on('click', function (event) {
                     addHighLight(event, this);
                 });
-            }
-            else if (type === this.myType['Highlight Remove']) {
+            } else if (type === this.myType['Highlight Remove']) {
                 this.highLightType = type;
                 this.highLights.push([]);
                 this.pointer2highlight++;
@@ -966,59 +968,56 @@ export default {
 
                 this.LabelPosition = () => {
                     this.geoData.features.forEach(feature => {
-                    const center = this.geoPath.centroid(feature);
-                    const annotation = feature.properties.annotation;
+                        const center = this.geoPath.centroid(feature);
+                        const annotation = feature.properties.annotation;
 
-                    if (annotation && annotation != -1) {
-                        let textLines = [
-                            `Country: ${feature.properties.NAME}`,
-                            `City: ${annotation.city}`
-                        ];
+                        if (annotation && annotation != -1) {
+                            let textLines = [
+                                `Country: ${feature.properties.NAME}`,
+                                `City: ${annotation.city}`
+                            ];
 
-                        // 根据条件动态添加Summer和Winter的行
-                        if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
-                            textLines.push(`Summer: ${annotation.summer_olympics}`);
-                        }
-                        if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
-                            textLines.push(`Winter: ${annotation.winter_olympics}`);
-                        }
-                        const maxLineWidth = 30;
+                            // 根据条件动态添加Summer和Winter的行
+                            if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
+                                textLines.push(`Summer: ${annotation.summer_olympics}`);
+                            }
+                            if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
+                                textLines.push(`Winter: ${annotation.winter_olympics}`);
+                            }
+                            const maxLineWidth = 30;
 
-                        // 用于跟踪当前垂直位置的变量
-                        let currentYOffset = 0;
+                            // 用于跟踪当前垂直位置的变量
+                            let currentYOffset = 0;
 
-                        // 应用拆分函数并添加文本
-                        textLines.forEach((line) => {
-                            let subLines = this.splitTextToLines(line, maxLineWidth); // 使用拆分函数
-                            subLines.forEach((subLine) => {
-                                this.svg.append('text')
-                                    .attr('class', 'olympic-label')
-                                    .attr('x', center[0])
-                                    .attr('y', center[1] + currentYOffset) // 使用currentYOffset确定垂直位置
-                                    .attr('text-anchor', 'middle')
-                                    .attr('fill', 'black')
-                                    .style('font-size', '8px')
-                                    .text(subLine);
+                            // 应用拆分函数并添加文本
+                            textLines.forEach((line) => {
+                                let subLines = this.splitTextToLines(line, maxLineWidth); // 使用拆分函数
+                                subLines.forEach((subLine) => {
+                                    this.svg.append('text')
+                                        .attr('class', 'olympic-label')
+                                        .attr('x', center[0])
+                                        .attr('y', center[1] + currentYOffset) // 使用currentYOffset确定垂直位置
+                                        .attr('text-anchor', 'middle')
+                                        .attr('fill', 'black')
+                                        .style('font-size', '8px')
+                                        .text(subLine);
 
-                                // 每添加一行，更新currentYOffset以便下一行下移
-                                currentYOffset += 10; // 假设每行文本的高度加间距为15px
+                                    // 每添加一行，更新currentYOffset以便下一行下移
+                                    currentYOffset += 10; // 假设每行文本的高度加间距为15px
+                                });
+
+                                // 注意：这里不再需要调整index
                             });
-
-                            // 注意：这里不再需要调整index
-                        });
-                    }
+                        }
                     });
                 }
 
-                
-            }
 
-
-            else if (type === this.myType['Label Text']) {
+            } else if (type === this.myType['Label Text']) {
                 this.labelPositionType = type;
 
                 this.LabelPosition = () => {
-                        // 仅为olympics_data.json中存在的国家显示国家名字
+                    // 仅为olympics_data.json中存在的国家显示国家名字
                     this.geoData.features.forEach(feature => {
                         if (feature.properties.annotation != -1) {
                             const center = this.geoPath.centroid(feature);
@@ -1039,7 +1038,6 @@ export default {
                     // 用于注解的特征进行循环，而不是所有特征
                     annotatedFeatures.forEach((feature, index) => {
                         const annotation = feature.properties.annotation;
-
 
 
                         // // 动态计算x坐标，考虑间距，以保证注解框在水平方向上均匀对齐
@@ -1089,14 +1087,12 @@ export default {
                         });
                     });
                 }
-                
-            }
 
-            else if (type === this.myType['Label Icon']) {
+            } else if (type === this.myType['Label Icon']) {
                 this.labelPositionType = type;
 
                 this.LabelPosition = () => {
-                        // 过滤掉不需要展示注解的数据
+                    // 过滤掉不需要展示注解的数据
                     const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
 
 
@@ -1169,9 +1165,8 @@ export default {
                         }
                     });
                 }
-                
-            }
-            else if (type === this.myType['Label Color']) {
+
+            } else if (type === this.myType['Label Color']) {
                 this.labelPositionType = type;
 
                 this.LabelPosition = () => {
@@ -1235,11 +1230,9 @@ export default {
                         });
                     });
                 }
-                
 
-            }
 
-            else if (type === this.myType['Label Convenient']) {
+            } else if (type === this.myType['Label Convenient']) {
                 this.labelPositionType = type;
                 this.LabelPosition = () => {
                     const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
@@ -1343,13 +1336,11 @@ export default {
                                 .text(line)
                                 .attr('class', 'annotation-text');
                         });
-                    }); 
+                    });
                 }
 
-                
-            }
 
-            else if (type === this.myType['Label Aligned']) {
+            } else if (type === this.myType['Label Aligned']) {
                 this.labelPositionType = type;
 
                 this.LabelPosition = () => {
@@ -1412,14 +1403,11 @@ export default {
                             .attr('stroke', 'black')
                             .attr('fill', 'none')
                             .attr('class', 'annotation-line');
-                    });   
+                    });
                 }
                 // 过滤并排序需要注解的国家特征，基于它们的中心x坐标
-                
-            }
 
-
-            else if (type === this.myType['Label Ordered']) {
+            } else if (type === this.myType['Label Ordered']) {
                 this.labelPositionType = type;
 
                 this.LabelPosition = () => {
@@ -1482,9 +1470,8 @@ export default {
 
                     });
                 }
-                
-            }
-            else if (type === this.myType['Label Remove']) {
+
+            } else if (type === this.myType['Label Remove']) {
                 this.labelPositionType = type;
                 this.LabelPosition = () => {
                     console.log("All Label Removed!");
@@ -1508,7 +1495,7 @@ export default {
                         // const transformFunction = (input) => input
 
                         const colorScale = d3.scaleSequential(d3.interpolateRgb(d3.rgb(220, 120, 130), d3.rgb(255, 255, 255)))
-                        .domain([transformFunction(this.mostPopulation), 0]);
+                            .domain([transformFunction(this.mostPopulation), 0]);
                         return scale == -1 ? this.defaultColor : colorScale(transformFunction(scale));
                     }
                     this.colorFunctionL = colorFunction;
@@ -1524,14 +1511,14 @@ export default {
                             this.highLights[this.pointer2highlight].forEach(highLight => {
                                 highLight();
                             });
-                        } 
+                        }
                         this.drawColorLuminanceLegend();
                     } else {
                         this.preEncoding = type;
                         this.svg.selectAll('path')
-                        .attr('fill', `${this.defaultColor}`);
+                            .attr('fill', `${this.defaultColor}`);
                         this.svg.selectAll('circle')
-                        .attr('fill', `${this.defaultColor}`);
+                            .attr('fill', `${this.defaultColor}`);
                     }
                 }
 
@@ -1543,8 +1530,7 @@ export default {
                     const colorFunction = (population) => {
                         if (population < 0) {
                             return this.defaultColor;
-                        }
-                        else if (population >= 0 && population < 5000000) {
+                        } else if (population >= 0 && population < 5000000) {
                             return 'rgb(142, 207, 201)'; // 人口数量小于5000000
                         } else if (population >= 5000000 && population < 10000000) {
                             return 'rgb(255, 190, 122)'; // 人口数量在5000000-10000000之间
@@ -1574,9 +1560,9 @@ export default {
                         this.preEncoding = type;
                         this.colorFunctionL = colorFunction;
                         this.svg.selectAll('path')
-                        .attr('fill', this.defaultColor);
+                            .attr('fill', this.defaultColor);
                         this.svg.selectAll('circle')
-                        .attr('fill', this.defaultColor);
+                            .attr('fill', this.defaultColor);
                     }
                 }
                 //Encoding 3D Length
@@ -1641,71 +1627,69 @@ export default {
                                         .attr('opacity', '0.9'); // 修改左侧面的颜色
                                 }
                             }
-                        }); 
+                        });
                         if (this.ifDoubleEncoding == false) {
                             //draw legend
                             for (let i = 0, delta = 20, px = 50; i < 4; i++) {
-                                let t = 1000000*Math.pow(5, i), x = px;
+                                let t = 1000000 * Math.pow(5, i), x = px;
                                 let v = t / 800000;
-                                let y = 330-v;
+                                let y = 330 - v;
                                 this.svg.append('rect')
                                     .attr('x', px)
-                                    .attr('y', 330-v)
+                                    .attr('y', 330 - v)
                                     .attr('width', 20)
                                     .attr('height', v)
                                     .attr('fill', 'rgba(230, 158, 165, 0.8)');
                                 this.svg.append('polygon')
-                                    .attr('points', `${x},${y} ${x-8},${y-8} ${x-8},${y+v-8} ${x},${y+v}`)
+                                    .attr('points', `${x},${y} ${x - 8},${y - 8} ${x - 8},${y + v - 8} ${x},${y + v}`)
                                     .attr('fill', 'rgba(200, 60, 60, 0.5)');
                                 this.svg.append('polygon')
-                                    .attr('points', `${x},${y} ${x-8},${y-8} ${x+12},${y-8} ${x+20},${y}`)
+                                    .attr('points', `${x},${y} ${x - 8},${y - 8} ${x + 12},${y - 8} ${x + 20},${y}`)
                                     .attr('fill', 'rgba(230, 158, 165, 0.6)');
 
                                 const label = t < 1000 ? Math.floor(t) :
                                     t < 1000000 ? Math.floor(t / 1000) + "k" :
-                                    Math.floor(t / 1000000) + "m";
+                                        Math.floor(t / 1000000) + "m";
                                 this.svg.append('text')
-                                    .attr('x', px-5)
-                                    .attr('y', 315-v)
+                                    .attr('x', px - 5)
+                                    .attr('y', 315 - v)
                                     .text(label);
                                 px += 2 * delta;
                             }
                         } else {
                             //draw legend
                             for (let i = 0, delta = 20, px = 50; i < 4; i++) {
-                                let t = 1000000*Math.pow(5, i), x = px;
+                                let t = 1000000 * Math.pow(5, i), x = px;
                                 let v = t / 800000;
-                                let y = 330-v;
+                                let y = 330 - v;
                                 this.svg.append('rect')
                                     .attr('x', px)
-                                    .attr('y', 330-v)
+                                    .attr('y', 330 - v)
                                     .attr('width', 20)
                                     .attr('height', v)
                                     .attr('fill', this.colorFunctionL(t))
                                     .attr('opacity', '0.8');
                                 this.svg.append('polygon')
-                                    .attr('points', `${x},${y} ${x-8},${y-8} ${x-8},${y+v-8} ${x},${y+v}`)
+                                    .attr('points', `${x},${y} ${x - 8},${y - 8} ${x - 8},${y + v - 8} ${x},${y + v}`)
                                     .attr('fill', this.colorFunctionL(t))
                                     .attr('opacity', '0.9');
                                 this.svg.append('polygon')
-                                    .attr('points', `${x},${y} ${x-8},${y-8} ${x+12},${y-8} ${x+20},${y}`)
+                                    .attr('points', `${x},${y} ${x - 8},${y - 8} ${x + 12},${y - 8} ${x + 20},${y}`)
                                     .attr('fill', this.colorFunctionL(t))
                                     .attr('opacity', '0.6');
 
                                 const label = t < 1000 ? Math.floor(t) :
                                     t < 1000000 ? Math.floor(t / 1000) + "k" :
-                                    Math.floor(t / 1000000) + "m";
+                                        Math.floor(t / 1000000) + "m";
                                 this.svg.append('text')
-                                    .attr('x', px-5)
-                                    .attr('y', 315-v)
+                                    .attr('x', px - 5)
+                                    .attr('y', 315 - v)
                                     .text(label);
                                 px += 2 * delta;
                             }
-                        }                      
+                        }
                     }
-                }
-
-                else if (type === this.myType['2D Length']) {
+                } else if (type === this.myType['2D Length']) {
                     d3.select("." + this.value + "-legend").selectAll("*").remove();
                     this.encodingChannelType = type;
 
@@ -1725,59 +1709,59 @@ export default {
 
                                 if (this.ifDoubleEncoding == false) {
                                     this.svg.append('rect')
-                                    .attr('x', center[0] - cuboidWidth / 2)
-                                    .attr('y', center[1] - height)
-                                    .attr('width', cuboidWidth)
-                                    .attr('height', height)
-                                    .attr('fill', 'rgba(230, 158, 165, 0.7)');
+                                        .attr('x', center[0] - cuboidWidth / 2)
+                                        .attr('y', center[1] - height)
+                                        .attr('width', cuboidWidth)
+                                        .attr('height', height)
+                                        .attr('fill', 'rgba(230, 158, 165, 0.7)');
                                 } else {
                                     this.svg.append('rect')
-                                    .attr('x', center[0] - cuboidWidth / 2)
-                                    .attr('y', center[1] - height)
-                                    .attr('width', cuboidWidth)
-                                    .attr('height', height)
-                                    .attr('fill', this.colorFunctionL(population))
-                                    .attr('opacity', '0.7');
+                                        .attr('x', center[0] - cuboidWidth / 2)
+                                        .attr('y', center[1] - height)
+                                        .attr('width', cuboidWidth)
+                                        .attr('height', height)
+                                        .attr('fill', this.colorFunctionL(population))
+                                        .attr('opacity', '0.7');
                                 }
                             }
                         });
                         if (this.ifDoubleEncoding == false) {
                             //draw legend
                             for (let i = 0, delta = 20, px = 50; i < 4; i++) {
-                                let t = 1000000*Math.pow(5, i);
+                                let t = 1000000 * Math.pow(5, i);
                                 let v = t / 800000;
                                 this.svg.append('rect')
                                     .attr('x', px)
-                                    .attr('y', 330-v)
+                                    .attr('y', 330 - v)
                                     .attr('width', 20)
                                     .attr('height', v)
                                     .attr('fill', 'rgba(230, 158, 165, 0.7)');
-                                    const label = t < 1000 ? Math.floor(t) :
+                                const label = t < 1000 ? Math.floor(t) :
                                     t < 1000000 ? Math.floor(t / 1000) + "k" :
-                                    Math.floor(t / 1000000) + "m";
-                                    this.svg.append('text')
+                                        Math.floor(t / 1000000) + "m";
+                                this.svg.append('text')
                                     .attr('x', px)
-                                    .attr('y', 320-v)
+                                    .attr('y', 320 - v)
                                     .text(label);
                                 px += 2 * delta;
                             }
                         } else {
                             for (let i = 0, delta = 20, px = 50; i < 4; i++) {
-                                let t = 1000000*Math.pow(5, i);
+                                let t = 1000000 * Math.pow(5, i);
                                 let v = t / 800000;
                                 this.svg.append('rect')
                                     .attr('x', px)
-                                    .attr('y', 330-v)
+                                    .attr('y', 330 - v)
                                     .attr('width', 20)
                                     .attr('height', v)
                                     .attr('fill', this.colorFunctionL(t))
                                     .attr('opacity', '0.7');
-                                    const label = t < 1000 ? Math.floor(t) :
+                                const label = t < 1000 ? Math.floor(t) :
                                     t < 1000000 ? Math.floor(t / 1000) + "k" :
-                                    Math.floor(t / 1000000) + "m";
-                                    this.svg.append('text')
+                                        Math.floor(t / 1000000) + "m";
+                                this.svg.append('text')
                                     .attr('x', px)
-                                    .attr('y', 320-v)
+                                    .attr('y', 320 - v)
                                     .text(label);
                                 px += 2 * delta;
                             }
@@ -1808,27 +1792,27 @@ export default {
                             if (population >= 1000000) { // 人口大于等于1000000时绘制方块
                                 if (this.ifDoubleEncoding == false) {
                                     this.svg.append('rect')
-                                    .attr('x', x - sizeScale(population) / 2)
-                                    .attr('y', y - sizeScale(population) / 2)
-                                    .attr('width', sizeScale(population))
-                                    .attr('height', sizeScale(population))
-                                    .attr('fill', 'rgba(230, 158, 165, 0.7)');
+                                        .attr('x', x - sizeScale(population) / 2)
+                                        .attr('y', y - sizeScale(population) / 2)
+                                        .attr('width', sizeScale(population))
+                                        .attr('height', sizeScale(population))
+                                        .attr('fill', 'rgba(230, 158, 165, 0.7)');
                                 } else {
                                     this.svg.append('rect')
-                                    .attr('x', x - sizeScale(population) / 2)
-                                    .attr('y', y - sizeScale(population) / 2)
-                                    .attr('width', sizeScale(population))
-                                    .attr('height', sizeScale(population))
-                                    .attr('fill', this.colorFunctionL(population))
-                                    .attr('opacity', '0.7');
+                                        .attr('x', x - sizeScale(population) / 2)
+                                        .attr('y', y - sizeScale(population) / 2)
+                                        .attr('width', sizeScale(population))
+                                        .attr('height', sizeScale(population))
+                                        .attr('fill', this.colorFunctionL(population))
+                                        .attr('opacity', '0.7');
                                 }
-                                
+
                             }
                         });
                         if (this.ifDoubleEncoding == false) {
                             //draw size legend
                             for (let i = 0, delta = 20, py = 100; i < 4; i++) {
-                                let t = 1000000*Math.pow(5, i)
+                                let t = 1000000 * Math.pow(5, i)
                                 let v = sizeScale(t);
                                 this.svg.append('rect')
                                     .attr('x', 50)
@@ -1839,9 +1823,9 @@ export default {
 
                                 const label = t < 1000 ? Math.floor(t) :
                                     t < 1000000 ? Math.floor(t / 1000) + "k" :
-                                    Math.floor(t / 1000000) + "m";
+                                        Math.floor(t / 1000000) + "m";
                                 this.svg.append('text')
-                                    .attr('x', 65+v)
+                                    .attr('x', 65 + v)
                                     .attr('y', py + v)
                                     .text(label);
 
@@ -1849,7 +1833,7 @@ export default {
                             }
                         } else {
                             for (let i = 0, delta = 20, py = 100; i < 4; i++) {
-                                let t = 1000000*Math.pow(5, i)
+                                let t = 1000000 * Math.pow(5, i)
                                 let v = sizeScale(t);
                                 this.svg.append('rect')
                                     .attr('x', 50)
@@ -1861,9 +1845,9 @@ export default {
 
                                 const label = t < 1000 ? Math.floor(t) :
                                     t < 1000000 ? Math.floor(t / 1000) + "k" :
-                                    Math.floor(t / 1000000) + "m";
+                                        Math.floor(t / 1000000) + "m";
                                 this.svg.append('text')
-                                    .attr('x', 65+v)
+                                    .attr('x', 65 + v)
                                     .attr('y', py + v)
                                     .text(label);
 
@@ -1925,7 +1909,7 @@ export default {
                                             .attr('r', 4)
                                             .style('stroke', 'none')
                                             .style('fill', 'rgba(230, 158, 165, 0.7)');
-                                        g.attr('transform', 'translate('+x+','+y+')')
+                                        g.attr('transform', 'translate(' + x + ',' + y + ')')
                                             .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
                                             .attr('fill', 'rgba(230, 158, 165, 0.7)')
                                             .attr('stroke', 'none')
@@ -1953,7 +1937,7 @@ export default {
                                             .attr('r', 3)
                                             .style('stroke', 'none')
                                             .style('fill', this.colorFunctionL(population));
-                                        gd.attr('transform', 'translate('+x+','+y+')')
+                                        gd.attr('transform', 'translate(' + x + ',' + y + ')')
                                             .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
                                             .attr('fill', this.colorFunctionL(population))
                                             .attr('stroke', 'none')
@@ -1968,8 +1952,8 @@ export default {
                             .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
                             .attr('x', 50)
                             .attr('y', 100)
-                            .attr('width', iconWidth*2)
-                            .attr('height', iconHeight*2);
+                            .attr('width', iconWidth * 2)
+                            .attr('height', iconHeight * 2);
                         this.svg.append('text')
                             .attr('x', 70)
                             .attr('y', 120)
@@ -1983,18 +1967,15 @@ export default {
                         }
                     }
 
-                    
-                }
-                else if (type === this.myType['Remove']) {
+
+                } else if (type === this.myType['Remove']) {
                     this.encodingChannelType = type;
 
                     this.encodingChannel = () => {
                         this.svg.selectAll('path').attr("fill", this.defaultColor);
                         d3.select("." + this.value + "-legend").selectAll("*").remove();
                     }
-                }
-
-                else {
+                } else {
                     // // 如果没有适用的编码方式
                     // this.encodingChannelType = -1; // 或其他表示无效编码方式的值
 
@@ -2017,8 +1998,7 @@ export default {
                     // d3.select("." + this.value + "-legend").selectAll("*").remove();
                     this.showErrorDialog("Encoding Channel Not Support", "The selected encoding channel only support the data your uploaded!")
                 }
-            }
-            else {
+            } else {
                 d3.select("." + this.value + "-legend").selectAll("*").remove();
                 if (type === this.myType['Glyph']) {
                     this.encodingChannelType = type;
@@ -2035,26 +2015,25 @@ export default {
                                 // 在地图的国家中心点上添加国旗图像
                                 if (this.ifDoubleEncoding == false) {
                                     this.svg.append('image')
-                                    .attr('xlink:href', flagBase64) // 使用国旗的base64编码
-                                    .attr('x', center[0] - 10) // 你可能需要调整这个以适合国旗图像的大小和位置
-                                    .attr('y', center[1] - 10) // 同上
-                                    .attr('width', 20) // 根据需要调整国旗的尺寸
-                                    .attr('height', 20);
+                                        .attr('xlink:href', flagBase64) // 使用国旗的base64编码
+                                        .attr('x', center[0] - 10) // 你可能需要调整这个以适合国旗图像的大小和位置
+                                        .attr('y', center[1] - 10) // 同上
+                                        .attr('width', 20) // 根据需要调整国旗的尺寸
+                                        .attr('height', 20);
                                 } else {
                                     this.svg.append('image')
-                                    .attr('xlink:href', flagBase64) // 使用国旗的base64编码
-                                    .attr('x', center[0] - 10) // 你可能需要调整这个以适合国旗图像的大小和位置
-                                    .attr('y', center[1] - 10) // 同上
-                                    .attr('width', 20) // 根据需要调整国旗的尺寸
-                                    .attr('height', 20)
-                                    .attr('fill', this.colorFunctionL());
+                                        .attr('xlink:href', flagBase64) // 使用国旗的base64编码
+                                        .attr('x', center[0] - 10) // 你可能需要调整这个以适合国旗图像的大小和位置
+                                        .attr('y', center[1] - 10) // 同上
+                                        .attr('width', 20) // 根据需要调整国旗的尺寸
+                                        .attr('height', 20)
+                                        .attr('fill', this.colorFunctionL());
                                 }
-                                
+
                             }
                         });
                     };
-                }
-                else if (type === this.myType['Color (Hue)']) {
+                } else if (type === this.myType['Color (Hue)']) {
                     this.encodingChannelType = type;
 
                     // 1. 创建一个包含所有国家名称的数组
@@ -2091,11 +2070,10 @@ export default {
                             .attr('fill', d => colorScale(d))
                             .attr('stroke', '#ffffff');
                         this.highLights[this.pointer2highlight].forEach(highLight => {
-                                highLight();
-                            });
+                            highLight();
+                        });
                     };
-                }
-                else {
+                } else {
                     // // 如果没有适用的编码方式
                     // this.encodingChannelType = -1; // 或其他表示无效编码方式的值
 
@@ -2204,11 +2182,11 @@ export default {
 
         drawColorHueLegend() {
             const legendData = [
-                { color: 'rgb(142, 207, 201)', text: '< 5M', minPopulation: 0, maxPopulation: 5000000 },
-                { color: 'rgb(255, 190, 122)', text: '5M-10M', minPopulation: 5000000, maxPopulation: 10000000 },
-                { color: 'rgb(250, 127, 111)', text: '10M-50M', minPopulation: 10000000, maxPopulation: 50000000 },
-                { color: 'rgb(130, 176, 210)', text: '50M-100M', minPopulation: 50000000, maxPopulation: 100000000 },
-                { color: 'rgb(190, 184, 220)', text: '>100M', minPopulation: 100000000, maxPopulation: Infinity }
+                {color: 'rgb(142, 207, 201)', text: '< 5M', minPopulation: 0, maxPopulation: 5000000},
+                {color: 'rgb(255, 190, 122)', text: '5M-10M', minPopulation: 5000000, maxPopulation: 10000000},
+                {color: 'rgb(250, 127, 111)', text: '10M-50M', minPopulation: 10000000, maxPopulation: 50000000},
+                {color: 'rgb(130, 176, 210)', text: '50M-100M', minPopulation: 50000000, maxPopulation: 100000000},
+                {color: 'rgb(190, 184, 220)', text: '>100M', minPopulation: 100000000, maxPopulation: Infinity}
             ];
 
             const legendWidth = 20;
@@ -2261,7 +2239,7 @@ export default {
             var legendItems = this.legend.selectAll('*');
 
             // 将图形移植到 tempsvg 上
-            legendItems.each(function() {
+            legendItems.each(function () {
                 tempsvg.node().appendChild(this);
             });
             // 选择包含图形的SVG元素
@@ -2273,7 +2251,7 @@ export default {
             var svgString = new XMLSerializer().serializeToString(svgElement);
 
             // 创建Blob对象
-            var blob = new Blob([svgString], { type: 'image/svg+xml' });
+            var blob = new Blob([svgString], {type: 'image/svg+xml'});
 
             // 创建URL
             var url = window.URL.createObjectURL(blob);
@@ -2346,12 +2324,12 @@ export default {
 
 #myButton {
     border: 2px solid transparent; /* 设置默认的边框，透明色 */
-    outline: none;                 /* 取消浏览器默认的焦点轮廓 */
+    outline: none; /* 取消浏览器默认的焦点轮廓 */
     /* border-color: pink; */
 }
 
 #myButton:hover {
-    border-color: pink;  /* 设置选中时的边框颜色为粉色 */
+    border-color: pink; /* 设置选中时的边框颜色为粉色 */
     /*outline: none;      /* 取消浏览器默认的焦点轮廓 */
 }
 
