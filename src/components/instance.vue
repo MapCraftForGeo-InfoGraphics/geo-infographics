@@ -1048,19 +1048,19 @@ export default {
                         const startX = (this.mapWidth - totalAnnotationsWidth) / 2; // 为了居中对齐
                         // // 调整y坐标，为每个注解框下方留出一定的间距
                         // const y = this.mapHeight + row * (boxHeight + 20 + boxSpacing); // 调整了间距的计算
-                        const annotationX = startX + index * (boxWidth + boxSpacing);
+                        const annotationX = startX + index * (boxWidth + boxSpacing); 
                         const annotationY = this.mapHeight + 50; // 地图下方50px
 
 
                         // 绘制注解框
-                        this.svg.append('rect')
-                            .attr('class', 'annotation-box')
-                            .attr('x', annotationX)
-                            .attr('y', annotationY)
-                            .attr('width', boxWidth)
-                            .attr('height', boxHeight)
-                            .attr('fill', 'none')
-                            .attr('stroke', 'black');
+                        // this.svg.append('rect')
+                        //     .attr('class', 'annotation-box')
+                        //     .attr('x', annotationX)
+                        //     .attr('y', annotationY)
+                        //     .attr('width', boxWidth)
+                        //     .attr('height', boxHeight)
+                        //     .attr('fill', this.defaultColor)
+                        //     .attr('stroke', 'none');
 
                         // 在注解框内添加文本
                         let textLines = [
@@ -1076,14 +1076,76 @@ export default {
                             textLines.push(`Winter: ${annotation.winter_olympics}`);
                         }
 
+                        const maxWidth = boxWidth-5; // 设置最大宽度阈值
+                        let ty = annotationY;
+
                         textLines.forEach((line, lineIndex) => {
+                            let words = line.split(' ');
+                            let currentLine = words[0];
+
+                            for (let i = 1; i < words.length; i++) {
+                                let word = words[i];
+                                let testLine = currentLine + ' ' + word;
+                                let testWidth = this.getTextWidth(testLine, '10px'); // 获取当前行的文本宽度
+
+                                if (testWidth > maxWidth) {
+                                    this.svg.append('text')
+                                        .attr('class', 'annotation-text')
+                                        .attr('x', annotationX + 5) // 略微缩进
+                                        .attr('y', ty + 15 + (lineIndex * 12)) // 根据行数调整位置
+                                        .attr('fill', 'black')
+                                        .style('font-size', '10px')
+                                        .text(currentLine); // 添加当前行的文本
+
+                                    currentLine = word;
+                                    ty += 12; // 调整Y坐标到下一行
+                                } else {
+                                    currentLine += ' ' + word;
+                                }
+                            }
+                        });
+
+                        this.svg.append('rect')
+                            .attr('class', 'annotation-box')
+                            .attr('x', annotationX)
+                            .attr('y', annotationY)
+                            .attr('width', boxWidth)
+                            .attr('height', boxHeight+ty-annotationY)
+                            .attr('fill', this.defaultColor)
+                            .attr('stroke', 'none');
+
+                        ty = annotationY;
+                        textLines.forEach((line, lineIndex) => {
+                            let words = line.split(' ');
+                            let currentLine = words[0];
+
+                            for (let i = 1; i < words.length; i++) {
+                                let word = words[i];
+                                let testLine = currentLine + ' ' + word;
+                                let testWidth = this.getTextWidth(testLine, '10px'); // 获取当前行的文本宽度
+
+                                if (testWidth > maxWidth) {
+                                    this.svg.append('text')
+                                        .attr('class', 'annotation-text')
+                                        .attr('x', annotationX + 5) // 略微缩进
+                                        .attr('y', ty + 15 + (lineIndex * 12)) // 根据行数调整位置
+                                        .attr('fill', 'black')
+                                        .style('font-size', '10px')
+                                        .text(currentLine); // 添加当前行的文本
+
+                                    currentLine = word;
+                                    ty += 12; // 调整Y坐标到下一行
+                                } else {
+                                    currentLine += ' ' + word;
+                                }
+                            }
                             this.svg.append('text')
                                 .attr('class', 'annotation-text')
                                 .attr('x', annotationX + 5) // 略微缩进
-                                .attr('y', annotationY + 15 + (lineIndex * 12)) // 根据行数调整位置
+                                .attr('y', ty + 15 + (lineIndex * 12)) // 根据行数调整位置
                                 .attr('fill', 'black')
                                 .style('font-size', '10px')
-                                .text(line);
+                                .text(currentLine);
                         });
                     });
                 }
@@ -1122,11 +1184,11 @@ export default {
                             this.svg.append('rect')
                                 .attr('class', 'annotation-box')
                                 .attr('x', annotationX)
-                                .attr('y', annotationY)
+                                .attr('y', annotationY-boxHeight)
                                 .attr('width', boxWidth)
                                 .attr('height', boxHeight)
                                 .attr('fill', 'url(#flagPattern' + index + ')') // 使用图案填充
-                                .attr('stroke', 'black');
+                                .attr('stroke', 'none');
 
                             let textLines = [
                                 `Country: ${feature.properties.NAME}`,
@@ -1141,14 +1203,76 @@ export default {
                                 textLines.push(`Winter: ${annotation.winter_olympics}`);
                             }
 
+                            const maxWidth = boxWidth-5; // 设置最大宽度阈值
+                            let ty = annotationY;
+
                             textLines.forEach((line, lineIndex) => {
+                                let words = line.split(' ');
+                                let currentLine = words[0];
+
+                                for (let i = 1; i < words.length; i++) {
+                                    let word = words[i];
+                                    let testLine = currentLine + ' ' + word;
+                                    let testWidth = this.getTextWidth(testLine, '10px'); // 获取当前行的文本宽度
+
+                                    if (testWidth > maxWidth) {
+                                        this.svg.append('text')
+                                            .attr('class', 'annotation-text')
+                                            .attr('x', annotationX + 5) // 略微缩进
+                                            .attr('y', ty + 15 + (lineIndex * 12)) // 根据行数调整位置
+                                            .attr('fill', 'black')
+                                            .style('font-size', '10px')
+                                            .text(currentLine); // 添加当前行的文本
+
+                                        currentLine = word;
+                                        ty += 12; // 调整Y坐标到下一行
+                                    } else {
+                                        currentLine += ' ' + word;
+                                    }
+                                }
+                            });
+
+                            this.svg.append('rect')
+                                .attr('class', 'annotation-box')
+                                .attr('x', annotationX)
+                                .attr('y', annotationY)
+                                .attr('width', boxWidth)
+                                .attr('height', boxHeight+ty-annotationY)
+                                .attr('fill', this.defaultColor)
+                                .attr('stroke', 'none');
+
+                            ty = annotationY;
+                            textLines.forEach((line, lineIndex) => {
+                                let words = line.split(' ');
+                                let currentLine = words[0];
+
+                                for (let i = 1; i < words.length; i++) {
+                                    let word = words[i];
+                                    let testLine = currentLine + ' ' + word;
+                                    let testWidth = this.getTextWidth(testLine, '10px'); // 获取当前行的文本宽度
+
+                                    if (testWidth > maxWidth) {
+                                        this.svg.append('text')
+                                            .attr('class', 'annotation-text')
+                                            .attr('x', annotationX + 5) // 略微缩进
+                                            .attr('y', ty + 15 + (lineIndex * 12)) // 根据行数调整位置
+                                            .attr('fill', 'black')
+                                            .style('font-size', '10px')
+                                            .text(currentLine); // 添加当前行的文本
+
+                                        currentLine = word;
+                                        ty += 12; // 调整Y坐标到下一行
+                                    } else {
+                                        currentLine += ' ' + word;
+                                    }
+                                }
                                 this.svg.append('text')
                                     .attr('class', 'annotation-text')
                                     .attr('x', annotationX + 5) // 略微缩进
-                                    .attr('y', annotationY + 15 + (lineIndex * 12)) // 根据行数调整位置
+                                    .attr('y', ty + 15 + (lineIndex * 12)) // 根据行数调整位置
                                     .attr('fill', 'black')
                                     .style('font-size', '10px')
-                                    .text(line);
+                                    .text(currentLine);
                             });
 
                             // 创建用于国旗背景的图案
@@ -1195,14 +1319,14 @@ export default {
                             .classed("country-color", true);
 
                         // 创建注解框
-                        this.svg.append('rect')
-                            .attr('class', 'annotation-box')
-                            .attr('x', annotationX)
-                            .attr('y', annotationY)
-                            .attr('width', boxWidth)
-                            .attr('height', boxHeight)
-                            .attr('fill', fillColor) // 确保注解框颜色与国家颜色相同
-                            .attr('stroke', 'black');
+                        // this.svg.append('rect')
+                        //     .attr('class', 'annotation-box')
+                        //     .attr('x', annotationX)
+                        //     .attr('y', annotationY)
+                        //     .attr('width', boxWidth)
+                        //     .attr('height', boxHeight)
+                        //     .attr('fill', fillColor) // 确保注解框颜色与国家颜色相同
+                        //     .attr('stroke', 'none');
 
                         // 添加注解文本
                         const annotation = feature.properties.annotation;
@@ -1219,14 +1343,76 @@ export default {
                             textLines.push(`Winter: ${annotation.winter_olympics}`);
                         }
 
+                        const maxWidth = boxWidth-5; // 设置最大宽度阈值
+                        let ty = annotationY;
+
                         textLines.forEach((line, lineIndex) => {
+                            let words = line.split(' ');
+                            let currentLine = words[0];
+
+                            for (let i = 1; i < words.length; i++) {
+                                let word = words[i];
+                                let testLine = currentLine + ' ' + word;
+                                let testWidth = this.getTextWidth(testLine, '10px'); // 获取当前行的文本宽度
+
+                                if (testWidth > maxWidth) {
+                                    this.svg.append('text')
+                                        .attr('class', 'annotation-text')
+                                        .attr('x', annotationX + 5) // 略微缩进
+                                        .attr('y', ty + 15 + (lineIndex * 12)) // 根据行数调整位置
+                                        .attr('fill', 'black')
+                                        .style('font-size', '10px')
+                                        .text(currentLine); // 添加当前行的文本
+
+                                    currentLine = word;
+                                    ty += 12; // 调整Y坐标到下一行
+                                } else {
+                                    currentLine += ' ' + word;
+                                }
+                            }
+                        });
+
+                        this.svg.append('rect')
+                            .attr('class', 'annotation-box')
+                            .attr('x', annotationX)
+                            .attr('y', annotationY)
+                            .attr('width', boxWidth)
+                            .attr('height', boxHeight+ty-annotationY)
+                            .attr('fill', fillColor)
+                            .attr('stroke', 'none');
+
+                        ty = annotationY;
+                        textLines.forEach((line, lineIndex) => {
+                            let words = line.split(' ');
+                            let currentLine = words[0];
+
+                            for (let i = 1; i < words.length; i++) {
+                                let word = words[i];
+                                let testLine = currentLine + ' ' + word;
+                                let testWidth = this.getTextWidth(testLine, '10px'); // 获取当前行的文本宽度
+
+                                if (testWidth > maxWidth) {
+                                    this.svg.append('text')
+                                        .attr('class', 'annotation-text')
+                                        .attr('x', annotationX + 5) // 略微缩进
+                                        .attr('y', ty + 15 + (lineIndex * 12)) // 根据行数调整位置
+                                        .attr('fill', 'black')
+                                        .style('font-size', '10px')
+                                        .text(currentLine); // 添加当前行的文本
+
+                                    currentLine = word;
+                                    ty += 12; // 调整Y坐标到下一行
+                                } else {
+                                    currentLine += ' ' + word;
+                                }
+                            }
                             this.svg.append('text')
                                 .attr('class', 'annotation-text')
                                 .attr('x', annotationX + 5) // 略微缩进
-                                .attr('y', annotationY + 15 + (lineIndex * 12)) // 根据行数调整位置
+                                .attr('y', ty + 15 + (lineIndex * 12)) // 根据行数调整位置
                                 .attr('fill', 'black')
                                 .style('font-size', '10px')
-                                .text(line);
+                                .text(currentLine);
                         });
                     });
                 }
@@ -2269,6 +2455,12 @@ export default {
             window.URL.revokeObjectURL(url);
 
         },
+        getTextWidth(text, fontSize) {
+            let canvas = document.createElement('canvas');
+            let context = canvas.getContext('2d');
+            context.font = fontSize + ' sans-serif';
+            return context.measureText(text).width;
+        }
     },
 
 }
