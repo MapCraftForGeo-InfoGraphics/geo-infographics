@@ -1600,21 +1600,24 @@ export default {
                     const annotatedFeatures = this.geoData.features.filter(feature => feature.properties.annotation && feature.properties.annotation != -1);
                     const circleCenterX = 500; // 圆心的x坐标
                     const circleCenterY = this.mapHeight - 100; // 圆心的y坐标
-                    const radius = Math.min(this.mapWidth, this.mapHeight) / 4; // 半径
+                    const radius = Math.min(this.mapWidth, this.mapHeight) / 3; // 半径
                     const angleIncrement = (2 * Math.PI) / annotatedFeatures.length; // 每个注解之间的角度增量
+                    let delta = -6;
+                    const gamma = 2;
 
                     annotatedFeatures.forEach((feature, index) => {
+                        delta += gamma;
                         const angle = angleIncrement * index;
                         const annotationX = circleCenterX + radius * Math.cos(angle);
                         const annotationY = circleCenterY + radius * Math.sin(angle);
                         const countryCenter = this.geoPath.centroid(feature);
                         // 更改连线到注解的最近的边缘中心点
-                        const lineEndX = annotationX;
-                        const lineEndY = countryCenter[1] < annotationY ? annotationY - boxHeight / 2 : annotationY + boxHeight / 2;
+                        const lineEndX = annotationX+delta;
+                        const lineEndY = (countryCenter[1] < annotationY ? annotationY - boxHeight / 2 : annotationY + boxHeight / 2) + delta;
 
                         this.svg.append('path')
-                            .attr('d', `M${countryCenter[0]} ${countryCenter[1]} L${lineEndX} ${countryCenter[1]} L${lineEndX} ${lineEndY}`)
-                            .attr('stroke', 'black')
+                            .attr('d', `M${countryCenter[0]+delta} ${countryCenter[1]+delta} L${lineEndX} ${countryCenter[1]+delta} L${lineEndX} ${lineEndY}`)
+                            .attr('stroke', 'gray')
                             .attr('fill', 'none')
                             .attr('class', 'annotation-line');
 
@@ -1634,8 +1637,8 @@ export default {
                         // 绘制注解框
                         this.svg.append('rect')
                             .attr('class', 'annotation-box')
-                            .attr('x', annotationX - boxWidth / 2) // 中心对齐调整
-                            .attr('y', annotationY - boxHeight / 2) // 中心对齐调整
+                            .attr('x', annotationX - boxWidth / 2 + delta) // 中心对齐调整
+                            .attr('y', annotationY - boxHeight / 2 + delta) // 中心对齐调整
                             .attr('width', boxWidth)
                             .attr('height', boxHeight)
                             .attr('fill', 'none')
@@ -1645,8 +1648,8 @@ export default {
                         textLines.forEach((line, lineIndex) => {
                             this.svg.append('text')
                                 .attr('class', 'annotation-text')
-                                .attr('x', annotationX)
-                                .attr('y', annotationY - boxHeight / 2 + 10 + lineIndex * 15) // 垂直位置调整
+                                .attr('x', annotationX + delta)
+                                .attr('y', annotationY - boxHeight / 2 + 10 + lineIndex * 15 + delta) // 垂直位置调整
                                 .attr('text-anchor', 'middle')
                                 .attr('fill', 'black')
                                 .style('font-size', '10px')
