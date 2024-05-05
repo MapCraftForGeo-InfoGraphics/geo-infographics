@@ -652,8 +652,7 @@
     },
     {
         "country": "Norway",
-        "population": 5311916,
-        "description": "Norway's population is relatively small but diverse, with indigenous Sami people alongside ethnic Norwegians, contributing to its reputation as a modern and progressive society."
+        "population": 5311916
     },
     {
         "country": "Oman",
@@ -846,7 +845,8 @@
     },
     {
         "country": "Sweden",
-        "population": 10175214
+        "population": 10175214,
+        "description": "The population of Sweden, numbering around 10 million, is characterized by its high standard of living, well-educated citizens, and cultural diversity."
     },
     {
         "country": "Switzerland",
