@@ -11,6 +11,12 @@
                         <v-expansion-panel-text>
                             <v-container class="container">
                                 <v-row>
+                                    <v-col class="element" @click="setRepresentation(myType['Plain'])">
+                                        <input type="button" id="myButtonPlain" class="colorfulButton"
+                                           v-model=plainTextLabel @click="setRepresentation(myType['Plain'])"/>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
                                     <v-col class="element" @click="setRepresentation(myType['Political Map'])">
                                         Political Map
                                         <v-img :src="require('../assets/PoliticalMap.svg')" contain/>
@@ -39,11 +45,12 @@
                                 </v-row> -->
 
                                 <v-row>
-                                    <v-col class="element" @click="setRepresentation(myType['Plain'])">
-                                        Plain
-                                        <v-img :src="require('../assets/GridCartogram.svg')" contain/>
-                                    </v-col>
+                                    
 
+                                    <v-col class="element" @click="setRepresentation(myType['Terrain'])">
+                                        Topographic Map
+                                        <v-img :src="require('../assets/TerrainGlobal.svg')" contain/>
+                                    </v-col>
                                     <v-col></v-col>
                                 </v-row>
                             </v-container>
@@ -390,6 +397,7 @@ export default {
         removeText: 'No Encoding',
         removeTextLabel: 'No Label',
         removeTextHighlight: 'No Highlight',
+        plainTextLabel: 'No Map',
         preEncoding: -1,
         preColortype: -1,
 
@@ -414,6 +422,7 @@ export default {
             "Shape-based Map": 2,
             "Street Map": 3,
             "Plain": 4,
+            "Terrain": 5,
 
 
             "Mercator": 0,
@@ -668,6 +677,22 @@ export default {
                 }
 
 
+            } else if (type === this.myType['Terrain']) {
+                this.representationType = type;
+
+                alert('Attention! Not supporting for ANY color method in encoding channel, label position, or highlight.');
+
+                this.representation = () => {
+                    this.svg.append("image")
+                    .attr("xlink:href", require("../assets/terrain.svg")) // 设置图片的路径
+                    .attr("width", 1000) // 设置图片宽度
+                    .attr("height", 750) // 设置图片高度
+                    .attr("x", 150) // 设置图片相对于SVG画布的x坐标
+                    .attr("y", 0) // 设置图片相对于SVG画布的y坐标
+                    .attr('transform', 'scale(1.8, 1.2)');
+                };
+
+                
             }
 
             this.drawSvg();
@@ -2147,13 +2172,16 @@ export default {
                             .attr('x', 70)
                             .attr('y', 120)
                             .text(':100k');
-                        if (this.preColortype == 0) {
-                            //luminance legend
-                            this.drawColorLuminanceLegend();
-                        } else if (this.preColortype == 1) {
-                            //hue legend
-                            this.drawColorHueLegend();
+                        if (this.ifDoubleEncoding == true) {
+                            if (this.preColortype == 0) {
+                                //luminance legend
+                                this.drawColorLuminanceLegend();
+                            } else if (this.preColortype == 1) {
+                                //hue legend
+                                this.drawColorHueLegend();
+                            }
                         }
+                        
                     }
 
 
