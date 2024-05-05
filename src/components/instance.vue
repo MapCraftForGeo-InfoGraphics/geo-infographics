@@ -51,7 +51,10 @@
                                         Topographic Map
                                         <v-img :src="require('../assets/TerrainGlobal.svg')" contain/>
                                     </v-col>
-                                    <v-col></v-col>
+                                    <v-col class="element" @click="setRepresentation(myType['Street'])">
+                                        Street Map
+                                        <v-img :src="require('../assets/StreetMap.svg')" contain/>
+                                    </v-col>
                                 </v-row>
                             </v-container>
                         </v-expansion-panel-text>
@@ -138,12 +141,12 @@
                                 <v-row>
                                     <div class="row-with-line"></div>
                                     <v-col class="element" @click="setEncodingChannel(myType['Link (Line)'])">
-                                        Tilt/Angle (Undirected)
+                                        Tilt/Angle (Directionless)
                                         <v-img :src="require('../assets/Link(Line).svg')" contain/>
                                     </v-col>
 
                                     <v-col class="element" @click="setEncodingChannel(myType['Link (Arrow)'])">
-                                        Tilt/Angle (Directed)
+                                        Tilt/Angle (Directional)
                                         <v-img :src="require('../assets/Link(Arrow).svg')" contain/>
                                     </v-col>
                                 </v-row>
@@ -431,6 +434,7 @@ export default {
             "Street Map": 3,
             "Plain": 4,
             "Terrain": 5,
+            "Street": 6,
 
 
             "Mercator": 0,
@@ -582,6 +586,7 @@ export default {
         },
 
         getDescriptionByCountry(cty) {
+            console.log(this.infoData[cty]);
             return this.infoData[cty] && this.infoData[cty]['description'] ? this.infoData[cty]['description'] : undefined;
         },
 
@@ -658,8 +663,26 @@ export default {
                             .attr("r", pointRadius);
                     })
                 };
-            } else if (type === this.myType['Street Map']) {
+            } else if (type === this.myType['Street']) {
                 this.representationType = type;
+                alert('Attention! Not supporting for ANY color method in encoding channel, label position, or highlight.');
+                this.representation = () => {
+                    this.svg.append("image")
+                        .attr("xlink:href", require("../assets/streetmap.png")) // 设置图片的路径
+                        .attr("width", 1000) // 设置图片宽度
+                        .attr("height", 655) // 设置图片高度
+                        .attr("x", 150) // 设置图片相对于SVG画布的x坐标
+                        .attr("y", -10) // 设置图片相对于SVG画布的y坐标
+                        .attr('transform', 'scale(2.0, 1.2)');
+                    this.svg.append("image")
+                        .attr("xlink:href", require("../assets/iceland.jpg")) // 设置图片的路径
+                        .attr("width", 150) // 设置图片宽度
+                        .attr("height", 65) // 设置图片高度
+                        .attr("x", 115) // 设置图片相对于SVG画布的x坐标
+                        .attr("y", 70) // 设置图片相对于SVG画布的y坐标
+                        .attr('transform', 'scale(2.5, 1.3)')
+                        //.attr('transform', 'scale(1.5)');
+                };
             } else if (type === this.myType['Plain']) {
                 this.representationType = type;
                 // this.svg.select('.grid-layer').remove();
@@ -999,49 +1022,55 @@ export default {
             if (type === this.myType['Label Situated']) {
                 this.labelPositionType = type;
 
+                
+
                 this.LabelPosition = () => {
                     this.geoData.features.forEach(feature => {
-                        const center = this.geoPath.centroid(feature);
-                        const annotation = feature.properties.annotation;
+                        if ((this.getDescriptionByCountry(feature.properties.NAME)) != undefined) {
+                            const center = this.geoPath.centroid(feature);
+                            const annotation = this.getDescriptionByCountry(feature.properties.NAME);
 
-                        if (annotation && annotation != -1) {
-                            let textLines = [
-                                `Country: ${feature.properties.NAME}`,
-                                `City: ${annotation.city}`
-                            ];
+                            if (annotation && annotation != -1) {
+                                let textLines = [
+                                    `Country: ${feature.properties.NAME}`,
+                                    // `City: ${annotation.city}`
+                                    `Discription: ${annotation}`
+                                ];
 
-                            // 根据条件动态添加Summer和Winter的行
-                            if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
-                                textLines.push(`Summer: ${annotation.summer_olympics}`);
-                            }
-                            if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
-                                textLines.push(`Winter: ${annotation.winter_olympics}`);
-                            }
-                            const maxLineWidth = 30;
+                                // 根据条件动态添加Summer和Winter的行
+                                // if (annotation.summer_olympics && annotation.summer_olympics.length > 0) {
+                                //     textLines.push(`Summer: ${annotation.summer_olympics}`);
+                                // }
+                                // if (annotation.winter_olympics && annotation.winter_olympics.length > 0) {
+                                //     textLines.push(`Winter: ${annotation.winter_olympics}`);
+                                // }
+                                const maxLineWidth = 30;
 
-                            // 用于跟踪当前垂直位置的变量
-                            let currentYOffset = 0;
+                                // 用于跟踪当前垂直位置的变量
+                                let currentYOffset = 0;
 
-                            // 应用拆分函数并添加文本
-                            textLines.forEach((line) => {
-                                let subLines = this.splitTextToLines(line, maxLineWidth); // 使用拆分函数
-                                subLines.forEach((subLine) => {
-                                    this.svg.append('text')
-                                        .attr('class', 'olympic-label')
-                                        .attr('x', center[0])
-                                        .attr('y', center[1] + currentYOffset) // 使用currentYOffset确定垂直位置
-                                        .attr('text-anchor', 'middle')
-                                        .attr('fill', 'black')
-                                        .style('font-size', '8px')
-                                        .text(subLine);
+                                // 应用拆分函数并添加文本
+                                textLines.forEach((line) => {
+                                    let subLines = this.splitTextToLines(line, maxLineWidth); // 使用拆分函数
+                                    subLines.forEach((subLine) => {
+                                        this.svg.append('text')
+                                            .attr('class', 'olympic-label')
+                                            .attr('x', center[0])
+                                            .attr('y', center[1] + currentYOffset-20) // 使用currentYOffset确定垂直位置
+                                            .attr('text-anchor', 'middle')
+                                            .attr('fill', 'black')
+                                            .style('font-size', '12px')
+                                            .text(subLine);
 
-                                    // 每添加一行，更新currentYOffset以便下一行下移
-                                    currentYOffset += 10; // 假设每行文本的高度加间距为15px
+                                        // 每添加一行，更新currentYOffset以便下一行下移
+                                        currentYOffset += 13; // 假设每行文本的高度加间距为15px
+                                    });
+
+                                    // 注意：这里不再需要调整index
                                 });
-
-                                // 注意：这里不再需要调整index
-                            });
+                            }
                         }
+                        
                     });
                 }
 
