@@ -257,8 +257,7 @@
     },
     {
         "country": "England",
-        "population": 55619400,
-        "description": "With a diverse population reflecting its historical and contemporary immigration patterns, England is home to a vibrant multicultural society."
+        "population": 55619400
     },
     {
         "country": "Equatorial Guinea",
@@ -924,7 +923,8 @@
     },
     {
         "country": "United Kingdom",
-        "population": 66460344
+        "population": 66460344,
+        "description": "With a diverse population reflecting its historical and contemporary immigration patterns, United Kingdom is home to a vibrant multicultural society."
     },
     {
         "country": "United States of America",
