@@ -291,7 +291,7 @@
                             </v-container>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
-                    <v-expansion-panel>
+                    <!-- <v-expansion-panel>
                         <v-expansion-panel-title>
                             Print
                         </v-expansion-panel-title>
@@ -304,7 +304,7 @@
                             </v-container>
                         </v-expansion-panel-text>
 
-                    </v-expansion-panel>
+                    </v-expansion-panel> -->
                 </v-expansion-panels>
             </v-container>
         </v-card>
@@ -319,11 +319,19 @@
 
 
             </v-row>
-            <svg :class="value + '-svg'" style="width: 100%; height: 100%;"></svg>
+            <svg :class="value + '-svg'" style="width: 100%; height: 90%;"></svg>
             <!-- <svg :class="value + '-legend'" style="position: absolute; top: 30px; right: 20px; width: 200px; height: 40px; z-index: 2;"></svg> -->
             <svg :id="value + '-enlargedView'"
                  style="width: 200px; height: 400px; position: absolute; top: 10px; right: 10px;"></svg>
+            <div>
+                <input type="button" id="myButtonPrint" class="colorfulButtonPrint" v-model=printText
+                                           @click="printSVG()"/>
+            </div>
         </v-container>
+        
+    </div>
+    <div>
+        
     </div>
 
     <v-dialog v-model="errorDialog" width="auto">
@@ -686,7 +694,7 @@ export default {
                     this.svg.append("image")
                     .attr("xlink:href", require("../assets/terrain.svg")) // 设置图片的路径
                     .attr("width", 1000) // 设置图片宽度
-                    .attr("height", 750) // 设置图片高度
+                    .attr("height", 675) // 设置图片高度
                     .attr("x", 150) // 设置图片相对于SVG画布的x坐标
                     .attr("y", 0) // 设置图片相对于SVG画布的y坐标
                     .attr('transform', 'scale(1.8, 1.2)');
@@ -2566,6 +2574,17 @@ export default {
     background-color: pink; /* 设置按钮的背景颜色为红色 */
     color: #000000; /* 设置按钮文字颜色为白色 */
     border-radius: 5px;
+}
+
+.colorfulButtonPrint {
+    background-color: pink; /* 设置按钮的背景颜色为红色 */
+    color: #000000; /* 设置按钮文字颜色为白色 */
+    border-radius: 5px;
+    margin: 10px; /* 调整间距 */
+    margin-right: 20px;
+    transform: scale(1.5); /* 放大按钮 */
+    padding: 4px;
+    float: right;
 }
 
 .button-row {
