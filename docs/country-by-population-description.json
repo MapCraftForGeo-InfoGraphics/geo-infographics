@@ -53,8 +53,7 @@
     },
     {
         "country": "Austria",
-        "population": 8840521,
-        "description": "Home to stunning alpine landscapes, classical music, and imperial architecture."
+        "population": 8840521
     },
     {
         "country": "Azerbaijan",
@@ -258,8 +257,7 @@
     },
     {
         "country": "England",
-        "population": 55619400,
-        "description": "A land of rich history, royal tradition, and cultural diversity."
+        "population": 55619400
     },
     {
         "country": "Equatorial Guinea",
@@ -296,7 +294,7 @@
     {
         "country": "France",
         "population": 66977107,
-        "description": "A bastion of art, fashion, and culinary excellence."
+        "description": "Known for its rich cultural heritage and diverse population, France embraces a blend of indigenous French, immigrant, and overseas territories' populations."
     },
     {
         "country": "French Guiana",
@@ -325,7 +323,7 @@
     {
         "country": "Germany",
         "population": 82905782,
-        "description":"Known for its efficiency, engineering prowess, and love for beer."
+        "description":"Germany's population is characterized by its blend of ethnic Germans alongside significant immigrant communities, contributing to its status as an economic powerhouse in Europe."
     },
     {
         "country": "Ghana",
@@ -338,7 +336,7 @@
     {
         "country": "Greece",
         "population": 10731726,
-        "description": "Birthplace of democracy, mythology, and idyllic Mediterranean landscapes."
+        "description": "Greece's population is a combination of indigenous Greeks and various minority groups, reflecting its complex history and strategic location in the Mediterranean."
     },
     {
         "country": "Greenland",
@@ -426,8 +424,7 @@
     },
     {
         "country": "Italy",
-        "population": 60421760,
-        "description": "Famous for its exquisite cuisine, ancient ruins, and passionate people."
+        "population": 60421760
     },
     {
         "country": "Ivory Coast",
@@ -655,8 +652,7 @@
     },
     {
         "country": "Norway",
-        "population": 5311916,
-        "description": "Famed for its breathtaking fjords, Northern Lights, and commitment to sustainability."
+        "population": 5311916
     },
     {
         "country": "Oman",
@@ -725,7 +721,7 @@
     {
         "country": "Russia",
         "population": 144478050,
-        "description": "A vast nation with a rich cultural heritage, intriguing history, and enduring resilience."
+        "description": "Russia boasts a vast and diverse population spread across its expansive territory, encompassing numerous ethnicities, cultures, and languages."
     },
     {
         "country": "Rwanda",
@@ -849,7 +845,8 @@
     },
     {
         "country": "Sweden",
-        "population": 10175214
+        "population": 10175214,
+        "description": "The population of Sweden, numbering around 10 million, is characterized by its high standard of living, well-educated citizens, and cultural diversity."
     },
     {
         "country": "Switzerland",
@@ -898,7 +895,7 @@
     {
         "country": "Turkey",
         "population": 82319724,
-        "description": "Bridging Europe and Asia, it boasts a blend of ancient civilizations, vibrant bazaars, and stunning coastlines."
+        "description": "Turkey's population is a dynamic mix of Turks, Kurds, and other ethnic groups, fostering a rich tapestry of traditions and customs."
     },
     {
         "country": "Turkmenistan",
@@ -926,7 +923,8 @@
     },
     {
         "country": "United Kingdom",
-        "population": 66460344
+        "population": 66460344,
+        "description": "With a diverse population reflecting its historical and contemporary immigration patterns, United Kingdom is home to a vibrant multicultural society."
     },
     {
         "country": "United States of America",

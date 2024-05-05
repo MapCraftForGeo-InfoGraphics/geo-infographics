@@ -1486,10 +1486,10 @@ export default {
                 this.labelPositionType = type;
                 this.LabelPosition = () => {
                     const annotatedFeatures = this.geoData.features.filter(feature=>(this.getDescriptionByCountry(feature.properties.NAME)) != undefined);
-                    const totalAnnotations = annotatedFeatures.length;
+                    // const totalAnnotations = annotatedFeatures.length;
 
                     // 假设每边分配的注解数量大致相等
-                    const annotationsPerSide = Math.ceil(totalAnnotations / 3);
+                    // const annotationsPerSide = Math.ceil(totalAnnotations / 3);
                     // eslint-disable-next-line
                     let leftAnnotationsCount = 0, bottomAnnotationsCount = 0, rightAnnotationsCount = 0;
 
@@ -1502,13 +1502,13 @@ export default {
                         if (feature.properties.NAME === "Germany") lineLength += 100;
 
                         // 计算到三边的距离
-                        const distanceToLeft = countryCenter[0];
-                        const distanceToBottom = this.mapHeight - countryCenter[1];
-                        const distanceToRight = this.mapWidth - countryCenter[0];
+                        // const distanceToLeft = countryCenter[0];
+                        // const distanceToBottom = this.mapHeight - countryCenter[1];
+                        // const distanceToRight = this.mapWidth - countryCenter[0];
 
                         // 确定注解应放置在哪个边缘
                         let edge = 'right'; // 默认右边
-                        let minDistance = distanceToLeft;
+                        // let minDistance = distanceToLeft;
 
                         // if (distanceToBottom < minDistance && bottomAnnotationsCount < annotationsPerSide) {
                         //     minDistance = distanceToBottom;
@@ -1521,7 +1521,7 @@ export default {
                         if (feature.properties.NAME=='United Kingdom' || feature.properties.NAME=='France' || feature.properties.NAME=='Sweden') {
                             edge = 'left';
                         } else if (feature.properties.NAME=='Germany' || feature.properties.NAME=='Greece' || feature.properties.NAME=='Turkey') {
-                            minDistance = distanceToBottom;
+                            // minDistance = distanceToBottom;
                             edge = 'bottom';
                         }
 
