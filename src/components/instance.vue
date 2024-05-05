@@ -1165,7 +1165,7 @@ export default {
                             .attr('x', annotationX)
                             .attr('y', annotationY)
                             .attr('width', boxWidth)
-                            .attr('height', boxHeight+ty-annotationY)
+                            .attr('height', 120)//.attr('height', boxHeight+ty-annotationY)
                             .attr('fill', this.defaultColor)
                             .attr('stroke', 'none');
 
