@@ -60,7 +60,7 @@
                         </v-expansion-panel-text>
                     </v-expansion-panel>
 
-                    <v-expansion-panel>
+                    <!-- <v-expansion-panel>
                         <v-expansion-panel-title>
                             Map Projections
                         </v-expansion-panel-title>
@@ -80,7 +80,7 @@
                                 </v-row>
                             </v-container>
                         </v-expansion-panel-text>
-                    </v-expansion-panel>
+                    </v-expansion-panel> -->
 
                     <v-expansion-panel>
                         <v-expansion-panel-title>
@@ -405,6 +405,7 @@ export default {
 
         ifDoubleEncoding: false,
         ifDoubleEncodingText: 'Dual Encoding: OFF',
+        ifSizeColor: false,
         removeText: 'No Encoding',
         removeTextLabel: 'No Label',
         removeTextHighlight: 'No Highlight',
@@ -420,6 +421,8 @@ export default {
         },
 
         colorFunctionL: () => {
+        },
+        sizeFunctionL: () => {
         },
 
         highLights: [],
@@ -529,6 +532,9 @@ export default {
             // console.log(this.mapWidth, this.mapHeight);
             this.setProjection(1);
             this.drawSvg();
+            if (!this.isNumerical) {
+                alert('No dual encoding supporting!');
+            }
         },
 
         splitTextToLines(text, maxLineWidth) {
@@ -1926,6 +1932,7 @@ export default {
                         this.drawColorLuminanceLegend();
                     } else {
                         this.preEncoding = type;
+                        this.ifSizeColor = true;
                         this.svg.selectAll('path')
                             .attr('fill', `${this.defaultColor}`);
                         this.svg.selectAll('circle')
@@ -1969,6 +1976,7 @@ export default {
                         this.drawColorHueLegend();
                     } else {
                         this.preEncoding = type;
+                        this.ifSizeColor = true;
                         this.colorFunctionL = colorFunction;
                         this.svg.selectAll('path')
                             .attr('fill', this.defaultColor);
@@ -2098,6 +2106,7 @@ export default {
                                     .text(label);
                                 px += 2 * delta;
                             }
+                            this.doubleEncoding();
                         }
                     }
                 } else if (type === this.myType['2D Length']) {
@@ -2176,6 +2185,7 @@ export default {
                                     .text(label);
                                 px += 2 * delta;
                             }
+                            this.doubleEncoding();
                         }
                     }
                 }
@@ -2195,6 +2205,7 @@ export default {
                         const sizeScale = d3.scaleSqrt()
                             .domain(populationExtent)
                             .range([5, 50]); // 方块大小的范围
+                        let flag = false;
 
                         // 直接在现有的SVG上绘制方块，不清除之前的内容
                         this.geoData.features.forEach(feature => {
@@ -2209,13 +2220,19 @@ export default {
                                         .attr('height', sizeScale(population))
                                         .attr('fill', 'rgba(230, 158, 165, 0.7)');
                                 } else {
-                                    this.svg.append('rect')
-                                        .attr('x', x - sizeScale(population) / 2)
-                                        .attr('y', y - sizeScale(population) / 2)
-                                        .attr('width', sizeScale(population))
-                                        .attr('height', sizeScale(population))
-                                        .attr('fill', this.colorFunctionL(population))
-                                        .attr('opacity', '0.7');
+                                    if (this.ifSizeColor == true) {
+                                        this.svg.append('rect')
+                                            .attr('x', x - sizeScale(population) / 2)
+                                            .attr('y', y - sizeScale(population) / 2)
+                                            .attr('width', sizeScale(population))
+                                            .attr('height', sizeScale(population))
+                                            .attr('fill', this.colorFunctionL(population))
+                                            .attr('opacity', '0.7');
+                                        flag = true;
+                                    } else {
+                                        this.sizeFunctionL = sizeScale;
+                                    }
+                                        
                                 }
 
                             }
@@ -2242,7 +2259,7 @@ export default {
 
                                 py += v + delta;
                             }
-                        } else {
+                        } else if (this.ifSizeColor == true && flag == true){
                             for (let i = 0, delta = 20, py = 100; i < 4; i++) {
                                 let t = 1000000 * Math.pow(5, i)
                                 let v = sizeScale(t);
@@ -2264,6 +2281,8 @@ export default {
 
                                 py += v + delta;
                             }
+                            this.ifSizeColor = false;
+                            this.doubleEncoding();
                         }
                     }
                 }
@@ -2326,7 +2345,7 @@ export default {
                                             .attr('stroke', 'none')
                                             .attr('stroke-width', 3);
                                         g.attr('transform', 'translate(' + x + ',' + y + ')');
-                                    } else {
+                                    } else if (this.ifSizeColor == true) {
                                         // var gg = this.svg.append('g');
                                         // gg.append('path')
                                         //     .attr('d', 'M14.8025 62.0243H13.3025V63.5243V109.33C13.3025 112.457 10.7652 114.995 7.62974 114.995C4.52341 114.995 2.05603 112.482 2.05603 109.33V58.5276C2.05603 47.7847 10.8631 39.0498 21.6399 39.0498H57.8253C68.5917 39.0498 77.4056 47.7849 77.4056 58.5276V109.33C77.4056 112.483 74.9364 114.995 71.8267 114.995C68.6982 114.995 66.1557 112.454 66.1557 109.33V63.5243V62.0243H64.6557H60.9589H59.4589V63.5243V190.975C59.4589 195.441 55.8001 199.086 51.3147 199.086C46.8293 199.086 43.2017 195.448 43.2017 190.975V116.968V115.468H41.7017H37.7564H36.2564V116.968V190.975C36.2564 195.449 32.6278 199.086 28.1539 199.086C23.6745 199.086 20.0392 195.447 20.0392 190.975C20.0392 187.046 20.0184 155.183 19.9975 124.302C19.9871 108.862 19.9767 93.6674 19.9689 82.3327L19.9594 68.6775L19.9568 64.8683L19.9561 63.8666L19.9559 63.61L19.9558 63.5451V63.5288V63.5247C19.9558 63.5238 19.9558 63.5233 18.4558 63.5243L19.9558 63.5233L19.9548 62.0243H18.4558H14.8025ZM39.7326 31.8474C31.5119 31.8474 24.8553 25.1836 24.8535 16.9684C24.8537 8.74658 31.5101 2.08571 39.7326 2.08571C47.945 2.08571 54.6081 8.74501 54.6081 16.9684C54.6081 25.1831 47.945 31.8474 39.7326 31.8474Z')
@@ -2354,6 +2373,18 @@ export default {
                                             .attr('stroke', 'none')
                                             .attr('stroke-width', 3);
                                         gd.attr('transform', 'translate(' + x + ',' + y + ')');
+                                        this.doubleEncoding();
+                                    } else {
+                                        const xs = center[0] - ((iconWidth*this.sizeFunctionL(population)/20 + iconGap*this.sizeFunctionL(population)/20) * 5 / 2) + ((i % 5) * (iconWidth*this.sizeFunctionL(population)/20 + iconGap*this.sizeFunctionL(population)/20));
+                                        let ys = center[1] + (Math.floor(i / 5) * (iconHeight*this.sizeFunctionL(population)/20 + iconGap*this.sizeFunctionL(population)/20)) - 10;
+                                        if(feature.properties.NAME=='Russia') ys -= 100;
+                                        this.svg.append('image')
+                                            .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
+                                            .attr('x', xs)
+                                            .attr('y', ys)
+                                            .attr('width', iconWidth*this.sizeFunctionL(population)/20)
+                                            .attr('height', iconHeight*this.sizeFunctionL(population)/20)
+                                            .attr('opcacity', 0.7);
                                     }
                                 }
                             }
@@ -2389,6 +2420,7 @@ export default {
                         this.svg.selectAll('path').attr("fill", this.defaultColor);
                         d3.select("." + this.value + "-legend").selectAll("*").remove();
                     }
+                    this.doubleEncoding();
                 } else {
                     // // 如果没有适用的编码方式
                     // this.encodingChannelType = -1; // 或其他表示无效编码方式的值
@@ -2410,7 +2442,8 @@ export default {
                     //         .text('This encoding method is not applicable to the current data provided.');
                     // };
                     // d3.select("." + this.value + "-legend").selectAll("*").remove();
-                    this.showErrorDialog("Encoding Channel Not Support", "The selected encoding channel only support the data your uploaded!")
+                    this.showErrorDialog("Encoding Channel Not Support", "The selected encoding channel only support the data your uploaded!");
+                    this.doubleEncoding();
                 }
             } else {
                 d3.select("." + this.value + "-legend").selectAll("*").remove();
@@ -2643,7 +2676,7 @@ export default {
             this.ifDoubleEncoding = !this.ifDoubleEncoding;
             this.ifDoubleEncodingText = this.ifDoubleEncoding ? 'Dual Encoding: ON' : 'Dual Encoding: OFF';
             if (this.ifDoubleEncoding)
-                alert('Attention! Only supporting for one color method with one length, size or quantity method.');
+                alert('Attention! Only supporting for one color method with other methods or size method with quantity method. No supporting for glyph.');
         },
 
         printSVG() {
