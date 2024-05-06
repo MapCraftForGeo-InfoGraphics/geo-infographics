@@ -2373,17 +2373,17 @@ export default {
                                             .attr('stroke', 'none')
                                             .attr('stroke-width', 3);
                                         gd.attr('transform', 'translate(' + x + ',' + y + ')');
-                                        this.doubleEncoding();
                                     } else {
-                                        const xs = center[0] - ((iconWidth*this.sizeFunctionL(population)/20 + iconGap*this.sizeFunctionL(population)/20) * 5 / 2) + ((i % 5) * (iconWidth*this.sizeFunctionL(population)/20 + iconGap*this.sizeFunctionL(population)/20));
-                                        let ys = center[1] + (Math.floor(i / 5) * (iconHeight*this.sizeFunctionL(population)/20 + iconGap*this.sizeFunctionL(population)/20)) - 10;
+                                        const s = 25;
+                                        const xs = center[0] - ((iconWidth*this.sizeFunctionL(population)/s + iconGap*this.sizeFunctionL(population)/s) * 5 / 2) + ((i % 5) * (iconWidth*this.sizeFunctionL(population)/s + iconGap*this.sizeFunctionL(population)/s));
+                                        let ys = center[1] + (Math.floor(i / 5) * (iconHeight*this.sizeFunctionL(population)/s + iconGap)) - 10;
                                         if(feature.properties.NAME=='Russia') ys -= 100;
                                         this.svg.append('image')
                                             .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
                                             .attr('x', xs)
                                             .attr('y', ys)
-                                            .attr('width', iconWidth*this.sizeFunctionL(population)/20)
-                                            .attr('height', iconHeight*this.sizeFunctionL(population)/20)
+                                            .attr('width', iconWidth*this.sizeFunctionL(population)/s)
+                                            .attr('height', iconHeight*this.sizeFunctionL(population)/s)
                                             .attr('opcacity', 0.7);
                                     }
                                 }
@@ -2408,6 +2408,7 @@ export default {
                                 //hue legend
                                 this.drawColorHueLegend();
                             }
+                            this.doubleEncoding();
                         }
                         
                     }
