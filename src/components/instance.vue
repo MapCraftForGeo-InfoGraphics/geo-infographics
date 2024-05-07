@@ -377,7 +377,6 @@
 
 <script>
 import * as d3 from 'd3';
-import { feature } from 'topojson-client';
 
 export default {
     name: 'instanceTab',
@@ -2036,6 +2035,10 @@ export default {
                     } else {
                         this.preEncoding = type;
                         this.ifSizeColor = true;
+                        this.encodingChannel = () => {
+                            this.svg.selectAll('path').attr("fill", this.defaultColor);
+                            d3.select("." + this.value + "-legend").selectAll("*").remove();
+                        }
                         this.svg.selectAll('path')
                             .attr('fill', `${this.defaultColor}`);
                         this.svg.selectAll('circle')
@@ -2081,6 +2084,10 @@ export default {
                         this.preEncoding = type;
                         this.ifSizeColor = true;
                         this.colorFunctionL = colorFunction;
+                        this.encodingChannel = () => {
+                            this.svg.selectAll('path').attr("fill", this.defaultColor);
+                            d3.select("." + this.value + "-legend").selectAll("*").remove();
+                        }
                         this.svg.selectAll('path')
                             .attr('fill', this.defaultColor);
                         this.svg.selectAll('circle')
@@ -2399,10 +2406,10 @@ export default {
 
                         // 在地图上叠加人口图标
                         const iconWidth = 10; // 图标的宽度
-                        const iconHeight = 25; // 图标的高度
+                        // const iconHeight = 25; // 图标的高度
                         const iconGap = 3; // 调整图标间的间隔
-                        const scaleX = 0.4;
-                        const scaleY = 0.4;
+                        // const scaleX = 0.4;
+                        // const scaleY = 0.4;
 
                         // 直接在现有的SVG上绘制图标，不清除之前的内容
                         this.geoData.features.forEach(feature => {
