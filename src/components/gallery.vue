@@ -36,6 +36,29 @@
                     </div>
                 </v-col>
             </v-row>
+
+            <v-row>
+                <v-col class="image-with-text">
+                    <v-img :src="require('../assets/colordouble.png')" contain/>
+                </v-col>
+                <v-col class="image-with-text">
+                    <v-img :src="require('../assets/sizedouble.png')" contain/>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col>
+                    <div  class="text-container">
+                        <div>颜色尺寸双编码样例</div>
+                        <div>先点颜色编码，再点尺寸编码</div>
+                    </div>
+                </v-col>
+                <v-col>
+                    <div  class="text-container">
+                        <div>尺寸icon双编码样例</div>
+                        <div>先点尺寸编码，再点glyph编码</div>
+                    </div>
+                </v-col>
+            </v-row>
         </v-container>
     </div>
     
