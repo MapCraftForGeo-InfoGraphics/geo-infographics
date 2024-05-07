@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <v-app-bar :elevation="2">
-        <v-app-bar-title>Geo-Info Graphics WebUI</v-app-bar-title>
+        <v-app-bar-title><h1>Geo-Info Graphics WebUI</h1></v-app-bar-title>
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
         <template v-slot:extension>
@@ -169,3 +169,9 @@ export default {
   },
 }
 </script>
+<style scoped>
+h1 {
+    font-size: 30px;
+}
+
+</style>
