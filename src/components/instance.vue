@@ -101,6 +101,11 @@
                                 </v-row>
 
                                 <v-row>
+                                    <v-col style="padding: 0;">
+                                        <div class="matched-heading">Color</div>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
                                     <div class="row-with-line"></div>
                                     <v-col class="element" @click="setEncodingChannel(myType['Color (Luminance)'])">
                                         Color (Intensity)
@@ -113,6 +118,11 @@
                                     </v-col>
                                 </v-row>
 
+                                <v-row>
+                                    <v-col style="padding: 0;">
+                                        <div class="matched-heading">Length</div>
+                                    </v-col>
+                                </v-row>
                                 <v-row>
                                     <div class="row-with-line"></div>
                                     <v-col class="element" @click="setEncodingChannel(myType['3D Length'])">
@@ -127,6 +137,11 @@
                                 </v-row>
 
                                 <v-row>
+                                    <v-col style="padding: 0;">
+                                        <div class="matched-heading">Scale</div>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
                                     <div class="row-with-line"></div>
                                     <v-col class="element" @click="setEncodingChannel(myType['Quantity'])">
                                         Quantity
@@ -138,6 +153,11 @@
                                     </v-col>
                                 </v-row>
 
+                                <v-row>
+                                    <v-col style="padding: 0;">
+                                        <div class="matched-heading">Link</div>
+                                    </v-col>
+                                </v-row>
                                 <v-row>
                                     <div class="row-with-line"></div>
                                     <v-col class="element" @click="setEncodingChannel(myType['Link (Line)'])">
@@ -152,10 +172,19 @@
                                 </v-row>
 
                                 <v-row>
+                                    <v-col style="padding: 0;">
+                                        <div class="matched-heading">Glyph</div>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
                                     <div class="row-with-line"></div>
-                                    <v-col class="element" @click="setEncodingChannel(myType['Glyph'])">
-                                        Glyph
-                                        <v-img :src="require('../assets/Glyph.svg')" width="50%" contain/>
+                                    <v-col class="element" @click="setEncodingChannel(myType['GlyphIcon'])">
+                                        Icon
+                                        <v-img :src="require('../assets/Glyph.svg')" contain/>
+                                    </v-col>
+                                    <v-col class="element" @click="setEncodingChannel(myType['GlyphFlag'])">
+                                        <!-- Flag
+                                        <v-img :src="require('../assets/Glyph.svg')" contain/> -->
                                     </v-col>
 
                                     <!-- <v-col class="element" @click="setEncodingChannel(myType['Remove'])">
@@ -348,6 +377,7 @@
 
 <script>
 import * as d3 from 'd3';
+import { feature } from 'topojson-client';
 
 export default {
     name: 'instanceTab',
@@ -406,10 +436,10 @@ export default {
         ifDoubleEncoding: false,
         ifDoubleEncodingText: 'Dual Encoding: OFF',
         ifSizeColor: false,
-        removeText: 'No Encoding',
-        removeTextLabel: 'No Label',
-        removeTextHighlight: 'No Highlight',
-        plainTextLabel: 'No Map',
+        removeText: 'Clear Encoding',
+        removeTextLabel: 'Clear Label',
+        removeTextHighlight: 'Clear Highlight',
+        plainTextLabel: 'Clear Map',
         preEncoding: -1,
         preColortype: -1,
 
@@ -470,6 +500,8 @@ export default {
             "Quantity": 7,
             "2D Length": 8,
             "Remove": 9,
+            "GlyphIcon": 10,
+            "GlyphFlag": 11
 
         },
     }),
@@ -2385,7 +2417,7 @@ export default {
                                     // 计算图标的位置
                                     // 将图标排列成一行显示5个图标的形式
                                     const x = center[0] - ((iconWidth + iconGap) * 5 / 2) + ((i % 5) * (iconWidth + iconGap));
-                                    const y = center[1] + (Math.floor(i / 5) * (iconHeight + iconGap)) - 10;
+                                    const y = center[1] + (Math.floor(i / 5) * (iconWidth + iconGap)) - 10;
                                     const x1 = x + 6.5;
                                     const y1 = y - 3.5;
                                     // 添加图标
@@ -2397,26 +2429,26 @@ export default {
                                         // .attr('width', iconWidth)
                                         // .attr('height', iconHeight)
                                         // .attr('opcacity', 0.7);
-                                        var g = this.svg.append('g');
-                                        g.append('path')
-                                            .attr('d', "M1 14.0338C1 10.5338 1 7.5338 4.5 4.0338C7.3 1.2338 12 0.867135 14 1.0338L19.5 1.03381C21.5 1.03381 26.2 1.6338 29 4.0338C31.8 6.4338 32.1667 11.7005 32 14.0338V24.0338C32 26.8338 28.3333 28.8671 26.5 29.5338L24.5 42.0338C24.5 43.2338 23.1667 44.2005 22.5 44.5338H10.5C9.7 44.5338 9.16667 42.8671 9 42.0338L7 29.5338C4.2 29.9338 2.16667 26.0338 1.5 24.0338C1.33333 21.8671 1 16.8338 1 14.0338Z")
-                                            .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
-                                            .attr('fill', 'rgba(230, 158, 165, 0.7)')
-                                            .attr('stroke', 'none')
-                                            .attr('stroke-width', 3);
-                                        this.svg.append('circle')
-                                            .attr('cx', x1)
-                                            .attr('cy', y1)
-                                            .attr('r', 4)
-                                            .style('stroke', 'none')
-                                            .style('fill', 'rgba(230, 158, 165, 0.7)');
-                                        g.attr('transform', 'translate(' + x + ',' + y + ')')
-                                            .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
-                                            .attr('fill', 'rgba(230, 158, 165, 0.7)')
-                                            .attr('stroke', 'none')
-                                            .attr('stroke-width', 3);
-                                        g.attr('transform', 'translate(' + x + ',' + y + ')');
-                                    } else if (this.ifSizeColor == true) {
+                                        // var g = this.svg.append('g');
+                                        // g.append('path')
+                                        //     .attr('d', "M1 14.0338C1 10.5338 1 7.5338 4.5 4.0338C7.3 1.2338 12 0.867135 14 1.0338L19.5 1.03381C21.5 1.03381 26.2 1.6338 29 4.0338C31.8 6.4338 32.1667 11.7005 32 14.0338V24.0338C32 26.8338 28.3333 28.8671 26.5 29.5338L24.5 42.0338C24.5 43.2338 23.1667 44.2005 22.5 44.5338H10.5C9.7 44.5338 9.16667 42.8671 9 42.0338L7 29.5338C4.2 29.9338 2.16667 26.0338 1.5 24.0338C1.33333 21.8671 1 16.8338 1 14.0338Z")
+                                        //     .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
+                                        //     .attr('fill', 'rgba(230, 158, 165, 0.7)')
+                                        //     .attr('stroke', 'none')
+                                        //     .attr('stroke-width', 3);
+                                        this.svg.append('rect')
+                                            .attr('x', x1)
+                                            .attr('y', y1)
+                                            .attr('width', iconWidth)
+                                            .attr('height', iconWidth)
+                                            .attr('fill', 'rgba(230, 158, 165, 0.7)');
+                                        // g.attr('transform', 'translate(' + x + ',' + y + ')')
+                                        //     .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
+                                        //     .attr('fill', 'rgba(230, 158, 165, 0.7)')
+                                        //     .attr('stroke', 'none')
+                                        //     .attr('stroke-width', 3);
+                                        // g.attr('transform', 'translate(' + x + ',' + y + ')');
+                                    } else {
                                         // var gg = this.svg.append('g');
                                         // gg.append('path')
                                         //     .attr('d', 'M14.8025 62.0243H13.3025V63.5243V109.33C13.3025 112.457 10.7652 114.995 7.62974 114.995C4.52341 114.995 2.05603 112.482 2.05603 109.33V58.5276C2.05603 47.7847 10.8631 39.0498 21.6399 39.0498H57.8253C68.5917 39.0498 77.4056 47.7849 77.4056 58.5276V109.33C77.4056 112.483 74.9364 114.995 71.8267 114.995C68.6982 114.995 66.1557 112.454 66.1557 109.33V63.5243V62.0243H64.6557H60.9589H59.4589V63.5243V190.975C59.4589 195.441 55.8001 199.086 51.3147 199.086C46.8293 199.086 43.2017 195.448 43.2017 190.975V116.968V115.468H41.7017H37.7564H36.2564V116.968V190.975C36.2564 195.449 32.6278 199.086 28.1539 199.086C23.6745 199.086 20.0392 195.447 20.0392 190.975C20.0392 187.046 20.0184 155.183 19.9975 124.302C19.9871 108.862 19.9767 93.6674 19.9689 82.3327L19.9594 68.6775L19.9568 64.8683L19.9561 63.8666L19.9559 63.61L19.9558 63.5451V63.5288V63.5247C19.9558 63.5238 19.9558 63.5233 18.4558 63.5243L19.9558 63.5233L19.9548 62.0243H18.4558H14.8025ZM39.7326 31.8474C31.5119 31.8474 24.8553 25.1836 24.8535 16.9684C24.8537 8.74658 31.5101 2.08571 39.7326 2.08571C47.945 2.08571 54.6081 8.74501 54.6081 16.9684C54.6081 25.1831 47.945 31.8474 39.7326 31.8474Z')
@@ -2425,48 +2457,55 @@ export default {
                                         //     .attr('stroke', 'black')
                                         //     .attr('stroke-width', 3);
                                         // gg.attr('transform', 'translate(' + x + ',' + y + ')');
-                                        var gd = this.svg.append('g');
-                                        gd.append('path')
-                                            .attr('d', "M1 14.0338C1 10.5338 1 7.5338 4.5 4.0338C7.3 1.2338 12 0.867135 14 1.0338L19.5 1.03381C21.5 1.03381 26.2 1.6338 29 4.0338C31.8 6.4338 32.1667 11.7005 32 14.0338V24.0338C32 26.8338 28.3333 28.8671 26.5 29.5338L24.5 42.0338C24.5 43.2338 23.1667 44.2005 22.5 44.5338H10.5C9.7 44.5338 9.16667 42.8671 9 42.0338L7 29.5338C4.2 29.9338 2.16667 26.0338 1.5 24.0338C1.33333 21.8671 1 16.8338 1 14.0338Z")
-                                            .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
-                                            .attr('fill', this.colorFunctionL(population))
-                                            .attr('stroke', 'none')
-                                            .attr('stroke-width', 3);
-                                        this.svg.append('circle')
-                                            .attr('cx', x1)
-                                            .attr('cy', y1)
-                                            .attr('r', 3)
-                                            .style('stroke', 'none')
+                                        // var gd = this.svg.append('g');
+                                        // gd.append('path')
+                                        //     .attr('d', "M1 14.0338C1 10.5338 1 7.5338 4.5 4.0338C7.3 1.2338 12 0.867135 14 1.0338L19.5 1.03381C21.5 1.03381 26.2 1.6338 29 4.0338C31.8 6.4338 32.1667 11.7005 32 14.0338V24.0338C32 26.8338 28.3333 28.8671 26.5 29.5338L24.5 42.0338C24.5 43.2338 23.1667 44.2005 22.5 44.5338H10.5C9.7 44.5338 9.16667 42.8671 9 42.0338L7 29.5338C4.2 29.9338 2.16667 26.0338 1.5 24.0338C1.33333 21.8671 1 16.8338 1 14.0338Z")
+                                        //     .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
+                                        //     .attr('fill', this.colorFunctionL(population))
+                                        //     .attr('stroke', 'none')
+                                        //     .attr('stroke-width', 3);
+                                        this.svg.append('rect')
+                                            .attr('x', x1)
+                                            .attr('y', y1)
+                                            .attr('width', iconWidth)
+                                            .attr('height', iconWidth)
                                             .style('fill', this.colorFunctionL(population));
-                                        gd.attr('transform', 'translate(' + x + ',' + y + ')')
-                                            .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
-                                            .attr('fill', this.colorFunctionL(population))
-                                            .attr('stroke', 'none')
-                                            .attr('stroke-width', 3);
-                                        gd.attr('transform', 'translate(' + x + ',' + y + ')');
-                                    } else {
-                                        const s = 25;
-                                        const xs = center[0] - ((iconWidth*this.sizeFunctionL(population)/s + iconGap*this.sizeFunctionL(population)/s) * 5 / 2) + ((i % 5) * (iconWidth*this.sizeFunctionL(population)/s + iconGap*this.sizeFunctionL(population)/s));
-                                        let ys = center[1] + (Math.floor(i / 5) * (iconHeight*this.sizeFunctionL(population)/s + iconGap)) - 10;
-                                        if(feature.properties.NAME=='Russia') ys -= 100;
-                                        this.svg.append('image')
-                                            .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
-                                            .attr('x', xs)
-                                            .attr('y', ys)
-                                            .attr('width', iconWidth*this.sizeFunctionL(population)/s)
-                                            .attr('height', iconHeight*this.sizeFunctionL(population)/s)
-                                            .attr('opcacity', 0.7);
-                                    }
+                                        // gd.attr('transform', 'translate(' + x + ',' + y + ')')
+                                        //     .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
+                                        //     .attr('fill', this.colorFunctionL(population))
+                                        //     .attr('stroke', 'none')
+                                        //     .attr('stroke-width', 3);
+                                        // gd.attr('transform', 'translate(' + x + ',' + y + ')');
+                                    } 
+                                    // else {
+                                    //     const s = 25;
+                                    //     const xs = center[0] - ((iconWidth*this.sizeFunctionL(population)/s + iconGap*this.sizeFunctionL(population)/s) * 5 / 2) + ((i % 5) * (iconWidth*this.sizeFunctionL(population)/s + iconGap*this.sizeFunctionL(population)/s));
+                                    //     let ys = center[1] + (Math.floor(i / 5) * (iconHeight*this.sizeFunctionL(population)/s + iconGap)) - 10;
+                                    //     if(feature.properties.NAME=='Russia') ys -= 100;
+                                    //     this.svg.append('image')
+                                    //         .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
+                                    //         .attr('x', xs)
+                                    //         .attr('y', ys)
+                                    //         .attr('width', iconWidth*this.sizeFunctionL(population)/s)
+                                    //         .attr('height', iconHeight*this.sizeFunctionL(population)/s)
+                                    //         .attr('opcacity', 0.7);
+                                    // }
                                 }
                             }
                         });
                         //draw quantity legend
-                        this.svg.append('image')
-                            .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
+                        // this.svg.append('image')
+                        //     .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
+                        //     .attr('x', 50)
+                        //     .attr('y', 100)
+                        //     .attr('width', iconWidth * 2)
+                        //     .attr('height', iconHeight * 2);
+                        this.svg.append('rect')
                             .attr('x', 50)
-                            .attr('y', 100)
-                            .attr('width', iconWidth * 2)
-                            .attr('height', iconHeight * 2);
+                            .attr('y', 110)
+                            .attr('width', iconWidth)
+                            .attr('height', iconWidth)
+                            .attr('fill', 'rgba(230, 158, 165, 0.7)');
                         this.svg.append('text')
                             .attr('x', 70)
                             .attr('y', 120)
@@ -2485,14 +2524,166 @@ export default {
                     }
 
 
-                } else if (type === this.myType['Remove']) {
+                } else if (type === this.myType['GlyphIcon']) {
+                    if (this.ifDoubleEncoding == false) {
+                        this.showErrorDialog("Encoding Channel Not Support", "Only supporting under dual encoding situation!");
+                        return;
+                    }
+                    this.encodingChannelType = type;
+                    if (this.ifSizeColor == false) {
+                        this.encodingChannel = () => {
+                            this.svg.selectAll('path').attr('fill', this.defaultColor);
+                            const iconWidth = 10;
+                            const iconHeight = 25;
+                            const scales = 10;
+
+                            this.geoData.features.forEach(feature=>{
+                                const center = this.geoPath.centroid(feature);
+                                const population = this.getPopulation(feature);
+                                if (population >= 1000000) {
+                                    this.svg.append('image')
+                                        .attr('xlink:href', require('../assets/PersonIcon.svg'))
+                                        .attr('x', center[0])
+                                        .attr('y', center[1]-10)
+                                        .attr('width', iconWidth*this.sizeFunctionL(population)/scales)
+                                        .attr('height', iconHeight*this.sizeFunctionL(population)/scales)
+                                        .attr('opacity', 0.7);
+                                }
+                            });
+                            for (let i = 0, py = 100, delta = 20; i < 4; i++) {
+                                let t = 1000000*Math.pow(5, i);
+                                let v = this.sizeFunctionL(t);
+                                let w = iconWidth*v/scales;
+                                let h = iconHeight*v/scales;
+                                this.svg.append('image')
+                                    .attr('xlink:href', require('../assets/PersonIcon.svg'))
+                                    .attr('x', 50)
+                                    .attr('y', py)
+                                    .attr('width', w)
+                                    .attr('height', h)
+                                    .attr('opacity', 0.7);
+                                const label = t<1000 ? Math.floor(t) : t<1000000 ? Math.floor(t/1000)+'k': Math.floor(t/1000000)+'m';
+                                this.svg.append('text')
+                                    .attr('x', 65+w)
+                                    .attr('y', py+h/2+5)
+                                    .text(label);
+                                
+                                py += h + delta;
+                            }
+                            this.doubleEncoding();
+                        }
+                    } else {
+                        this.encodingChannel = () => {
+                            this.svg.selectAll('path').attr('fill', this.defaultColor);
+                            const iconWidth = 10;
+                            const iconHeight = 25;
+                            const scaleX = 0.8;
+                            const scaleY = 0.8;
+
+                            this.geoData.features.forEach(feature=>{
+                                const center = this.geoPath.centroid(feature);
+                                const population = this.getPopulation(feature);
+                                if (population >= 1000000) {
+                                    const x = center[0], y = center[1];
+                                    const x1 = x+13, y1 = y-5;
+                                    var gd = this.svg.append('g');
+                                    gd.append('path')
+                                        .attr('d', "M1 14.0338C1 10.5338 1 7.5338 4.5 4.0338C7.3 1.2338 12 0.867135 14 1.0338L19.5 1.03381C21.5 1.03381 26.2 1.6338 29 4.0338C31.8 6.4338 32.1667 11.7005 32 14.0338V24.0338C32 26.8338 28.3333 28.8671 26.5 29.5338L24.5 42.0338C24.5 43.2338 23.1667 44.2005 22.5 44.5338H10.5C9.7 44.5338 9.16667 42.8671 9 42.0338L7 29.5338C4.2 29.9338 2.16667 26.0338 1.5 24.0338C1.33333 21.8671 1 16.8338 1 14.0338Z")
+                                        .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
+                                        .attr('fill', this.colorFunctionL(population))
+                                        .attr('stroke', 'none')
+                                        .attr('stroke-width', 3);
+                                    this.svg.append('circle')
+                                        .attr('cx', x1)
+                                        .attr('cy', y1)
+                                        .attr('r', 6)
+                                        .style('fill', this.colorFunctionL(population));
+                                    gd.attr('transform', 'translate(' + x + ',' + y + ')')
+                                        .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
+                                        .attr('fill', this.colorFunctionL(population))
+                                        .attr('stroke', 'none')
+                                        .attr('stroke-width', 3);
+                                    gd.attr('transform', 'translate(' + x + ',' + y + ')');
+                                }
+                            });
+                            for (let i = 0, py = 100, delta = 40; i < 4; i++) {
+                                const x = 50;
+                                const x1 = x+13, y1 = py-5;
+                                let t = 1000000*Math.pow(5, i);
+                                let w = iconWidth;
+                                let h = iconHeight;
+                                var gld = this.svg.append('g');
+                                gld.append('path')
+                                    .attr('d', "M1 14.0338C1 10.5338 1 7.5338 4.5 4.0338C7.3 1.2338 12 0.867135 14 1.0338L19.5 1.03381C21.5 1.03381 26.2 1.6338 29 4.0338C31.8 6.4338 32.1667 11.7005 32 14.0338V24.0338C32 26.8338 28.3333 28.8671 26.5 29.5338L24.5 42.0338C24.5 43.2338 23.1667 44.2005 22.5 44.5338H10.5C9.7 44.5338 9.16667 42.8671 9 42.0338L7 29.5338C4.2 29.9338 2.16667 26.0338 1.5 24.0338C1.33333 21.8671 1 16.8338 1 14.0338Z")
+                                    .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
+                                    .attr('fill', this.colorFunctionL(t))
+                                    .attr('stroke', 'none')
+                                    .attr('stroke-width', 3);
+                                this.svg.append('circle')
+                                    .attr('cx', x1)
+                                    .attr('cy', y1)
+                                    .attr('r', 6)
+                                    .style('fill', this.colorFunctionL(t));
+                                gld.attr('transform', 'translate(' + x + ',' + py + ')')
+                                    .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
+                                    .attr('fill', this.colorFunctionL(t))
+                                    .attr('stroke', 'none')
+                                    .attr('stroke-width', 3);
+                                gld.attr('transform', 'translate(' + x + ',' + py + ')');
+
+                                const label = t<1000 ? Math.floor(t) : t<1000000 ? Math.floor(t/1000)+'k': Math.floor(t/1000000)+'m';
+                                this.svg.append('text')
+                                    .attr('x', 70+w)
+                                    .attr('y', py+h/2)
+                                    .text(label);
+                                
+                                py += h + delta;
+                            }
+                            this.doubleEncoding();
+                        }
+                    }
+                    
+                } else if (type === this.myType['GlyphFlag']) {
+                    if (this.ifDoubleEncoding == true && this.ifSizeColor == true) {
+                        alert('Only supporting size method under dual encoding situation!');
+                        return;
+                    }
+                    this.encodingChannelType = type;
+                    this.encodingChannel = () => {
+                        this.svg.selectAll('path').attr('fill', this.defaultColor);
+                        this.geoData.features.forEach(feature=> {
+                            const center=this.geoPath.centroid(feature);
+                            const population=this.getPopulation(feature);
+                            const flag = this.getPopulation(feature);
+                            const width = 10, height = 10;
+                            if (flag !== -1) {
+                                if (this.ifDoubleEncoding)
+                                    this.svg.append('image')
+                                        .attr('xlink:href', flag)
+                                        .attr('x', center[0] - 10) // 你可能需要调整这个以适合国旗图像的大小和位置
+                                        .attr('y', center[1] - 10) // 同上
+                                        .attr('width', width*this.sizeFunctionL(population)) // 根据需要调整国旗的尺寸
+                                        .attr('height', height*this.sizeFunctionL(population));
+                                else
+                                this.svg.append('image')
+                                        .attr('xlink:href', flag) // 使用国旗的base64编码
+                                        .attr('x', center[0] - 10) // 你可能需要调整这个以适合国旗图像的大小和位置
+                                        .attr('y', center[1] - 10) // 同上
+                                        .attr('width', width) // 根据需要调整国旗的尺寸
+                                        .attr('height', height);
+                            }
+                        });
+                    }
+                }
+                else if (type === this.myType['Remove']) {
                     this.encodingChannelType = type;
 
                     this.encodingChannel = () => {
                         this.svg.selectAll('path').attr("fill", this.defaultColor);
                         d3.select("." + this.value + "-legend").selectAll("*").remove();
                     }
-                    this.doubleEncoding();
+                    if (this.ifDoubleEncoding==true)
+                        this.doubleEncoding();
                 } else {
                     // // 如果没有适用的编码方式
                     // this.encodingChannelType = -1; // 或其他表示无效编码方式的值
@@ -2515,7 +2706,8 @@ export default {
                     // };
                     // d3.select("." + this.value + "-legend").selectAll("*").remove();
                     this.showErrorDialog("Encoding Channel Not Support", "The selected encoding channel only support the data your uploaded!");
-                    this.doubleEncoding();
+                    if (this.ifDoubleEncoding==true)
+                        this.doubleEncoding();
                 }
             } else {
                 d3.select("." + this.value + "-legend").selectAll("*").remove();
