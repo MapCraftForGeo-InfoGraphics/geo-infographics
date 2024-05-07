@@ -178,14 +178,14 @@
                                 </v-row>
                                 <v-row>
                                     <div class="row-with-line"></div>
-                                    <v-col class="element" @click="setEncodingChannel(myType['GlyphIcon'])">
+                                    <v-col class="element" @click="setEncodingChannel(myType['Glyph'])">
                                         Icon
+                                        <v-img :src="require('../assets/Glyph.svg')" width="50%" contain/>
+                                    </v-col>
+                                    <!-- <v-col class="element" @click="setEncodingChannel(myType['GlyphFlag'])">
+                                        Flag
                                         <v-img :src="require('../assets/Glyph.svg')" contain/>
-                                    </v-col>
-                                    <v-col class="element" @click="setEncodingChannel(myType['GlyphFlag'])">
-                                        <!-- Flag
-                                        <v-img :src="require('../assets/Glyph.svg')" contain/> -->
-                                    </v-col>
+                                    </v-col> -->
 
                                     <!-- <v-col class="element" @click="setEncodingChannel(myType['Remove'])">
                                         Remove
@@ -2531,7 +2531,7 @@ export default {
                     }
 
 
-                } else if (type === this.myType['GlyphIcon']) {
+                } else if (type === this.myType['Glyph']) {
                     if (this.ifDoubleEncoding == false) {
                         this.showErrorDialog("Encoding Channel Not Support", "Only supporting under dual encoding situation!");
                         return;
