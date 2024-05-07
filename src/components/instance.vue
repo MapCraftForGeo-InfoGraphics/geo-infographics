@@ -1039,9 +1039,9 @@ export default {
 
                             if (annotation && annotation != -1) {
                                 let textLines = [
-                                    `Country: ${feature.properties.NAME}`,
+                                    `${feature.properties.NAME}`,
                                     // `City: ${annotation.city}`
-                                    `Discription: ${annotation}`
+                                    `${annotation}`
                                 ];
 
                                 // 根据条件动态添加Summer和Winter的行
@@ -1057,17 +1057,28 @@ export default {
                                 let currentYOffset = 0;
 
                                 // 应用拆分函数并添加文本
-                                textLines.forEach((line) => {
+                                textLines.forEach((line, index) => {
                                     let subLines = this.splitTextToLines(line, maxLineWidth); // 使用拆分函数
                                     subLines.forEach((subLine) => {
-                                        this.svg.append('text')
-                                            .attr('class', 'olympic-label')
-                                            .attr('x', center[0])
-                                            .attr('y', center[1] + currentYOffset-20) // 使用currentYOffset确定垂直位置
-                                            .attr('text-anchor', 'middle')
-                                            .attr('fill', 'black')
-                                            .style('font-size', '12px')
-                                            .text(subLine);
+                                        if (index)
+                                            this.svg.append('text')
+                                                .attr('class', 'olympic-label')
+                                                .attr('x', center[0])
+                                                .attr('y', center[1] + currentYOffset-20) // 使用currentYOffset确定垂直位置
+                                                .attr('text-anchor', 'middle')
+                                                .attr('fill', 'black')
+                                                .style('font-size', '12px')
+                                                .text(subLine);
+                                        else
+                                            this.svg.append('text')
+                                                .attr('class', 'olympic-label')
+                                                .attr('x', center[0])
+                                                .attr('y', center[1] + currentYOffset-20) // 使用currentYOffset确定垂直位置
+                                                .attr('text-anchor', 'middle')
+                                                .attr('fill', 'black')
+                                                .style('font-size', '12px')
+                                                .style("font-weight", "bold")
+                                                .text(subLine);
 
                                         // 每添加一行，更新currentYOffset以便下一行下移
                                         currentYOffset += 13; // 假设每行文本的高度加间距为13px
@@ -1133,8 +1144,8 @@ export default {
 
                         // 在注解框内添加文本
                         let textLines = [
-                            `Country: ${feature.properties.NAME}`,
-                            `Discription: ${annotation}`
+                            `${feature.properties.NAME}`,
+                            `${annotation}`
                         ];
 
                         const maxWidth = boxWidth-5-2*marginSpace; // 设置最大宽度阈值
@@ -1193,20 +1204,30 @@ export default {
                                         .attr('fill', 'black')
                                         .style('font-size', '13px')
                                         .text(currentLine); // 添加当前行的文本
-
+                                            
                                     currentLine = word;
                                     ty += 14; // 调整Y坐标到下一行
                                 } else {
                                     currentLine += ' ' + word;
                                 }
                             }
-                            this.svg.append('text')
-                                .attr('class', 'annotation-text')
-                                .attr('x', annotationX + 5 + marginSpace) // 略微缩进
-                                .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
-                                .attr('fill', 'black')
-                                .style('font-size', '13px')
-                                .text(currentLine);
+                            if(lineIndex)
+                                this.svg.append('text')
+                                    .attr('class', 'annotation-text')
+                                    .attr('x', annotationX + 5 + marginSpace) // 略微缩进
+                                    .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
+                                    .attr('fill', 'black')
+                                    .style('font-size', '13px')
+                                    .text(currentLine);
+                            else
+                                    this.svg.append('text')
+                                    .attr('class', 'annotation-text')
+                                    .attr('x', annotationX + 5 + marginSpace) // 略微缩进
+                                    .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
+                                    .attr('fill', 'black')
+                                    .style('font-size', '13px')
+                                    .style('font-weight', 'bold')
+                                    .text(currentLine);
                         });
                     });
                 }
@@ -1353,13 +1374,23 @@ export default {
                                         currentLine += ' ' + word;
                                     }
                                 }
-                                this.svg.append('text')
-                                    .attr('class', 'annotation-text')
-                                    .attr('x', annotationX + 5 + marginSpace) // 略微缩进
-                                    .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
-                                    .attr('fill', 'black')
-                                    .style('font-size', '13px')
-                                    .text(currentLine);
+                                if(lineIndex)
+                                    this.svg.append('text')
+                                        .attr('class', 'annotation-text')
+                                        .attr('x', annotationX + 5 + marginSpace) // 略微缩进
+                                        .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
+                                        .attr('fill', 'black')
+                                        .style('font-size', '13px')
+                                        .text(currentLine);
+                                else
+                                    this.svg.append('text')
+                                        .attr('class', 'annotation-text')
+                                        .attr('x', annotationX + 5 + marginSpace) // 略微缩进
+                                        .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
+                                        .attr('fill', 'black')
+                                        .style('font-size', '13px')
+                                        .style('font-weight', 'bold')
+                                        .text(currentLine);
                             });
 
                             
@@ -1476,13 +1507,23 @@ export default {
                                     currentLine += ' ' + word;
                                 }
                             }
-                            this.svg.append('text')
-                                .attr('class', 'annotation-text')
-                                .attr('x', annotationX + 5+2*marginSpace) // 略微缩进
-                                .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
-                                .attr('fill', 'black')
-                                .style('font-size', '13px')
-                                .text(currentLine);
+                            if(lineIndex)
+                                this.svg.append('text')
+                                    .attr('class', 'annotation-text')
+                                    .attr('x', annotationX + 5+2*marginSpace) // 略微缩进
+                                    .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
+                                    .attr('fill', 'black')
+                                    .style('font-size', '13px')
+                                    .text(currentLine);
+                            else
+                                this.svg.append('text')
+                                    .attr('class', 'annotation-text')
+                                    .attr('x', annotationX + 5 + marginSpace) // 略微缩进
+                                    .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
+                                    .attr('fill', 'black')
+                                    .style('font-size', '13px')
+                                    .style('font-weight', 'bold')
+                                    .text(currentLine);
                         });
                     });
                 }
@@ -1644,13 +1685,23 @@ export default {
                                     currentLine += ' ' + word;
                                 }
                             }
-                            this.svg.append('text')
-                                .attr('class', 'annotation-text')
-                                .attr('x', textOffsetX + 5+2*marginSpace) // 略微缩进
-                                .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
-                                .attr('fill', 'black')
-                                .style('font-size', '13px')
-                                .text(currentLine);
+                            if(lineIndex)
+                                this.svg.append('text')
+                                    .attr('class', 'annotation-text')
+                                    .attr('x', textOffsetX + 5+2*marginSpace) // 略微缩进
+                                    .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
+                                    .attr('fill', 'black')
+                                    .style('font-size', '13px')
+                                    .text(currentLine);
+                            else
+                                this.svg.append('text')
+                                        .attr('class', 'annotation-text')
+                                        .attr('x', textOffsetX + 5 + marginSpace) // 略微缩进
+                                        .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
+                                        .attr('fill', 'black')
+                                        .style('font-size', '13px')
+                                        .style('font-weight', 'bold')
+                                        .text(currentLine);
                         });
                     });
                 }
@@ -1748,13 +1799,23 @@ export default {
                                     currentLine += ' ' + word;
                                 }
                             }
-                            this.svg.append('text')
-                                .attr('class', 'annotation-text')
-                                .attr('x', annotationX + 5+2*marginSpace) // 略微缩进
-                                .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
-                                .attr('fill', 'black')
-                                .style('font-size', '13px')
-                                .text(currentLine);
+                            if(lineIndex)
+                                this.svg.append('text')
+                                    .attr('class', 'annotation-text')
+                                    .attr('x', annotationX + 5+2*marginSpace) // 略微缩进
+                                    .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
+                                    .attr('fill', 'black')
+                                    .style('font-size', '13px')
+                                    .text(currentLine);
+                            else
+                                this.svg.append('text')
+                                    .attr('class', 'annotation-text')
+                                    .attr('x', annotationX + 5+2*marginSpace) // 略微缩进
+                                    .attr('y', ty + 15 + (lineIndex * 14)) // 根据行数调整位置
+                                    .attr('fill', 'black')
+                                    .style('font-size', '13px')
+                                    .style('font-weight','bold')
+                                    .text(currentLine);
                         });
 
                         // 绘制注解连线
@@ -1862,13 +1923,23 @@ export default {
                                     currentLine += ' ' + word;
                                 }
                             }
-                            this.svg.append('text')
-                                .attr('class', 'annotation-text')
-                                .attr('x', annotationX[index] - boxWidth / 2 + delta + 5) // 略微缩进
-                                .attr('y', ty + 15 + (lineIndex * 14) - boxHeight / 2 + delta) // 根据行数调整位置
-                                .attr('fill', 'black')
-                                .style('font-size', '13px')
-                                .text(currentLine);
+                            if(lineIndex)
+                                this.svg.append('text')
+                                    .attr('class', 'annotation-text')
+                                    .attr('x', annotationX[index] - boxWidth / 2 + delta + 5) // 略微缩进
+                                    .attr('y', ty + 15 + (lineIndex * 14) - boxHeight / 2 + delta) // 根据行数调整位置
+                                    .attr('fill', 'black')
+                                    .style('font-size', '13px')
+                                    .text(currentLine);
+                            else
+                                this.svg.append('text')
+                                    .attr('class', 'annotation-text')
+                                    .attr('x', annotationX[index] - boxWidth / 2 + delta + 5) // 略微缩进
+                                    .attr('y', ty + 15 + (lineIndex * 14) - boxHeight / 2 + delta) // 根据行数调整位置
+                                    .attr('fill', 'black')
+                                    .style('font-size', '13px')
+                                    .style('font-weight', 'bold')
+                                    .text(currentLine);
                         });
 
                         // 更改连线到注解的最近的边缘中心点
