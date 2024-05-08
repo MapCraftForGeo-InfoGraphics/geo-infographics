@@ -180,12 +180,12 @@
                                     <div class="row-with-line"></div>
                                     <v-col class="element" @click="setEncodingChannel(myType['Glyph'])">
                                         Icon
-                                        <v-img :src="require('../assets/Glyph.svg')" width="50%" contain/>
+                                        <v-img :src="require('../assets/Glyph.svg')" contain/>
                                     </v-col>
-                                    <!-- <v-col class="element" @click="setEncodingChannel(myType['GlyphFlag'])">
+                                    <v-col class="element" @click="setEncodingChannel(myType['GlyphFlag'])">
                                         Flag
                                         <v-img :src="require('../assets/Glyph.svg')" contain/>
-                                    </v-col> -->
+                                    </v-col>
 
                                     <!-- <v-col class="element" @click="setEncodingChannel(myType['Remove'])">
                                         Remove
@@ -2661,7 +2661,7 @@ export default {
                         this.geoData.features.forEach(feature=> {
                             const center=this.geoPath.centroid(feature);
                             const population=this.getPopulation(feature);
-                            const flag = this.getPopulation(feature);
+                            const flag = feature.properties.flag;
                             const width = 10, height = 10;
                             if (flag !== -1) {
                                 if (this.ifDoubleEncoding)
@@ -2669,8 +2669,8 @@ export default {
                                         .attr('xlink:href', flag)
                                         .attr('x', center[0] - 10) // 你可能需要调整这个以适合国旗图像的大小和位置
                                         .attr('y', center[1] - 10) // 同上
-                                        .attr('width', width*this.sizeFunctionL(population)) // 根据需要调整国旗的尺寸
-                                        .attr('height', height*this.sizeFunctionL(population));
+                                        .attr('width', width*this.sizeFunctionL(population)/10) // 根据需要调整国旗的尺寸
+                                        .attr('height', height*this.sizeFunctionL(population)/10);
                                 else
                                 this.svg.append('image')
                                         .attr('xlink:href', flag) // 使用国旗的base64编码
@@ -2724,8 +2724,8 @@ export default {
                         this.svg.selectAll('path').attr("fill", this.defaultColor);
 
                         this.geoData.features.forEach(feature => {
-                            const flagBase64 = this.getPopulation(feature); // 使用getPopulation方法尝试从infoData获取国旗的base64编码
-                            // const flagBase64 = feature.properties.flag;
+                            // const flagBase64 = this.getPopulation(feature); // 使用getPopulation方法尝试从infoData获取国旗的base64编码
+                            const flagBase64 = feature.properties.flag;
 
                             // 检查flagBase64是否不等于-1，仅当不等于-1时，才显示国旗
                             if (flagBase64 !== -1) {
