@@ -1305,8 +1305,8 @@ export default {
                                 .attr('stroke', 'none');
 
                             let textLines = [
-                                `Country: ${feature.properties.NAME}`,
-                                `Discription: ${annotation}`
+                                `${feature.properties.NAME}`,
+                                `${annotation}`
                             ];
 
                             const maxWidth = boxWidth-5-2*marginSpace; // 设置最大宽度阈值
@@ -1470,8 +1470,8 @@ export default {
                         // 添加注解文本
                         const annotation = this.getDescriptionByCountry(feature.properties.NAME);
                         let textLines = [
-                            `Country: ${feature.properties.NAME}`,
-                            `Discription: ${annotation}`
+                            `${feature.properties.NAME}`,
+                            `${annotation}`
                         ];
 
                         const maxWidth = boxWidth-5-4*marginSpace; // 设置最大宽度阈值
@@ -1631,8 +1631,8 @@ export default {
                         }
 
                         let textLines = [
-                            `Country: ${feature.properties.NAME}`,
-                            `Discription: ${annotation}`
+                            `${feature.properties.NAME}`,
+                            `${annotation}`
                         ];
 
                         const maxWidth = boxWidth-5-2*marginSpace; // 设置最大宽度阈值
@@ -1761,8 +1761,8 @@ export default {
                         const annotationY = this.mapHeight + 50; // 地图下方50px
 
                         let textLines = [
-                            `Country: ${feature.properties.NAME}`,
-                            `Discription: ${annotation}`
+                            `${feature.properties.NAME}`,
+                            `${annotation}`
                         ];
 
                         const maxWidth = boxWidth-5-4*marginSpace; // 设置最大宽度阈值
@@ -1885,8 +1885,8 @@ export default {
                         
                         const countryCenter = this.geoPath.centroid(feature);
                         let textLines = [
-                            `Country: ${feature.properties.NAME}`,
-                            `Discription: ${annotation}`
+                            `${feature.properties.NAME}`,
+                            `${annotation}`
                         ];
 
                         const maxWidth = boxWidth-5-4*marginSpace; // 设置最大宽度阈值
@@ -2718,7 +2718,7 @@ export default {
                 }
             } else {
                 d3.select("." + this.value + "-legend").selectAll("*").remove();
-                if (type === this.myType['Glyph']) {
+                if (type === this.myType['GlyphFlag']) {
                     this.encodingChannelType = type;
                     this.encodingChannel = () => {
                         this.svg.selectAll('path').attr("fill", this.defaultColor);
