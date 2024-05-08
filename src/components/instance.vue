@@ -435,6 +435,7 @@ export default {
         ifDoubleEncoding: false,
         ifDoubleEncodingText: 'Dual Encoding: OFF',
         ifSizeColor: false,
+        ifQuantity: false,
         removeText: 'Clear Encoding',
         removeTextLabel: 'Clear Label',
         removeTextHighlight: 'Clear Highlight',
@@ -2471,12 +2472,17 @@ export default {
                                         //     .attr('fill', this.colorFunctionL(population))
                                         //     .attr('stroke', 'none')
                                         //     .attr('stroke-width', 3);
-                                        this.svg.append('rect')
-                                            .attr('x', x1)
-                                            .attr('y', y1)
-                                            .attr('width', iconWidth)
-                                            .attr('height', iconWidth)
-                                            .style('fill', this.colorFunctionL(population));
+                                        if (this.ifSizeColor == true) {
+                                            this.svg.append('rect')
+                                                .attr('x', x1)
+                                                .attr('y', y1)
+                                                .attr('width', iconWidth)
+                                                .attr('height', iconWidth)
+                                                .style('fill', this.colorFunctionL(population));
+                                        } else {
+                                            this.ifQuantity = true;
+                                        }
+                                        
                                         // gd.attr('transform', 'translate(' + x + ',' + y + ')')
                                         //     .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
                                         //     .attr('fill', this.colorFunctionL(population))
@@ -2538,47 +2544,94 @@ export default {
                     }
                     this.encodingChannelType = type;
                     if (this.ifSizeColor == false) {
-                        this.encodingChannel = () => {
-                            this.svg.selectAll('path').attr('fill', this.defaultColor);
-                            const iconWidth = 10;
-                            const iconHeight = 25;
-                            const scales = 10;
+                        if (this.ifQuantity) {
+                            this.encodingChannel = () => {
+                                this.svg.selectAll('path').attr('fill', this.defaultColor);
+                                const iconWidth = 10, iconHeight = 25, iconGap = 12, scaleX = 0.4, scaleY = 0.4;
+                                this.geoData.features.forEach(feature=> {
+                                    const center = this.geoPath.centroid(feature);
+                                    const population = this.getPopulation(feature);
+                                    if (population >= 1000000) {
+                                        const totalIcons = Math.ceil(population/8000000);
+                                        for (let i = 0; i < totalIcons; i++) {
+                                            const x = center[0] - ((iconWidth + iconGap) * 5 / 2) + ((i % 5) * (iconWidth + iconGap)) + 15;
+                                            const y = center[1] + (Math.floor(i / 5) * (iconWidth + iconGap)) - 10;
+                                            const x1 = x + 6.5;
+                                            const y1 = y - 3.5;
+                                            this.svg.append('image')
+                                                .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
+                                                .attr('x', x)
+                                                .attr('y', y)
+                                                .attr('width', iconWidth)
+                                                .attr('height', iconHeight)
+                                                .attr('opcacity', 0.7);
+                                            // var g = this.svg.append('g');
+                                            // g.append('path')
+                                            //     .attr('d', "M1 14.0338C1 10.5338 1 7.5338 4.5 4.0338C7.3 1.2338 12 0.867135 14 1.0338L19.5 1.03381C21.5 1.03381 26.2 1.6338 29 4.0338C31.8 6.4338 32.1667 11.7005 32 14.0338V24.0338C32 26.8338 28.3333 28.8671 26.5 29.5338L24.5 42.0338C24.5 43.2338 23.1667 44.2005 22.5 44.5338H10.5C9.7 44.5338 9.16667 42.8671 9 42.0338L7 29.5338C4.2 29.9338 2.16667 26.0338 1.5 24.0338C1.33333 21.8671 1 16.8338 1 14.0338Z")
+                                            //     .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
+                                            //     .attr('fill', 'rgba(230, 158, 165, 0.7)')
+                                            //     .attr('stroke', 'none')
+                                            //     .attr('stroke-width', 3);
 
-                            this.geoData.features.forEach(feature=>{
-                                const center = this.geoPath.centroid(feature);
-                                const population = this.getPopulation(feature);
-                                if (population >= 1000000) {
+                                            // g.attr('transform', 'translate(' + x + ',' + y + ')')
+                                            //     .attr('transform', 'scale(' + scaleX + ',' + scaleY + ')')
+                                            //     .attr('fill', 'rgba(230, 158, 165, 0.7)')
+                                            //     .attr('stroke', 'none')
+                                            //     .attr('stroke-width', 3);
+                                            // g.attr('transform', 'translate(' + x + ',' + y + ')');
+                                            // this.svg.append('circle')
+                                            //     .attr('cx', x1)
+                                            //     .attr('cy', y1)
+                                            //     .attr('r', 3)
+                                            //     .style('fill', 'rgba(230, 158, 165, 0.7)');
+                                        }
+                                    }
+                                });
+                            }
+                        } else {
+                            this.encodingChannel = () => {
+                                this.svg.selectAll('path').attr('fill', this.defaultColor);
+                                const iconWidth = 10;
+                                const iconHeight = 25;
+                                const scales = 10;
+
+                                this.geoData.features.forEach(feature=>{
+                                    const center = this.geoPath.centroid(feature);
+                                    const population = this.getPopulation(feature);
+                                    if (population >= 1000000) {
+                                        this.svg.append('image')
+                                            .attr('xlink:href', require('../assets/PersonIcon.svg'))
+                                            .attr('x', center[0])
+                                            .attr('y', center[1]-10)
+                                            .attr('width', iconWidth*this.sizeFunctionL(population)/scales)
+                                            .attr('height', iconHeight*this.sizeFunctionL(population)/scales)
+                                            .attr('opacity', 0.7);
+                                    }
+                                });
+                                for (let i = 0, py = 100, delta = 20; i < 4; i++) {
+                                    let t = 1000000*Math.pow(5, i);
+                                    let v = this.sizeFunctionL(t);
+                                    let w = iconWidth*v/scales;
+                                    let h = iconHeight*v/scales;
                                     this.svg.append('image')
                                         .attr('xlink:href', require('../assets/PersonIcon.svg'))
-                                        .attr('x', center[0])
-                                        .attr('y', center[1]-10)
-                                        .attr('width', iconWidth*this.sizeFunctionL(population)/scales)
-                                        .attr('height', iconHeight*this.sizeFunctionL(population)/scales)
+                                        .attr('x', 50)
+                                        .attr('y', py)
+                                        .attr('width', w)
+                                        .attr('height', h)
                                         .attr('opacity', 0.7);
+                                    const label = t<1000 ? Math.floor(t) : t<1000000 ? Math.floor(t/1000)+'k': Math.floor(t/1000000)+'m';
+                                    this.svg.append('text')
+                                        .attr('x', 65+w)
+                                        .attr('y', py+h/2+5)
+                                        .text(label);
+                                    
+                                    py += h + delta;
                                 }
-                            });
-                            for (let i = 0, py = 100, delta = 20; i < 4; i++) {
-                                let t = 1000000*Math.pow(5, i);
-                                let v = this.sizeFunctionL(t);
-                                let w = iconWidth*v/scales;
-                                let h = iconHeight*v/scales;
-                                this.svg.append('image')
-                                    .attr('xlink:href', require('../assets/PersonIcon.svg'))
-                                    .attr('x', 50)
-                                    .attr('y', py)
-                                    .attr('width', w)
-                                    .attr('height', h)
-                                    .attr('opacity', 0.7);
-                                const label = t<1000 ? Math.floor(t) : t<1000000 ? Math.floor(t/1000)+'k': Math.floor(t/1000000)+'m';
-                                this.svg.append('text')
-                                    .attr('x', 65+w)
-                                    .attr('y', py+h/2+5)
-                                    .text(label);
-                                
-                                py += h + delta;
+                                // this.doubleEncoding();
                             }
-                            // this.doubleEncoding();
                         }
+                        
                     } else {
                         this.encodingChannel = () => {
                             this.svg.selectAll('path').attr('fill', this.defaultColor);
@@ -2676,8 +2729,8 @@ export default {
                                         .attr('xlink:href', flag) // 使用国旗的base64编码
                                         .attr('x', center[0] - 10) // 你可能需要调整这个以适合国旗图像的大小和位置
                                         .attr('y', center[1] - 10) // 同上
-                                        .attr('width', width) // 根据需要调整国旗的尺寸
-                                        .attr('height', height);
+                                        .attr('width', width*2) // 根据需要调整国旗的尺寸
+                                        .attr('height', height*2);
                             }
                         });
                     }
