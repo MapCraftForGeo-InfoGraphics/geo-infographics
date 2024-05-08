@@ -2003,7 +2003,7 @@ export default {
 
         setEncodingChannel(type) {
             console.log("Encoding Channel:", type);
-            //d3.select("." + this.value + "-legend").selectAll("*").remove();
+            d3.select("." + this.value + "-legend").selectAll("*").remove();
             if (this.isNumerical) {
                 //Encoding Color (Luminance)'
                 if (type === this.myType['Color (Luminance)']) {
@@ -2513,23 +2513,46 @@ export default {
                         //     .attr('y', 100)
                         //     .attr('width', iconWidth * 2)
                         //     .attr('height', iconHeight * 2);
-                        this.svg.append('rect')
-                            .attr('x', 50)
-                            .attr('y', 110)
-                            .attr('width', iconWidth)
-                            .attr('height', iconWidth)
-                            .attr('fill', 'rgba(230, 158, 165, 0.7)');
-                        this.svg.append('text')
-                            .attr('x', 70)
-                            .attr('y', 120)
-                            .text(':100k');
+                        if (this.ifDoubleEncoding == false) {
+                            this.svg.append('rect')
+                                .attr('x', 50)
+                                .attr('y', 110)
+                                .attr('width', iconWidth)
+                                .attr('height', iconWidth)
+                                .attr('fill', 'rgba(230, 158, 165, 0.7)');
+                            this.svg.append('text')
+                                .attr('x', 70)
+                                .attr('y', 120)
+                                .text(':100k');
+                        }
+                        
                         if (this.ifDoubleEncoding == true) {
                             if (this.preColortype == 0) {
                                 //luminance legend
                                 this.drawColorLuminanceLegend();
+                                this.svg.append('rect')
+                                    .attr('x', 50)
+                                    .attr('y', 110)
+                                    .attr('width', iconWidth)
+                                    .attr('height', iconWidth)
+                                    .attr('fill', 'rgba(230, 158, 165, 0.7)');
+                                this.svg.append('text')
+                                    .attr('x', 70)
+                                    .attr('y', 120)
+                                    .text(':100k');
                             } else if (this.preColortype == 1) {
                                 //hue legend
                                 this.drawColorHueLegend();
+                                this.svg.append('rect')
+                                    .attr('x', 50)
+                                    .attr('y', 110)
+                                    .attr('width', iconWidth)
+                                    .attr('height', iconWidth)
+                                    .attr('fill', 'rgba(230, 158, 165, 0.7)');
+                                this.svg.append('text')
+                                    .attr('x', 70)
+                                    .attr('y', 120)
+                                    .text(':100k');
                             }
                             // this.doubleEncoding();
                         }
@@ -2547,7 +2570,7 @@ export default {
                         if (this.ifQuantity) {
                             this.encodingChannel = () => {
                                 this.svg.selectAll('path').attr('fill', this.defaultColor);
-                                const iconWidth = 10, iconHeight = 25, iconGap = 12, scaleX = 0.4, scaleY = 0.4;
+                                const iconWidth = 14, iconHeight = 35, iconGap = 12, iconHeightGap = 3;
                                 this.geoData.features.forEach(feature=> {
                                     const center = this.geoPath.centroid(feature);
                                     const population = this.getPopulation(feature);
@@ -2555,7 +2578,7 @@ export default {
                                         const totalIcons = Math.ceil(population/8000000);
                                         for (let i = 0; i < totalIcons; i++) {
                                             const x = center[0] - ((iconWidth + iconGap) * 5 / 2) + ((i % 5) * (iconWidth + iconGap)) + 15;
-                                            const y = center[1] + (Math.floor(i / 5) * (iconWidth + iconGap)) - 10;
+                                            const y = center[1] + (Math.floor(i / 5) * (iconWidth + iconGap + iconHeightGap)) - 10;
                                             const x1 = x + 6.5;
                                             const y1 = y - 3.5;
                                             this.svg.append('image')
@@ -2587,6 +2610,18 @@ export default {
                                         }
                                     }
                                 });
+                                //lengend
+                                this.svg.append('image')
+                                    .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
+                                    .attr('x', 50)
+                                    .attr('y', 100)
+                                    .attr('width', iconWidth)
+                                    .attr('height', iconHeight)
+                                    .attr('opcacity', 0.7);
+                                this.svg.append('text')
+                                    .attr('x', 70)
+                                    .attr('y', 120)
+                                    .text(':100k');
                             }
                         } else {
                             this.encodingChannel = () => {
