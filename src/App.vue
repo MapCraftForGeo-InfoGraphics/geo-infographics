@@ -125,9 +125,10 @@ export default {
 
     Promise.all([
             loadJson('europe.geojson'),
-            loadJson('olympics_data.json')
+            loadJson('olympics_data.json'),
+            loadJson('country-by-flag.json')
         ])
-      .then(([data, annotationData]) => {
+      .then(([data, annotationData, flagData]) => {
         geoData.value = data;
 
         if (geoData.value && geoData.value.features && annotationData) {
@@ -135,6 +136,10 @@ export default {
             const annotationInfo = annotationData.find(item => item.country === feature.properties.NAME);
             const annotation = annotationInfo ? annotationInfo.annotation : -1;
             feature.properties.annotation = annotation;
+
+            const flagInfo = flagData.find(item => item.country === feature.properties.NAME);
+            const flag= flagInfo ? flagInfo.flag_base64 : undefined;
+            feature.properties.flag = flag;
           });
         }
       });

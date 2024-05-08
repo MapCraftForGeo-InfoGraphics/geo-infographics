@@ -2725,6 +2725,7 @@ export default {
 
                         this.geoData.features.forEach(feature => {
                             const flagBase64 = this.getPopulation(feature); // 使用getPopulation方法尝试从infoData获取国旗的base64编码
+                            // const flagBase64 = feature.properties.flag;
 
                             // 检查flagBase64是否不等于-1，仅当不等于-1时，才显示国旗
                             if (flagBase64 !== -1) {
