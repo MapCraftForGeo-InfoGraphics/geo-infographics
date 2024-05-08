@@ -2216,7 +2216,7 @@ export default {
                                     .text(label);
                                 px += 2 * delta;
                             }
-                            this.doubleEncoding();
+                            // this.doubleEncoding();
                         }
                     }
                 } else if (type === this.myType['2D Length']) {
@@ -2295,7 +2295,7 @@ export default {
                                     .text(label);
                                 px += 2 * delta;
                             }
-                            this.doubleEncoding();
+                            // this.doubleEncoding();
                         }
                     }
                 }
@@ -2392,7 +2392,7 @@ export default {
                                 py += v + delta;
                             }
                             this.ifSizeColor = false;
-                            this.doubleEncoding();
+                            // this.doubleEncoding();
                         }
                     }
                 }
@@ -2525,7 +2525,7 @@ export default {
                                 //hue legend
                                 this.drawColorHueLegend();
                             }
-                            this.doubleEncoding();
+                            // this.doubleEncoding();
                         }
                         
                     }
@@ -2577,7 +2577,7 @@ export default {
                                 
                                 py += h + delta;
                             }
-                            this.doubleEncoding();
+                            // this.doubleEncoding();
                         }
                     } else {
                         this.encodingChannel = () => {
@@ -2646,7 +2646,7 @@ export default {
                                 
                                 py += h + delta;
                             }
-                            this.doubleEncoding();
+                            // this.doubleEncoding();
                         }
                     }
                     
