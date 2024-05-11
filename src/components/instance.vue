@@ -2579,8 +2579,6 @@ export default {
                                         for (let i = 0; i < totalIcons; i++) {
                                             const x = center[0] - ((iconWidth + iconGap) * 5 / 2) + ((i % 5) * (iconWidth + iconGap)) + 15;
                                             const y = center[1] + (Math.floor(i / 5) * (iconWidth + iconGap + iconHeightGap)) - 10;
-                                            const x1 = x + 6.5;
-                                            const y1 = y - 3.5;
                                             this.svg.append('image')
                                                 .attr('xlink:href', require('../assets/PersonIcon.svg')) // 图标的路径
                                                 .attr('x', x)

@@ -53,6 +53,15 @@
             <v-btn color="primary" @click="createInstance" :disabled="!uploaded">Create</v-btn>
             <v-btn @click="clear" style="margin-left: 16px;">CLEAR</v-btn>
         </v-row>
+
+        <h2 class="example">Example Data Files</h2>
+        <v-row>
+            <v-col><a href="https://raw.githubusercontent.com/MapCraftForGeo-InfoGraphics/geo-infographics/master/public/country-by-population-description.json" download>Download Population</a></v-col>
+        </v-row>
+
+        <v-row>
+            <v-col><a href="https://raw.githubusercontent.com/MapCraftForGeo-InfoGraphics/geo-infographics/master/public/country-by-flag-description.json" download>Download Country</a></v-col>
+        </v-row>
     </v-container>
 
     <!-- <v-dialog v-model="dialog" max-width="500px">
@@ -196,5 +205,9 @@ export default {
 <style scoped>
 h1 {
     font-size: 56px;
+}
+
+.example {
+    margin-top:50px;
 }
 </style>
