@@ -300,7 +300,7 @@
 
                                 <v-row>
                                     <v-col class="element" @click="setHighlight(myType['Map Pin'])">
-                                        Map Pin
+                                        Icon
                                         <v-img :src="require('../assets/HighlightMappin.svg')" contain/>
                                     </v-col>
 
