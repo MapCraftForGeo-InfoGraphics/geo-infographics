@@ -51,7 +51,7 @@
                 </v-col>
                 <div class="row-with-line"></div>
                 <v-col class="image-with-text">
-                    <v-img :src="require('../assets/gallery2C.png')" contain/>
+                    <v-img :src="require('../assets/gallery5C.png')" contain/>
                 </v-col>
             </v-row>
             <v-row>
@@ -70,7 +70,7 @@
                         <div>Basic Map: Political Map</div>
                         <div>Encoding Channel: Glyph</div>
                         <div>Label Position: Color</div>
-                        <div>Highlight: Contour, Map Pin, Enlarged Portions</div>
+                        <div>Highlight: Contour, Map Pin, Light, Enlarged Portions</div>
                     </div>
                 </v-col>
             </v-row>
@@ -109,7 +109,7 @@
             <v-row>
                 <div class="row-with-line"></div>
                 <v-col class="image-with-text">
-                    <v-img :src="require('../assets/galleryYaoP.png')" contain/>
+                    <v-img :src="require('../assets/gallery5P.png')" contain/>
                 </v-col>
                 <div class="row-with-line"></div>
                 <v-col class="image-with-text">
@@ -120,10 +120,10 @@
                 <div class="row-with-line"></div>
                 <v-col>
                     <div  class="text-container">
-                        <div>Basic Map: Political Map</div>
-                        <div>Encoding Channel: Color Intensity</div>
-                        <div>Label Position: Ordered</div>
-                        <div>Highlight: Contour, Light</div>
+                        <div>Basic Map: Shape-based Map</div>
+                        <div>Encoding Channel: Color Hue</div>
+                        <div>Label Position: Icon</div>
+                        <div>Highlight: Map Pin, Light</div>
                     </div>
                 </v-col>
                 <div class="row-with-line"></div>
