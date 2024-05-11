@@ -19,7 +19,7 @@
                 </v-col>
                 <div class="row-with-line"></div>
                 <v-col class="image-with-text">
-                    <v-img :src="require('../assets/gallery4C.png')" contain/>
+                    <v-img :src="require('../assets/gallery5C.png')" contain/>
                 </v-col>
             </v-row>
             <v-row>
@@ -35,10 +35,10 @@
                 <div class="row-with-line"></div>
                 <v-col>
                     <div  class="text-container">
-                        <div>Basic Map: Topographic Map</div>
+                        <div>Basic Map: Political Map</div>
                         <div>Encoding Channel: Glyph</div>
-                        <div>Label Position: Aligned</div>
-                        <div>Highlight: Map Pin, Enlarged Portions</div>
+                        <div>Label Position: Color</div>
+                        <div>Highlight: Contour, Map Pin, Light, Enlarged Portions</div>
                     </div>
                 </v-col>
             </v-row>
@@ -51,26 +51,26 @@
                 </v-col>
                 <div class="row-with-line"></div>
                 <v-col class="image-with-text">
-                    <v-img :src="require('../assets/gallery5C.png')" contain/>
+                    <v-img :src="require('../assets/galleryZhaoC.png')" contain/>
                 </v-col>
             </v-row>
             <v-row>
                 <div class="row-with-line"></div>
                 <v-col>
                     <div  class="text-container">
-                        <div>Basic Map: Topographic Map</div>
-                        <div>Encoding Channel: Color Intensity, 2D Length</div>
-                        <div>Label Position: Convenient</div>
-                        <div>Highlight: Enlarged Portions</div>
+                        <div>Basic Map: Political Map</div>
+                        <div>Encoding Channel: Color Intensity</div>
+                        <div>Label Position: Aligned</div>
+                        <div>Highlight: Light, Map Pin</div>
                     </div>
                 </v-col>
                 <div class="row-with-line"></div>
                 <v-col>
                     <div  class="text-container">
                         <div>Basic Map: Political Map</div>
-                        <div>Encoding Channel: Glyph</div>
-                        <div>Label Position: Color</div>
-                        <div>Highlight: Contour, Map Pin, Light, Enlarged Portions</div>
+                        <div>Encoding Channel: Color Hue</div>
+                        <div>Label Position: Convenient</div>
+                        <div>Highlight: Map Pin, Enlarged Portions</div>
                     </div>
                 </v-col>
             </v-row>
@@ -82,7 +82,7 @@
                 </v-col>
                 <div class="row-with-line"></div>
                 <v-col class="image-with-text">
-                    <v-img :src="require('../assets/galleryZhaoC.png')" contain/>
+                    <v-img :src="require('../assets/gallery4C.png')" contain/>
                 </v-col>
             </v-row>
             <v-row>
@@ -98,10 +98,10 @@
                 <div class="row-with-line"></div>
                 <v-col>
                     <div  class="text-container">
-                        <div>Basic Map: Political Map</div>
-                        <div>Encoding Channel: Color Hue</div>
-                        <div>Label Position: Convenient</div>
-                        <div>Highlight: Contour, Map Pin, 3D Transformation, Enlarged Portions</div>
+                        <div>Basic Map: Topographic Map</div>
+                        <div>Encoding Channel: Glyph</div>
+                        <div>Label Position: Aligned</div>
+                        <div>Highlight: Map Pin, Enlarged Portions</div>
                     </div>
                 </v-col>
             </v-row>
@@ -129,10 +129,10 @@
                 <div class="row-with-line"></div>
                 <v-col>
                     <div  class="text-container">
-                        <div>Basic Map: Shape-based Map</div>
+                        <div>Basic Map: Political Map</div>
                         <div>Encoding Channel: Glyph</div>
-                        <div>Label Position: Aligned</div>
-                        <div>Highlight: Light, Map Pin</div>
+                        <div>Label Position: Convenient</div>
+                        <div>Highlight: Color, Contour, Enlarged Portions</div>
                     </div>
                 </v-col>
             </v-row>
