@@ -54,14 +54,14 @@
             <v-btn @click="clear" style="margin-left: 16px;">CLEAR</v-btn>
         </v-row>
 
-        <h2 class="example">Example Data Files</h2>
+        <h2 class="example" style="margin-top: 30px;">Example Data Files</h2>
         <v-row>
-            <v-col><a href="https://raw.githubusercontent.com/MapCraftForGeo-InfoGraphics/geo-infographics/master/public/country-by-population-description.json" download>Download Population</a></v-col>
-        </v-row>
+    <v-col class="download" style="margin-top: 15px;"><a href="https://raw.githubusercontent.com/MapCraftForGeo-InfoGraphics/geo-infographics/master/public/country-by-population-description.json" download style="text-decoration: none;"><span style="background-color: pink; padding: 10px; padding-left: 25px; padding-right: 25px;color: #000; text-decoration: none; border-radius: 10px;">Download Quantitative Sample File</span></a></v-col>
+</v-row>
 
-        <v-row>
-            <v-col><a href="https://raw.githubusercontent.com/MapCraftForGeo-InfoGraphics/geo-infographics/master/public/country-by-flag-description.json" download>Download Country</a></v-col>
-        </v-row>
+<v-row>
+    <v-col class="download" style="margin-top: 15px;"><a href="https://raw.githubusercontent.com/MapCraftForGeo-InfoGraphics/geo-infographics/master/public/country-by-flag-description.json" download style="text-decoration: none;"><span style="background-color: pink; padding: 10px; padding-left: 25px; padding-right: 25px;color: #000; text-decoration: none; border-radius: 10px;">Download Categorical Sample File</span></a></v-col>
+</v-row>
     </v-container>
 
     <!-- <v-dialog v-model="dialog" max-width="500px">
