@@ -3034,7 +3034,7 @@ export default {
             this.ifDoubleEncoding = !this.ifDoubleEncoding;
             this.ifDoubleEncodingText = this.ifDoubleEncoding ? 'Dual Encoding: ON' : 'Dual Encoding: OFF';
             if (this.ifDoubleEncoding)
-                alert('Attention! Only supporting for one color method with other methods or size method with quantity method. No supporting for glyph.');
+                alert('Attention! Only supporting for one color method with other methods or a size or quantity method with glyph method.');
         },
 
         printSVG() {
