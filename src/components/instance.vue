@@ -3038,10 +3038,10 @@ export default {
         },
 
         printSVG() {
-            var tempsvg = this.svg;
+            const tempsvg = this.svg;
             tempsvg.selectAll('*')
                 .attr('transform', 'translate(0, 10)');
-            var legendItems = this.legend.selectAll('*');
+            const legendItems = this.legend.selectAll('*');
 
             // 将图形移植到 tempsvg 上
             legendItems.each(function () {
@@ -3050,19 +3050,19 @@ export default {
             // 选择包含图形的SVG元素
             tempsvg.selectAll('*')
                 .attr('transform', 'translate(10, 10)');
-            var svgElement = tempsvg.node();
+            const svgElement = tempsvg.node();
 
             // 将SVG内容转换为字符串
-            var svgString = new XMLSerializer().serializeToString(svgElement);
+            const svgString = new XMLSerializer().serializeToString(svgElement);
 
             // 创建Blob对象
-            var blob = new Blob([svgString], {type: 'image/svg+xml'});
+            const blob = new Blob([svgString], {type: 'image/svg+xml'});
 
             // 创建URL
-            var url = window.URL.createObjectURL(blob);
+            const url = window.URL.createObjectURL(blob);
 
             // 创建一个a标签用于下载
-            var a = document.createElement('a');
+            const a = document.createElement('a');
             a.href = url;
             a.download = 'd3_chart.svg'; // 下载文件的名称
 
