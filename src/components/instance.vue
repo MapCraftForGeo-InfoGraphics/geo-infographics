@@ -288,7 +288,7 @@
                                 </v-row>
                                 <v-row>
                                     <v-col class="element" @click="setHighlight(myType['Light'])">
-                                        Light
+                                        Glow
                                         <v-img :src="require('../assets/HighlightLight.svg')" contain/>
                                     </v-col>
 
